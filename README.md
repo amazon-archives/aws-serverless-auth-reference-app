@@ -53,10 +53,14 @@ The framework relies on [Node.js](https://nodejs.org/en/download/) and [npm](htt
     # Optional: Update the API config file if you'd like to use a specific non-default AWS profile or different region than us-east-1 to install to.
     # vi aws-serverless-auth-reference-app/api/config.js
 
-    # Run the API automated bootstrapping process to deploy all resources to your account
+    # Run the API automated bootstrapping process to deploy all AWS resources to your account
     # gulp commands need to be run from 'api' directory
     cd ..
-    gulp bootstrap
+    gulp deploy
+    
+    # Generate some sample data
+    gulp generate_sample_users
+    gulp generate_sample_data
 
 ----
 
