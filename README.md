@@ -34,6 +34,8 @@ For full visibility into how everything works, you're able to setup the backend 
 
 ### Installing the prerequisites
 
+The framework relies on [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/).
+
     # install the latest Gulp CLI tools globally (you will need a newer version of Gulp CLI which supports Gulp v4)
     npm install gulpjs/gulp-cli -g
 
