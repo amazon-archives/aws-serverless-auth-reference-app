@@ -72,7 +72,7 @@ The application framework relies on [Node.js](https://nodejs.org/en/download/) a
     npm install -g ionic cordova bower
 
     # Checkout the git repo (if you haven't already)
-    git clone --depth 1 https://github.com/awslabs/aws-serverless-auth-reference-app.git
+    git clone https://github.com/awslabs/aws-serverless-auth-reference-app.git
     
     # install the Node modules 
     cd spacefinder/app
