@@ -38,7 +38,7 @@ For full visibility into how everything works, you're able to setup the backend 
     npm install gulpjs/gulp-cli -g
 
     # Checkout the git repo
-    git clone --depth 1 https://github.com/awslabs/aws-serverless-auth-reference-app.git
+    git clone https://github.com/awslabs/aws-serverless-auth-reference-app.git
     
     # install the Node modules for the bootstrapping process 
     cd spacefinder/api
