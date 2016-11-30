@@ -10,7 +10,7 @@ app/node_modules/
 app/platforms/
 app/plugins/
 app/src/assets/vendor/bower_components/
-app/www/
+app/www/assets
 api/dist/
 api/lambda/node_modules/
 api/later/
