@@ -1,0 +1,23 @@
+{
+  "name": "spacefinder-api-lambda",
+  "description": "SpaceFinder-API",
+  "version": "1.0.0",
+  "author": "Jim Tran and Justin Pirtle",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justonian/spacefinder.git"
+  },
+  "bugs": {
+    "url": "https://github.com/justonian/spacefinder/issues"
+  },
+  "homepage": "https://github.com/justonian/spacefinder#readme",
+  "dependencies": {
+    "aws-sdk": "^2.6.11",
+    "bunyan": "^1.8.3",
+    "bunyan-prettystream": "^0.1.3",
+    "jsonwebtoken": "^7.1.9",
+    "rfr": "^1.2.3",
+    "uuid": "^2.0.3"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "spacefinder-api",
+  "description": "Spacefinder API sample backend service",
+  "main": "index.js",
+  "scripts": {
+    "gulp": "gulp",
+    "deploy": "gulp deploy",
+    "test": "mocha **/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justonian/spacefinder-api.git"
+  },
+  "author": "Jim Tran and Justin Pirtle",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/justonian/spacefinder-api/issues"
+  },
+  "homepage": "https://github.com/justonian/spacefinder-api#readme",
+  "dependencies": {
+    "archiver": "^1.1.0",
+    "aws-sdk": "^2.7.5",
+    "bunyan": "^1.8.3",
+    "bunyan-prettystream": "^0.1.3",
+    "js-yaml": "^3.6.1",
+    "rfr": "^1.2.3",
+    "uuid": "^2.0.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "fs-extra": "^0.30.0",
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-install": "^0.6.0",
+    "mocha": "^3.1.0",
+    "yargs": "^6.2.0"
+  }
+}

@@ -1,0 +1,344 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "LambdaBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {},
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "33617384-d25d-4fd2-9fce-59ed9394a747"
+        }
+      }
+    },
+    "UserDataBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "CorsConfiguration" : {
+					"CorsRules" : [ {
+            "AllowedHeaders" : [ "*" ],
+            "AllowedMethods" : [ "GET", "PUT", "POST", "HEAD" ],
+            "AllowedOrigins" : [ "*" ],
+            "MaxAge" : "3000"
+          }]
+        }
+      } 
+    },
+    "UserDataBucketPolicy": {
+      "Type" : "AWS::S3::BucketPolicy",
+      "Properties" : {
+        "Bucket" : { "Ref": "UserDataBucket" },
+        "PolicyDocument" : {
+          "Version":"2012-10-17",
+          "Statement":
+          [{
+            "Sid": "Make all content public",
+            "Effect":"Allow",
+            "Principal": "*",
+            "Action":["s3:GetObject"],
+            "Resource":{
+              "Fn::Join": [ "",
+                [ "arn:aws:s3:::",
+                  { "Ref": "UserDataBucket" },
+                  "/*"
+                ]
+              ]
+            }
+          }]
+        }
+      }
+    }, 
+    "ApiGatewayRestApi": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Description": "The API resource",
+        "Name": {
+          "Fn::Join": [
+            "-",
+            [{
+              "Ref": "ResourcePrefix"
+             },
+             "-lambda-execution-role"
+            ]
+           ]
+         }
+      }
+    },
+    "LambdaExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "b39c3719-0f5a-45cd-996a-54e2169a8292"
+        }
+      }
+    },
+    "LambdaExecutionPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "LambdaExecutionPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:*",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Resource": "*"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "057d78c2-d091-4c1e-8043-1fbdc1150d93"
+        }
+      }
+    },
+    "CognitoIdentityPoolAuthRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              },
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "authenticated"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "CognitoIdentityPoolAuthPolicy": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "CognitoIdentityPoolAuthPolicy",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": "execute-api:Invoke",
+              "Effect": "Allow",
+              "Resource": [{
+                "Fn::Join": [ "",
+                  [ "arn:aws:execute-api:",
+                    { "Ref" : "AWS::Region" }, ":",
+                    { "Ref" : "AWS::AccountId" }, ":",
+                    { "Ref" : "ApiGatewayRestApi" },
+                    "/*/*"
+                  ]
+                ]
+              }]
+            },
+            {
+              "Action": "execute-api:Invoke",
+              "Effect": "Deny",
+              "Resource": [
+                {
+                  "Fn::Join": [ "",
+                    [ "arn:aws:execute-api:",
+                      { "Ref" : "AWS::Region" }, ":",
+                      { "Ref" : "AWS::AccountId" }, ":",
+                      { "Ref" : "ApiGatewayRestApi" },
+                      "/*/DELETE/locations"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [ "",
+                    [ "arn:aws:execute-api:",
+                      { "Ref" : "AWS::Region" }, ":",
+                      { "Ref" : "AWS::AccountId" }, ":",
+                      { "Ref" : "ApiGatewayRestApi" },
+                      "/*/DELETE/locations/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [ "",
+                    [ "arn:aws:execute-api:",
+                      { "Ref" : "AWS::Region" }, ":",
+                      { "Ref" : "AWS::AccountId" }, ":",
+                      { "Ref" : "ApiGatewayRestApi" },
+                      "/*/POST/locations"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [ "",
+                    [ "arn:aws:execute-api:",
+                      { "Ref" : "AWS::Region" }, ":",
+                      { "Ref" : "AWS::AccountId" }, ":",
+                      { "Ref" : "ApiGatewayRestApi" },
+                      "/*/POST/locations/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "s3:PutObject"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [ "",
+                  [ "arn:aws:s3:::",
+                    { "Ref": "UserDataBucket" },
+                    "/${cognito-identity.amazonaws.com:sub}/*"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "CognitoIdentityPoolAuthRole"
+          }
+        ]
+      }
+    },
+    "CognitoIdentityPoolUnAuthRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              },
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "unauthenticated"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Parameters": {
+    "ResourcePrefix": {
+      "Type": "String",
+      "Description": "Resource prefix to use when creating necessary objects",
+      "AllowedPattern": "^[a-z0-9][a-z0-9-]+$",
+      "ConstraintDescription": "Resource prefix can only contain lower-case letters, numbers, and dashes",
+      "MaxLength": 30
+    }
+  },
+  "Outputs": {
+    "AwsAccountId": {
+     "Value": {
+       "Ref": "AWS::AccountId"
+     },
+      "Description": "Account ID of the AWS account"
+    },
+    "AwsRegion": {
+      "Value": {
+        "Ref": "AWS::Region"
+      },
+      "Description": "Region of the AWS deployment"
+    },
+    "ApiGatewayRestApi": {
+      "Value": {
+        "Ref": "ApiGatewayRestApi"
+      },
+      "Description": "Name of the ApiGatewayRestApi"
+    },
+    "CognitoIdentityPoolAuthRole": {
+      "Value": {
+        "Ref": "CognitoIdentityPoolAuthRole"
+      },
+      "Description": "Name of the Cognito Identity Pool authenticated user role"
+    },
+    "CognitoIdentityPoolAuthRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "CognitoIdentityPoolAuthRole",
+          "Arn"
+        ]
+      },
+      "Description": "ARN of the Cognito Identity Pool authenticated user role"
+    },
+    "CognitoIdentityPoolUnAuthRole": {
+      "Value": {
+        "Ref": "CognitoIdentityPoolUnAuthRole"
+      },
+      "Description": "Name of the Cognito Identity Pool unauthenticated user role"
+    },
+    "CognitoIdentityPoolUnAuthRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "CognitoIdentityPoolUnAuthRole",
+          "Arn"
+        ]
+      },
+      "Description": "ARN of the Cognito Identity Pool unauthenticated user role"
+    },
+    "LambdaExecutionRole": {
+      "Value": {
+        "Ref": "LambdaExecutionRole"
+      },
+      "Description": "Name of the Lambda execution role"
+    },
+    "LambdaExecutionRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "LambdaExecutionRole",
+          "Arn"
+        ]
+      },
+      "Description": "ARN of the Lambda execution role"
+    },
+    "LambdaBucket": {
+      "Value": {
+        "Ref": "LambdaBucket"
+      },
+      "Description": "Name of the private S3 bucket used to store zipped Lambda function code"
+    },
+    "UserDataBucket": {
+      "Value": {
+        "Ref": "UserDataBucket"
+      },
+      "Description": "Name of the S3 bucket used to store application-specific user data"
+    }
+  }
+}

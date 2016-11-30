@@ -1,0 +1,6 @@
+dist/**/*
+lambda/authorizer.js
+lambda/node_modules/**/*
+node_modules/**/*
+npm-debug.log
+later/**
