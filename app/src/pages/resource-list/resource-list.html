@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar>
+    <!--<button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>-->
+    <ion-buttons right>
+      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId == ''">
+        <ion-icon name="log-in"></ion-icon>
+        Sign In
+      </button>
+      <button ion-button icon-left (click)="globals.logout(navCtrl)" *ngIf="globals.userId">
+        <ion-icon name="log-out"></ion-icon>Sign Out
+      </button>
+    </ion-buttons>
+    <ion-title>Resources</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div padding *ngIf="globals.userId == ''">
+    <p><b>You must be signed in to view available rooms and desks.</b></p>
+    <p>Click the "SIGN IN" button in the upper right of the screen, to sign in to the app.</p>
+    <p>Haven't registered yet? Click on the "Account" tab to register as a new user.</p>
+  </div>
+
+  <div *ngIf="globals.userId != ''">
+    <ion-list>
+      <ion-list-header style="color:white; background-color: #89bdd3 !important">
+        <b>{{location.name}}</b> 
+      </ion-list-header>
+      <ion-item *ngFor="let resource of resources">
+        <ion-avatar item-left (click)="gotoResourceAvailabilityPage(location, resource)">
+          <img src="assets/images/noun_46945_cc.png" *ngIf="resource.type == 'room'" width="170"/>
+          <img src="assets/images/noun_82305_cc.png" *ngIf="resource.type == 'desk'" width="170"/>
+        </ion-avatar>
+        <h2 (click)="gotoResourceAvailabilityPage(location, resource)">{{resource.name}}</h2>
+        <p (click)="gotoResourceAvailabilityPage(location, resource)">{{resource.description}}</p>
+         <button *ngIf="globals.displayAdminFeatures()" (click)="displayDeleteResourceConfirmation(resource.resourceId, resource.name)" ion-button color="danger" item-right>Delete</button>
+      </ion-item>
+    </ion-list>
+
+    <div align='center' *ngIf="globals.displayAdminFeatures() && initialized">
+      <button ion-button (click)="gotoResourceAddPage(location)" type="submit" color="primary">Add a resource</button>
+    </div>
+
+  </div>
+
+</ion-content>

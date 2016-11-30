@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons right>
+      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
+        <ion-icon name="contact"></ion-icon>Register 
+      </button>
+      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId == ''">
+        <ion-icon name="log-in"></ion-icon>
+        Sign In
+      </button>
+      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId">
+        <ion-icon name="log-out"></ion-icon>Sign Out
+      </button>
+    </ion-buttons>
+    <ion-title>My Bookings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <div padding *ngIf="globals.userId == ''">
+    <p><b>You must be signed in to view and modify your bookings.</b></p>
+    <p>Click the "SIGN IN" button in the upper right of the screen, to sign in to the app.</p>
+    <p>Haven't registered yet? Click on the "REGISTER" button to register as a new user.</p>
+
+  </div>
+
+  <div padding *ngIf="globals.userId != '' && data.length == 0 && initialized">
+    <p>You currently have no bookings.</p>
+    <p>To browse the availability of conference rooms and desks, click on the "Resources" tab.</p>
+  </div>
+
+  <div *ngIf="globals.userId != '' && data.length > 0 && initialized">
+    <ion-list *ngFor="let d of data">
+        <ion-list-header style="color:white; background-color: #89bdd3 !important" >
+          {{d.date}}
+        </ion-list-header>
+        <ion-item *ngFor="let booking of d.bookings">
+          <div item-left style='width:25%'>{{booking.timeslot}}</div>
+          <p>{{booking.locationName}}</p>  
+          <h2>{{booking.resourceName}}</h2>
+          <p>{{booking.resourceDescription}}</p>
+          <button ion-button color="light" item-right (click)="displayCancelDialog(booking.bookingId, booking.timeslot, booking.locationName, booking.resourceName)">Cancel</button>
+        </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>
+
+

@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <!--<button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>-->
+    <ion-title>Add a Resource</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <!--
+  <p *ngIf="submitted" style="color: #ea6153;">Please fill out all details accurately.</p>-->
+  <ion-list>
+    <form #theForm="ngForm" novalidate>
+
+      <ion-item>
+        <ion-label>Resource type</ion-label>
+        <ion-select [(ngModel)]="formData.type" ngControl="type" name="type" #type="ngModel">
+          <ion-option value="room" selected>Conference room</ion-option>
+          <ion-option value="desk">Desk</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating>Resource name</ion-label>
+        <ion-input [(ngModel)]="formData.name" ngControl="name" name="name" type="text" #name="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="name.valid || !submitted" color="danger" padding-left>
+        Resource name is required
+      </p>
+
+      <ion-item>
+        <ion-label floating>Description</ion-label>
+        <ion-input [(ngModel)]="formData.description" ngControl="description" name="description" type="text" #description="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="description.valid || !submitted" color="danger" padding-left>
+        Description is required
+      </p>      
+
+    </form>
+  </ion-list>
+
+  <br>
+
+  <ion-row responsive-sm>
+    <ion-col>
+      <button ion-button (click)="onSubmit(theForm)" type="submit" primary block>Add resource</button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

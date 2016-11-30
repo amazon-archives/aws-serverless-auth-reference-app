@@ -1,0 +1,21 @@
+{
+  "name": "spacefinder",
+  "description": "SpaceFinder: Book conference rooms, desks and more",
+  "main": "",
+  "authors": [
+    "Jim Tran",
+    "Justin Pirtle"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/justonian/spacefinder",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "aws-sign-web": "^1.2.1"
+  }
+}

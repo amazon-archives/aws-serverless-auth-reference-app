@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-navbar>
+    <!--<button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>-->
+    <ion-title>Register</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <p *ngIf="submitted && (!username.valid || !password.valid || !lastName.valid)" style="color: #ea6153;">Please fill out all details accurately.</p>
+
+  <form #signUpForm="ngForm" novalidate>
+  <ion-list>
+
+      <p>
+        Registration is fast and free. Once you're a member, you'll be able to book conference rooms and other resources. After you fill out this form, you will receive an email with a verification code.
+      </p>
+
+      <ion-item>
+        <ion-label floating>Username</ion-label>
+        <ion-input [(ngModel)]="userData.username" name="username" type="text" #username="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="username.valid || submitted == false" color="danger"  padding-left>
+        Username is required
+      </p>
+
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input [(ngModel)]="userData.password" name="password" type="password" #password="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="password.valid || submitted == false" color="danger" padding-left>
+        Password is required
+      </p>
+
+      <ion-item>
+        <ion-label floating>First name</ion-label>
+        <ion-input [(ngModel)]="userData.givenName" name="firstName" type="text" #firstName="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="firstName.valid || submitted == false" color="danger" padding-left>
+        First Name is required
+      </p>
+
+      <ion-item>
+        <ion-label floating>Last name</ion-label>
+        <ion-input [(ngModel)]="userData.familyName" name="lastName" type="text" #lastName="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="lastName.valid || submitted == false" color="danger" padding-left>
+        Last Name is required
+      </p>
+
+      <ion-item>
+        <ion-label floating>E-mail address</ion-label>
+        <ion-input [(ngModel)]="userData.email" name="email" type="text" #email="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="email.valid || submitted == false" color="danger" padding-left>
+        E-mail address is required
+      </p>
+
+    </ion-list>
+  </form>
+
+  <br>
+
+  <ion-row responsive-sm>
+    <ion-col>
+      <button ion-button (click)="onSignUp(signUpForm)" type="submit" primary block>Sign Up</button>
+    </ion-col>
+    <ion-col>
+      <button ion-button (click)="navCtrl.pop()" block>Cancel</button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

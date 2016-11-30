@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-navbar>
+    <!--<button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>-->
+    <ion-title>Add a Location</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <!--
+  <p *ngIf="submitted" style="color: #ea6153;">Please fill out all details accurately.</p>-->
+  <ion-list>
+    <form #theForm="ngForm" novalidate>
+
+      <ion-item>
+        <ion-label floating>Location name</ion-label>
+        <ion-input [(ngModel)]="formData.name" ngControl="name" name="name" type="text" #name="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="name.valid || !submitted" color="danger" padding-left>
+        Location name is required
+      </p>
+
+      <ion-item>
+        <ion-label floating>Description</ion-label>
+        <ion-input [(ngModel)]="formData.description" ngControl="description" name="description" type="text" #description="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="description.valid || !submitted" color="danger" padding-left>
+        Description is required
+      </p>      
+
+      <ion-item>
+        <ion-label floating>Image URL</ion-label>
+        <ion-input [(ngModel)]="formData.imageUrl" ngControl="imageUrl" name="imageUrl" type="text" #imageUrl="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="imageUrl.valid || !submitted" color="danger" padding-left>
+        Image URL is required
+      </p>     
+
+    </form>
+  </ion-list>
+
+  <br>
+
+  <ion-row responsive-sm>
+    <ion-col>
+      <button ion-button (click)="onSubmit(theForm)" type="submit" primary block>Add location</button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

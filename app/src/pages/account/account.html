@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-navbar>
+    <!--<button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>-->
+    <ion-buttons right>
+      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
+        <ion-icon name="contact"></ion-icon>Register
+      </button>
+      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId == ''">
+        <ion-icon name="log-in"></ion-icon>Sign In
+      </button>
+      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId">
+        <ion-icon name="log-out"></ion-icon>Sign Out
+      </button>
+    </ion-buttons>
+    <ion-title>My Account</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+<div *ngIf="globals.userId == ''">
+  <h5>Register</h5>
+  <p>Members can book conference rooms, desks, and other resources. Signing up is free, and only takes a minute.</p>
+  <button ion-button [navPush]="accountSignupPage" type="submit" primary block>Register</button>
+</div>
+
+
+<div *ngIf="globals.userId != ''">
+
+  <h5>Your profile image</h5>
+  <div *ngIf="profileImageDisplay">
+    <img src="{{profileImageURI}}" width="200" border="1"/><br/>
+  </div>
+
+  <div *ngIf="platform.is('cordova')">
+    <button ion-button (click)="selectImage()" type="submit" color="primary">Select image</button>
+  </div>
+  <div *ngIf="!platform.is('cordova')">
+    <input style='font-size:12px; width: 0.1px; height: 0.1px; opacity: 0; overflow: hidden; position: absolute; z-index: -1;' id="imageUpload" type="file" accept="image/*">
+    <label ion-button (click)="attachImageUploadEventListener()" color="primary" style='none;display: inline-block;' for="imageUpload" id="imageUploadLabel">Select image</label>
+    <button ion-button (click)="selectImage()" style='visibility:hidden; text-transform:none;' type="submit" color="primary" id="imageUploadSubmit">UPLOAD</button>
+  </div>
+  
+  <br/><br/>
+
+  <h5>Change password</h5>
+  As a general security best practice, we recommend changing your password every few months.<br/>
+  <button ion-button  [navPush]="accountChangePasswordPage" type="submit" color="primary">Change password</button>
+  <br/><br/>
+
+  <h5>View Admin features?</h5>
+  <span *ngIf="globals.isAdminRole()">
+    You are currently logged in with Admin privileges. If you wish, you can toggle off the display of Admin-only features, to see how the app appears to non-Admin users.'
+  </span>
+  <span *ngIf="!globals.isAdminRole()">
+    You are currently logged in without Admin privileges. You can enable the display of Admin-only features, however note that due to API authorization settings, the Admin-only API calls will still not work.
+  </span>
+  <ion-list>
+    <ion-item>
+      <ion-label>View Admin features (<span *ngIf="viewAdminFeatures">enabled</span><span *ngIf="!viewAdminFeatures">disabled</span>)</ion-label>
+      <ion-toggle (click)="setViewAdmin($event)" (ionChange)="setViewAdmin($event)" [(ngModel)]="viewAdminFeatures"></ion-toggle>
+    </ion-item>
+  </ion-list>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+  <br/><br/>
+
+
+  <h5>Image credits</h5>
+  Attribution for images used in this app.
+  <ul>
+    <li>"Conference room" photo by "Breather" used with permission under Creative Commons License from: https://unsplash.com/photos/bjhrzvzZeq4.</li>
+    <li>"Conference room" icon created by Dan Hetteix for The Noun Project (https://thenounproject.com/icon/46945/), used with permission under Creative Commons License.</li>
+    <li>"Desk" icon created by iconoci for The Noun Project (https://thenounproject.com/icon/82305/), used with permission under Creative Commons License</li>
+  </ul>
+  <!--
+  <br/><br/><br/>
+  <ion-card class='signedin'>
+    <ion-card-content>
+      You are currently signed in as a registered user.<br/>
+      <ul>
+        <li>Username: {{globals.userName}}</li>
+        <li>First name: _______</li>
+        <li>Last name: _______</li>
+        <li>Email address: _______</li>
+        <li>Administrator role? No</li>
+        <li>AWS Cognito Federated Identity user ID: ____</li>
+        <li>AWS Cognito generated JSON Web Token (JWT): ____</li>
+        <li>AWS Access Key ID: ____</li>
+        <li>AWS Secret Key: ____</li>
+        <li>AWS Session Token: ____</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+  -->
+
+</div>
+
+
+
+
+</ion-content>

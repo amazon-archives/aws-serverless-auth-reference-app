@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons right>
+      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId === ''">
+        <ion-icon name="contact"></ion-icon>Register
+      </button>
+      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId === ''">
+        <ion-icon name="log-in"></ion-icon>Sign In
+      </button>
+      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId !== ''">
+        <ion-icon name="log-out"></ion-icon>Sign Out
+      </button>
+    </ion-buttons>
+    <ion-title>SpaceFinder</ion-title> 
+  </ion-navbar>
+</ion-header>
+<ion-content class='main'>
+  <div id='main-content'>
+    <img width='100%' src='assets/images/conference_room_unsplash.jpg'>
+    <div id='top'>
+      <span class='title' *ngIf="globals.userId == ''">Welcome to SpaceFinder!</span>
+      <span class='title' *ngIf="globals.userId !== ''">Welcome, {{globals.getUserFirstName()}} {{globals.getUserLastName()}}</span>
+      <table border="0">
+      <tr>
+        <td><img src="assets/images/noun_46945_cc.png" width="100"/></td>
+        <td>&nbsp;&nbsp;&nbsp;Book a conference room<br/>&nbsp;&nbsp;&nbsp;for your team meeting. </td>
+      </tr>
+      <tr>
+        <td><img src="assets/images/noun_82305_cc.png" width="100"/></td>
+        <td>&nbsp;&nbsp;&nbsp;Visiting a remote office?<br/>&nbsp;&nbsp;&nbsp;You can book a desk in advance.</td>
+      </tr>
+      </table>
+    </div>
+  </div><!-- main-content -->
+</ion-content>

@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-navbar>
+    <!--<button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>-->
+    <ion-buttons right>
+      <button ion-button icon-left [navPush]="accountSignupPage">
+        <ion-icon name="contact"></ion-icon>Register
+      </button>
+    </ion-buttons>
+    <ion-title>Sign In</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <h5>Sign-in using Cognito User Pools</h5>
+
+  <!--
+  <p *ngIf="submitted" style="color: #ea6153;">Please fill out all details accurately.</p>-->
+  <ion-list>
+    <form #signInForm="ngForm" novalidate>
+
+      <ion-item>
+        <ion-label floating>Username</ion-label>
+        <ion-input [(ngModel)]="userData.username" ngControl="username" name="username" type="text" #username="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="username.valid || (!signInButtonClicked && !forgotPasswordButtonClicked)" color="danger" padding-left>
+        Username is required
+      </p>
+
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input [(ngModel)]="userData.password" ngControl="password" name="password" type="password" #password="ngModel" required></ion-input>
+      </ion-item>
+      <p [hidden]="password.valid || !signInButtonClicked" color="danger" padding-left>
+        Password is required
+      </p>
+
+    </form>
+  </ion-list>
+
+  <br>
+
+  <ion-row responsive-sm>
+    <ion-col>
+      <button ion-button (click)="onSignIn(signInForm)" type="submit" primary block>Sign In</button>
+    </ion-col>
+    <ion-col>
+      <button ion-button (click)="onForgotPassword(signInForm)" type="submit" primary block>Forgot password</button>
+    </ion-col>
+  </ion-row>
+
+  <!--
+  <br/><br/>
+  <h5>Option 2: Sign-in via SAML</h5>
+
+  Alternatively, you can login using a corporate directory credentials using SAML-based authentication. Use the same Active Directory (AD) login and password that you use to login to your Windows work desktop or laptop. 
+
+  <ion-row responsive-sm>
+    <ion-col>
+      <button ion-button [navPush]="accountSigninUsingSAMLPage" type="submit" primary block>Sign In Using Corporate Credentials</button>
+    </ion-col>
+  </ion-row>
+  -->
+
+</ion-content>

@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar>
+    <!--<button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>-->
+    <ion-buttons right>
+      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId == ''">
+        <ion-icon name="log-in"></ion-icon>
+        Sign In
+      </button>
+      <button ion-button icon-left (click)="globals.logout(navCtrl)" *ngIf="globals.userId">
+        <ion-icon name="log-out"></ion-icon>Sign Out
+      </button>
+    </ion-buttons>
+    <ion-title>Resource Availability</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div padding *ngIf="globals.userId == ''">
+    <p><b>You must be signed in to view available rooms and desks.</b></p>
+    <p>Click the "SIGN IN" button in the upper right of the screen, to sign in to the app.</p>
+    <p>Haven't registered yet? Click on the "Account" tab to register as a new user.</p>
+  </div>
+
+  <div *ngIf="globals.userId != ''">
+      
+    <ion-list>
+      <ion-list-header style="color:white; background-color: #89bdd3 !important">
+        <b>{{location.name}} > {{resource.name}}</b> 
+      </ion-list-header>
+      <ion-item>
+        <ion-label>Showing availability for: </ion-label>
+        <ion-datetime displayFormat="MMM DD, YYYY" min="{{todaydate}}" max="2018-12-31"  [(ngModel)]="date" (change)="changeDate(date)"></ion-datetime>
+      </ion-item>
+      <ion-item *ngFor="let timeslot of availableTimeslots">
+        <!-- TODO: want to re-use the Angular2 template variable getBooking(timeslot) but haven't figure it how yet -->
+        <div item-left style='width:25%'>{{timeslot}}</div>
+        <h2 *ngIf="initialized && !getBooking(timeslot)">&nbsp;&nbsp;&nbsp;<b style='color:green'>AVAILABLE</b></h2>
+        <h2 *ngIf="initialized && getBooking(timeslot)" style='color:#999999'>&nbsp;&nbsp;&nbsp;{{getBooking(timeslot).userFirstName}} {{getBooking(timeslot).userLastName}}</h2>
+        <h2 *ngIf="!initialized">&nbsp;&nbsp;&nbsp;</h2>
+        <button *ngIf="initialized && !getBooking(timeslot)" ion-button color="light" item-right  (click)="displayBookingDialog(resource.resourceId, timeslot)">BOOK</button>
+        <button *ngIf="initialized && (getBooking(timeslot) && (globals.displayAdminFeatures() || (getBooking(timeslot).userId == globals.userId)))" (click)="displayCancelDialog(timeslot)" ion-button color="danger" item-right>Cancel</button>
+        <button style='display:none' *ngIf="!initialized" ion-button item-right></button>
+      </ion-item>
+    </ion-list>
+  </div>
+
+</ion-content>

@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Confirm Sign-Up</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <p>Please check your e-mail and enter your registration code.</p>
+  <form #confirmSignUpForm="ngForm" novalidate>
+
+    <ion-item>
+      <ion-label floating>Registration Code</ion-label>
+      <ion-input [(ngModel)]="registrationCode.code" name="code" type="text" #code="ngModel" required></ion-input>
+    </ion-item>
+    <p [hidden]="code.valid || submitted == false" color="danger" padding-left>
+      Registration code is required
+    </p>
+
+  </form>
+
+  <button ion-button (click)="confirmSignUp(confirmSignUpForm)" type="submit" primary block>Confirm Sign Up</button>
+
+</ion-content>

@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons right>
+      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
+        <ion-icon name="contact"></ion-icon>Register 
+      </button>
+      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId == ''">
+        <ion-icon name="log-in"></ion-icon>
+        Sign In
+      </button>
+      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId">
+        <ion-icon name="log-out"></ion-icon>Sign Out
+      </button>
+    </ion-buttons>
+    <ion-title>Locations</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div padding *ngIf="globals.userId == ''">
+    <p><b>You must be signed in to view available rooms and desks.</b></p>
+    <p>Click the "SIGN IN" button in the upper right of the screen, to sign in to the app.</p>
+    <p>Haven't registered yet? Click on the "REGISTER" button to register as a new user.</p>
+  </div>
+
+  <div *ngIf="globals.userId != ''">
+
+    <div align='center' *ngIf="initialized">
+      <button ion-button (click)="loadLocationsWithoutAuth()" type="submit" color="light" style='text-transform:none'>Load Locations without Auth</button>
+    </div>
+    <div align='center' *ngIf="initialized">
+      <button ion-button (click)="loadLocationsWithAuth()" type="submit" color="light" style='text-transform:none'>Load Locations with Auth</button>
+    </div>
+
+    <ion-list>
+      <ion-item *ngFor="let location of locations">
+        <ion-thumbnail item-left (click)="gotoResourceListPage(location)">
+          <img src="{{location.imageUrl}}">
+        </ion-thumbnail>
+        <!--<ion-icon name="compass" item-left (click)="gotoResourceListPage(location)"></ion-icon>-->
+        <h2 (click)="gotoResourceListPage(location)">{{location.name}}</h2>
+        <p (click)="gotoResourceListPage(location)">{{location.description}}</p>
+        <button *ngIf="globals.displayAdminFeatures()" (click)="displayDeleteLocationConfirmation(location.locationId, location.name)" ion-button color="danger" item-right>Delete</button>
+      </ion-item>
+    </ion-list>
+    
+    <div align='center' *ngIf="globals.displayAdminFeatures() && initialized">
+      <button ion-button [navPush]="locationAddPage" type="submit" color="primary">Add a location</button>
+    </div>
+  </div>
+
+</ion-content>
