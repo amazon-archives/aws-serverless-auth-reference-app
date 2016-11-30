@@ -72,9 +72,6 @@ The application framework relies on [Node.js](https://nodejs.org/en/download/) a
 
     # install latest version of the Ionic2 CLI, Cordova, and Bower tools
     npm install -g ionic cordova bower
-
-    # Checkout the git repo (if you haven't already)
-    git clone https://github.com/awslabs/aws-serverless-auth-reference-app.git
     
     # install the Node modules 
     cd aws-serverless-auth-reference-app/app
