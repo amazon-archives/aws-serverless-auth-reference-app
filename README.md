@@ -41,7 +41,7 @@ For full visibility into how everything works, you're able to setup the backend 
     git clone https://github.com/awslabs/aws-serverless-auth-reference-app.git
     
     # install the Node modules for the bootstrapping process 
-    cd spacefinder/api
+    cd aws-serverless-auth-reference-app/api
     npm install
     
     # install the Node modules for the Lambda run-time
@@ -49,7 +49,7 @@ For full visibility into how everything works, you're able to setup the backend 
     npm install
     
     # Optional: Update the API config file if you'd like to use a specific non-default AWS profile or different region than us-east-1 to install to.
-    # vi spacefinder/api/config.js
+    # vi aws-serverless-auth-reference-app/api/config.js
 
     # Run the API automated bootstrapping process to deploy all resources to your account
     # gulp commands need to be run from 'api' directory
@@ -75,7 +75,7 @@ The application framework relies on [Node.js](https://nodejs.org/en/download/) a
     git clone https://github.com/awslabs/aws-serverless-auth-reference-app.git
     
     # install the Node modules 
-    cd spacefinder/app
+    cd aws-serverless-auth-reference-app/app
     npm install
     
     # install the Bower crypto components (for AWS request signing)
@@ -148,5 +148,5 @@ The log messages will show you all tokens retrieved as part of the sign-in proce
 
 When you're through testing and using the application, you may run the following command to delete any previously created backend resources that are hosted in your AWS account.
 
-    cd spacefinder/api
+    cd aws-serverless-auth-reference-app/api
     gulp undeploy
