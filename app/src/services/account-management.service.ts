@@ -135,8 +135,6 @@ export class CognitoUtil {
 export class UserRegistrationService {
 
   public static signUp(signUpData: IUserRegistration): Promise<void> {
-    // TODO(Justin): Don't log password to console
-    console.log('Sign-up details ' + JSON.stringify(signUpData));
 
     let attributeList: IUserAttribute[] = [];
 
