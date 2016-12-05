@@ -14,11 +14,11 @@ export class AccountSignupPage {
   accountConfirmationCodePage = AccountConfirmationCodePage;
 
   public userData: IUserRegistration = {
-    username: 'jim',
-    password: 'Test123!',
-    givenName: 'Jim',
-    familyName: 'Tran',
-    email: 'jim@aws-demos.com'
+    username: '',
+    password: '',
+    givenName: '',
+    familyName: '',
+    email: ''
   };
 
   public submitted: boolean = false;
