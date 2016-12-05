@@ -10,7 +10,7 @@ SpaceFinder is primarily developed and maintained by Jim Tran and Justin Pirtle,
 
 A live demo of the SpaceFinder app was presented at [AWS re:Invent 2016](https://reinvent.awsevents.com/), the annual AWS cloud computing conference. The presentation provides useful context on the authentication and authorization flows that the app demonstrates. The YouTube recording of the session (53 minutes) is available here:
 
-* [AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management (MBL306)](https://www.youtube.com/watch?v=n4hsWVXCuVI&list=PLhr1KZpdzukdAg4bXtTfICuFeZFC_H2Xq&index=6)
+* [AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (MBL306)](https://www.youtube.com/watch?v=n4hsWVXCuVI&list=PLhr1KZpdzukdAg4bXtTfICuFeZFC_H2Xq&index=6)
 <br/>Presenters: Jim Tran and Justin Pirtle
 <br/>Presented on: November 30, 2016
 
@@ -79,6 +79,33 @@ The mobile app is a hybrid mobile app, and is built on the [Ionic2 framework](ht
 
 ![Spacefinder Mobile app](/app/docs/images/screenshot-small.png?raw=true)
 
+## User flows
+
+The app currently demonstrates the following user flows:
+
+* Identity Management
+  * Register as a new user
+  * Confirm registration code
+  * Sign in (as a user who has already confirmed a registration code)
+  * Sign in (as a user who has not yet confirmed a registration code)
+  * Re-send registration code
+  * Forgot password
+  * Change password
+  * Sign-out
+* SpaceFinder Application Features
+  * View list of locations
+  * Add a new location (Admin-only feature)
+  * Delete a location  (Admin-only feature)
+  * View list of resources at a location
+  * Add a new resource (Admin-only feature)
+  * Delete a resource (Admin-only feature)
+  * View resource availability
+  * Book a new booking
+  * Cancel own booking
+  * Cancel another user's booking (Admin-only feature)
+  * Upload a profile image to Amazon S3
+  * Toggle display of admin-only features
+
 ### Installing the prerequisites
 
 The application framework relies on [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/). It also uses [Apache Cordova](https://cordova.apache.org/) plugins to support certain native functionality on mobile devices.
@@ -134,9 +161,7 @@ There are also third-party tools such as [Vysor](https://www.vysor.io/) which ca
 
 #### Sample users and data
 
-As part of the bootstrapping process, sample users and location/resource data were created for you.
-
-Use the following users to login to the application. You may additionally create your own personal accounts.
+Sample users and location/resource data are created as part of the bootstrapping process, to make it easy for you to try out the user flows. Use the following users to login to the application. You may additionally create your own personal accounts.
 
 * Standard user
   * Username: `user1`
