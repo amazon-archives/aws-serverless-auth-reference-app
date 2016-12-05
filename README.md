@@ -6,6 +6,15 @@ The mobile front-end is built using the [Ionic2 framework](http://ionicframework
 
 SpaceFinder is primarily developed and maintained by Jim Tran and Justin Pirtle, Solutions Architects at Amazon Web Services. The project code is released under the Apache 2.0 license. Please feel free to make use of the code in this project, and spread the word. We hope you enjoy it, and we certainly welcome all feedback, pull requests and other contributions!
 
+## Video presentation
+
+A live demo of the SpaceFinder app was presented at [AWS re:Invent 2016](https://reinvent.awsevents.com/), the annual AWS cloud computing conference. The presentation provides useful context on the authentication and authorization flows that the app demonstrates. The YouTube recording of the session (53 minutes) is available here:
+
+* [AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management (MBL306)](https://www.youtube.com/watch?v=n4hsWVXCuVI&list=PLhr1KZpdzukdAg4bXtTfICuFeZFC_H2Xq&index=6)
+<br/>Presenters: Jim Tran and Justin Pirtle
+<br/>Presented on: November 30, 2016
+
+
 ## Architecture diagram
 
 ![Spacefinder Mobile App architecture](/app/docs/images/spacefinder-app-architecture.png?raw=true)
