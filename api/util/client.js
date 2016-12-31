@@ -21,7 +21,7 @@ function generateClientConfig() {
       generatedConfig.API_ENDPOINT = apiInvokeUrl;
       return cognito.getUserPoolId().then((userPoolId) => {
         generatedConfig.USER_POOL_ID = userPoolId;
-        return cognito.getUserPoolClientId(cognito.userPoolAppClientName, generatedConfig.USER_POOL_ID).then((userPoolClientId) => {
+        return cognito.getUserPoolClientId(cognito.userPoolClientName, generatedConfig.USER_POOL_ID).then((userPoolClientId) => {
           generatedConfig.CLIENT_ID = userPoolClientId;
           return cognito.getIdentityPoolId().then((identityPoolId) => {
             generatedConfig.IDENTITY_POOL_ID = identityPoolId;

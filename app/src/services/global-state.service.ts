@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
-import { CognitoUtil, UserLoginService } from './account-management.service';
+import {CognitoUtil, UserLoginService, LocalStorage} from './account-management.service';
 import { Logger } from './logger.service';
+
 
 @Injectable()
 export class GlobalStateService {
+
 
   private viewAdminFeaturesOverride: boolean = false;
   private loader = null;
@@ -65,9 +67,9 @@ export class GlobalStateService {
     return this.isAdminRole() || this.viewAdminFeaturesOverride;
   }
 
+
   isAdminRole(): boolean {
-    let userProfile = CognitoUtil.getUserProfile();
-    return (userProfile['custom:admin'] && userProfile['custom:admin'] === 'true');
+    return CognitoUtil.getUserGroup() == 'adminGroup';
   }
 
   getAlertController() {

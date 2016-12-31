@@ -9,8 +9,7 @@ let userPools = new AWS.CognitoIdentityServiceProvider();
 
 let identityPoolName = config.getName('identityPool').replace(/-/g,'_');
 let userPoolName = config.getName('userPool');
-let userPoolAdminClientName = userPoolName + '-admin-client';
-let userPoolAppClientName = userPoolName + '-app-client';
+let userPoolClientName = userPoolName + '-client';
 let newUserTempPassword = 'Temp123!';
 
 function createUserPool() {
@@ -18,13 +17,6 @@ function createUserPool() {
     PoolName: userPoolName,
     AutoVerifiedAttributes: [
       'email'
-    ],
-    Schema: [
-      {
-        Name: 'admin',
-        AttributeDataType: 'Boolean',
-        Mutable: true
-      }
     ]
   };
   return new Promise((resolve, reject) => {
@@ -41,7 +33,7 @@ function createUserPool() {
     logger.info('Created Cognito User Pool', params.PoolName);
     resolve(data);
     });
-  }).then(createUserPoolClients);
+  }).then(createUserPoolClientsV2);
 }
 
 function safeCreateUserPool() {
@@ -88,30 +80,12 @@ function createUserPoolClient(params) {
   });
 }
 
-function createUserPoolClients(data) {
+function createUserPoolClientsV2(data) {
   return new Promise((resolve, reject) => {
     let userPoolId = data.UserPool.Id;
-    // Generate app client config and create client
-    let appClientParams = {
-      ClientName: userPoolAppClientName,
-      UserPoolId: userPoolId,
-      GenerateSecret: false,
-      ReadAttributes: [
-        'email',
-        'email_verified',
-        'given_name',
-        'family_name',
-        'custom:admin'
-      ],
-      WriteAttributes: [
-        'email',
-        'given_name',
-        'family_name'
-      ]
-    };
 
-    let adminClientParams = {
-      ClientName: userPoolAdminClientName,
+    let appConfigParameters = {
+      ClientName: userPoolClientName,
       UserPoolId: userPoolId,
       ExplicitAuthFlows: [
         'ADMIN_NO_SRP_AUTH'
@@ -136,8 +110,7 @@ function createUserPoolClients(data) {
         'profile',
         'zoneinfo',
         'updated_at',
-        'website',
-        'custom:admin'
+        'website'
       ],
       WriteAttributes: [
         'address',
@@ -156,23 +129,19 @@ function createUserPoolClients(data) {
         'profile',
         'zoneinfo',
         'updated_at',
-        'website',
-        'custom:admin'
+        'website'
       ]
     };
 
-    createUserPoolClient(appClientParams).then(() => {
+    createUserPoolClient(appConfigParameters).then(() => {
       // Create admin client after app client successfully created
-      createUserPoolClient(adminClientParams).then(() => {
-        resolve('Created admin and app client successfully');
-      }).catch((err) => {
-         reject(err);
-      });
+      resolve('Created user pool LEX client successfully');
     }).catch((err) => {
-        reject(err);
+      reject(err);
     });
   });
 }
+
 
 function getUserPoolId() {
   let listUserPoolsParams = {
@@ -217,7 +186,8 @@ function getUserPoolClientId(userPoolClientName, userPoolId) {
   });
 }
 
-function createIdentityPool() {
+
+function createIdentityPoolV2() {
   return new Promise((resolve, reject) => {
     getUserPoolId().then((userPoolId) => {
       let listUserPoolClientParams = {
@@ -232,7 +202,7 @@ function createIdentityPool() {
         let userPoolClientIds = [];
         for (let i = 0; i < data.UserPoolClients.length; i++) {
           // Loop through user pool clients to find desired user pool client and return Id
-          if (data.UserPoolClients[i].ClientName === userPoolAppClientName || data.UserPoolClients[i].ClientName === userPoolAdminClientName) {
+          if (data.UserPoolClients[i].ClientName == userPoolClientName) {
             userPoolClientIds.push(data.UserPoolClients[i].ClientId);
           }
         }
@@ -246,6 +216,7 @@ function createIdentityPool() {
     });
   });
 }
+
 
 function createIdentityPoolImpl(userPoolId, userPoolClientIds) {
   let cognitoIdentityProviders = [];
@@ -300,7 +271,7 @@ function safeCreateIdentityPool() {
       }
 
       // No name match found. Create new user pool
-      resolve(createIdentityPool());
+      resolve(createIdentityPoolV2());
     });
   });
 }
@@ -382,6 +353,46 @@ function deleteUserPool() {
   });
 }
 
+
+function adminCreateGroup(group) {
+  return getUserPoolId().then((userPoolId) => {
+
+    let params = {
+      UserPoolId: userPoolId,
+      GroupName: group.name,
+      Description: group.description,
+      Precedence: group.precedence
+    };
+
+    userPools.adminAddUserToGroup()
+    userPools.createGroup(params, function (err, data) {
+      if (err) {
+        throw (new Error(err));
+      }
+      return (data)
+    });
+  });
+}
+
+
+function adminAssignUserToGroup(user, group) {
+  return getUserPoolId().then((userPoolId) => {
+    let params = {
+      UserPoolId: userPoolId,
+      Username: user.username,
+      GroupName: group.name
+    };
+
+    userPools.adminAddUserToGroup(params, function (err, data) {
+      if (err) {
+        throw (new Error(err));
+      }
+      return (data)
+    })
+  });
+}
+
+
 function adminCreateUser(userData) {
   return getUserPoolId().then((userPoolId) => {
     let createUserParams = {
@@ -401,10 +412,6 @@ function adminCreateUser(userData) {
         {
           Name: 'family_name',
           Value: userData.familyName
-        },
-        {
-          Name: 'custom:admin',
-          Value: userData.admin
         }
       ]
     };
@@ -420,7 +427,7 @@ function adminCreateUser(userData) {
 function initialChangePassword(userData) {
   return new Promise((resolve, reject) => {
     getUserPoolId().then((userPoolId) => {
-      getUserPoolClientId(userPoolAdminClientName, userPoolId).then((userPoolClientId) => {
+      getUserPoolClientId(userPoolClientName, userPoolId).then((userPoolClientId) => {
         let adminInitiateAuthParams = {
           AuthFlow: 'ADMIN_NO_SRP_AUTH',
           ClientId: userPoolClientId,
@@ -461,7 +468,7 @@ function initialChangePassword(userData) {
 function getIdentityPoolUserId(userData) {
   return new Promise((resolve, reject) => {
     getUserPoolId().then((userPoolId) => {
-      getUserPoolClientId(userPoolAdminClientName, userPoolId).then((userPoolClientId) => {
+      getUserPoolClientId(userPoolClientName, userPoolId).then((userPoolClientId) => {
         let adminInitiateAuthParams = {
           AuthFlow: 'ADMIN_NO_SRP_AUTH',
           ClientId: userPoolClientId,
@@ -517,5 +524,7 @@ module.exports = {
   getIdentityPoolUserId,
   getUserPoolId,
   getUserPoolClientId,
-  userPoolAppClientName
+  adminCreateGroup,
+  adminAssignUserToGroup,
+  userPoolClientName
 };
