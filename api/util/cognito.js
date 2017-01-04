@@ -202,7 +202,7 @@ function createIdentityPoolV2() {
         let userPoolClientIds = [];
         for (let i = 0; i < data.UserPoolClients.length; i++) {
           // Loop through user pool clients to find desired user pool client and return Id
-          if (data.UserPoolClients[i].ClientName == userPoolClientName) {
+          if (data.UserPoolClients[i].ClientName === userPoolClientName) {
             userPoolClientIds.push(data.UserPoolClients[i].ClientId);
           }
         }

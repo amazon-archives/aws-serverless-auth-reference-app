@@ -4,7 +4,7 @@ var locations = rfr('lambda/locations');
 var resources = rfr('lambda/resources');
 var bookings = rfr('lambda/bookings');
 var cognito = rfr('util/cognito');
-var logger = rfr('util/logger');
+
 
 var SampleGroups = [
   {
@@ -272,7 +272,7 @@ class SampleData {
       //Just a trivial assignment to demonstrate adding users
       //to a group. For the example admin1 user goes to admin group
       //and user1 user goes to client group
-      if (user.username == "admin1") {
+      if (user.username === "admin1") {
         group = SampleGroups[0];
       } else {
         group = SampleGroups[1];
