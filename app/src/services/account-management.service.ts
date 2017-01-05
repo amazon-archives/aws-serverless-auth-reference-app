@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Config } from '../config/config'
-import { Logger } from './logger.service';
+import {Injectable} from '@angular/core';
+import {Config} from '../config/config'
+import {Logger} from './logger.service';
 import * as sjcl from 'sjcl';
 
 declare const AWS: any;
@@ -87,11 +87,16 @@ export class CognitoUtil {
   public static getUserState(): UserState {
     // Retrieve user state from local storage. Return null if it does not exist
     switch (parseInt(LocalStorage.get('userState'))) {
-      case 0: return UserState.SignedOut;
-      case 1: return UserState.SignedIn;
-      case 2: return UserState.PendingConfirmation;
-      case 3: return UserState.InvalidCredentials;
-      default: return null;
+      case 0:
+        return UserState.SignedOut;
+      case 1:
+        return UserState.SignedIn;
+      case 2:
+        return UserState.PendingConfirmation;
+      case 3:
+        return UserState.InvalidCredentials;
+      default:
+        return null;
     }
   };
 
@@ -102,8 +107,8 @@ export class CognitoUtil {
   public static getUserPool() {
     // Initialize Cognito User Pool
     let poolData: Object = {
-      UserPoolId : CognitoUtil._USER_POOL_ID,
-      ClientId : CognitoUtil._CLIENT_ID
+      UserPoolId: CognitoUtil._USER_POOL_ID,
+      ClientId: CognitoUtil._CLIENT_ID
     };
     AWSCognito.config.region = CognitoUtil._REGION;
     AWSCognito.config.credentials = new AWS.CognitoIdentityCredentials({
@@ -227,8 +232,9 @@ export class UserLoginService {
     idToken: undefined,
     refreshToken: undefined
   };
+
   public static getAccessToken() {
-    let accessToken : string = UserLoginService._userTokens.accessToken;
+    let accessToken: string = UserLoginService._userTokens.accessToken;
     if (!accessToken) {
       // retrieve from Local Storage if it exists
       accessToken = LocalStorage.get('userTokens.accessToken');
@@ -238,7 +244,7 @@ export class UserLoginService {
   };
 
   public static getIdToken() {
-    let idToken : string = UserLoginService._userTokens.idToken;
+    let idToken: string = UserLoginService._userTokens.idToken;
     if (!idToken) {
       // retrieve from Local Storage if it exists
       idToken = LocalStorage.get('userTokens.idToken');
@@ -248,7 +254,7 @@ export class UserLoginService {
   };
 
   public static getRefreshToken() {
-    let refreshToken : string = UserLoginService._userTokens.refreshToken;
+    let refreshToken: string = UserLoginService._userTokens.refreshToken;
     if (!refreshToken) {
       // retrieve from Local Storage if it exists
       refreshToken = LocalStorage.get('userTokens.refreshToken');
@@ -258,7 +264,9 @@ export class UserLoginService {
   }
 
   public static getAwsAccessKey() {
-    if (AWS.config.credentials == null) { return LocalStorage.get('userTokens.awsAccessKeyId'); }
+    if (AWS.config.credentials == null) {
+      return LocalStorage.get('userTokens.awsAccessKeyId');
+    }
     return AWS.config.credentials.accessKeyId || LocalStorage.get('userTokens.awsAccessKeyId');
   }
 
@@ -335,6 +343,8 @@ export class UserLoginService {
           let payload = JSON.parse(sjcl.codec.utf8String.fromBits(sjcl.codec.base64url.toBits(idTokenPayload)));
           let userGroup = payload["cognito:groups"][0];
           LocalStorage.set('userGroup', userGroup);
+          console.log('%cCognito User Pools User Groups :'+'%c%s belongs to group %s', Logger.LeadInStyle, "black",
+            userLogin.username, userGroup);
 
           // Set user state to authenticated
           CognitoUtil.setUserState(UserState.SignedIn);
@@ -392,7 +402,7 @@ export class UserLoginService {
       // first, load the valid tokens cached in the local store, if they are available
       // see: https://github.com/aws/amazon-cognito-identity-js/issues/71
       let cognitoUser = CognitoUtil.getCognitoUser();
-      cognitoUser.getSession( (err: Error, session: any) => {
+      cognitoUser.getSession((err: Error, session: any) => {
         if (err) {
           reject(err);
           return;
@@ -521,12 +531,11 @@ export class UserProfileService {
           let userAttributes = {};
 
           for (var i = 0; i < result.length; i++) {
-            console.log('%cCognito User Pools :', Logger.LeadInStyle, result[i].getName)
             userAttributes[result[i].getName()] = result[i].getValue();
           }
           console.log('%cCognito User Pools User Attributes: ', Logger.LeadInStyle, userAttributes);
           // Write user profile attributes to local storage
-          LocalStorage.setObject('userProfile',userAttributes);
+          LocalStorage.setObject('userProfile', userAttributes);
           resolve(userAttributes);
         });
       })
@@ -567,5 +576,5 @@ export class LocalStorage {
   }
 }
 export const LOCAL_STORAGE_PROVIDERS: any[] = [
-  { provide: LocalStorage, useClass: LocalStorage }
+  {provide: LocalStorage, useClass: LocalStorage}
 ];
