@@ -290,11 +290,6 @@ AuthPolicy.prototype = (function AuthPolicyClass() {
       addMethod.call(this, 'deny', verb, resource, conditions);
     },
 
-    isAuthorizedUser() {
-      console.log('isAuthorized user call');
-      return true;
-    },
-
 
     /**
      * Generates the policy document based on the internal lists of allowed and denied
