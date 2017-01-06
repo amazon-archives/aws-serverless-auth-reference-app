@@ -3,10 +3,15 @@ var rfr = require('rfr');
 var logger = rfr('/logger');
 var config = rfr('/config');
 var jwt = require('jsonwebtoken');
+var env = rfr('/environment');
+var request = require('request');
+var jwkToPem = require('jwk-to-pem');
+var PEMS = null;
+
 console.log('Loading function');
 
 // TODO(Add identity token signature verification then remove this comment)
-// var env = rfr('/environment');
+
 
 /**
  * AuthPolicy receives a set of allowed and denied methods and generates a valid
@@ -203,6 +208,7 @@ AuthPolicy.prototype = (function AuthPolicyClass() {
     return statements;
   }
 
+
   return {
     constructor: AuthPolicy,
 
@@ -284,6 +290,12 @@ AuthPolicy.prototype = (function AuthPolicyClass() {
       addMethod.call(this, 'deny', verb, resource, conditions);
     },
 
+    isAuthorizedUser() {
+      console.log('isAuthorized user call');
+      return true;
+    },
+
+
     /**
      * Generates the policy document based on the internal lists of allowed and denied
      * conditions. This will generate a policy with two main statements for the effect:
@@ -315,70 +327,128 @@ AuthPolicy.prototype = (function AuthPolicyClass() {
   };
 }());
 
+
+function processAuthRequest(event, tokenIssuer, callback) {
+  var token = event.authorizationToken;
+
+  //Fail if the token is not jwt
+  var decodedJwt = jwt.decode(token, {complete: true});
+  if (!decodedJwt) {
+    console.log('Not a valid JWT token');
+    callback('Unauthorized');
+    return;
+  }
+
+  //Fail if token is not from your User Pool
+  if (decodedJwt.payload['iss'] != tokenIssuer) {
+    console.log("invalid Issuer");
+    callback("Unauthorized");
+    return;
+  }
+
+  //Reject the jwt if it's not an 'Access Token'
+  if (decodedJwt.payload['token_use'] != 'id') {
+    console.log("Not an Identity token");
+    callback("Unauthorized");
+    return;
+  }
+
+  //Get the kid from the token and retrieve corresponding PEM
+  var kid = decodedJwt.header.kid;
+  var pem = PEMS[kid];
+  if (!pem) {
+    console.log('Invalid Identity token');
+    callback("Unauthorized");
+    return;
+  }
+
+  //Verify the signature of the JWT token to ensure it's really coming from your User Pool
+
+  jwt.verify(token, pem, {issuer: tokenIssuer}, function (err, payload) {
+    if (err) {
+      callback("Unauthorized");
+    } else {
+      //Valid token. Generate the API Gateway policy for the user
+      //Always generate the policy on value of 'sub' claim and not for
+      // 'username' because username is reassignable
+      //sub is UUID for a user which is never reassigned to another user.
+
+      const apiOptions = {};
+      const tmp = event.methodArn.split(':');
+      const apiGatewayArnTmp = tmp[5].split('/');
+      const principalId = payload.sub;
+      const awsAccountId = tmp[4];
+
+      apiOptions.region = tmp[3];
+      apiOptions.restApiId = apiGatewayArnTmp[0];
+      apiOptions.stage = apiGatewayArnTmp[1];
+
+      let admin = null;
+      let policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
+      policy.allowAllMethods();
+
+
+      //Check the Cognito group entry for Admin.
+      //Assuming here that the Admin group has always higher
+      //precedence
+
+      if (payload['cognito:groups'] &&
+        payload['cognito:groups'][0] === 'adminGroup') {
+        admin = true;
+      }
+
+      if (!admin) {
+        policy.denyMethod(AuthPolicy.HttpVerb.DELETE, '/locations');
+        policy.denyMethod(AuthPolicy.HttpVerb.DELETE, '/locations/*');
+        policy.denyMethod(AuthPolicy.HttpVerb.POST, '/locations');
+        policy.denyMethod(AuthPolicy.HttpVerb.POST, '/locations/*');
+      }
+
+      let iamPolicy = policy.build();
+      logger.info('Generated IAM Policy', iamPolicy);
+      logger.info('Effective IAM statement', iamPolicy.policyDocument.Statement);
+      callback(null, iamPolicy);
+    }
+  });
+}
+
+function toPem(keyDictionary) {
+
+  var modulus = keyDictionary.n;
+  var exponent = keyDictionary.e;
+  var key_type = keyDictionary.kty;
+  var jwk = {kty: key_type, n: modulus, e: exponent};
+  var pem = jwkToPem(jwk);
+  return pem;
+}
+
 exports.Custom = (event, context, callback) => {
-  //console.log('Client authorization token:', event.authorizationToken);
-  //console.log('Method ARN:', event.methodArn);
 
-  // TODO: Move this initial key lookup step into constructor for on-time run only.
-  // Download and store the JWT set for our Cognito User Pool
-  // let jwtKeySet = 'https://cognito-idp.' + config.AWS_REGION + '.amazonaws.com/' + env.config.USER_POOL_ID + '/.well-known/jwks.json';
-  // logger.info('jwtKeySetUrl:', jwtKeySet);
+  let userPoolURI = 'https://cognito-idp.' + config.AWS_REGION
+    + '.amazonaws.com/' + env.config.USER_POOL_ID;
+
+  let jwtKeySetURI = userPoolURI + '/.well-known/jwks.json';
 
 
-  // Decode and validate the incoming token
-  var decoded = null;
-  try {
-    decoded = jwt.decode(event.authorizationToken);
-    logger.info('JWT Decoded', decoded);
-  } catch(e) {
-    callback(e);
+  if (!PEMS) {
+    request({url: jwtKeySetURI, json: true},
+      function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+          PEMS = {};
+          var keys = body['keys'];
+          for (let keyIndex = 0; keyIndex < keys.length; keyIndex++) {
+            var kid = keys[keyIndex].kid;
+            PEMS[kid] = toPem(keys[keyIndex]);
+          }
+          processAuthRequest(event, userPoolURI, callback);
+
+        } else {
+          callback('Unauthorized');
+        }
+      }
+    );
+  } else {
+    processAuthRequest(event, userPoolURI, callback);
   }
 
-  const principalId = decoded.sub;
-  let admin = null;
-  if (decoded['custom:admin'] && decoded['custom:admin'] === 'true') {
-    admin = true;
-  }
-
-  //TODO(Justin): Validate signature against Cognito User Pool
-  //TODO(Justin): Validate expiration date/time
-
-  // you can send a 401 Unauthorized response to the client by failing like so:
-  // callback('Unauthorized');
-
-  // build apiOptions for the AuthPolicy
-  const apiOptions = {};
-  const tmp = event.methodArn.split(':');
-  const apiGatewayArnTmp = tmp[5].split('/');
-  const awsAccountId = tmp[4];
-  apiOptions.region = tmp[3];
-  apiOptions.restApiId = apiGatewayArnTmp[0];
-  apiOptions.stage = apiGatewayArnTmp[1];
-
-  // this function must generate a policy that is associated with the recognized principal user identifier.
-  // depending on your use case, you might store policies in a DB, or generate them on the fly
-
-  // keep in mind, the policy is cached for 5 minutes by default (TTL is configurable in the authorizer)
-  // and will apply to subsequent calls to any method/resource in the RestApi
-  // made with the same token
-
-  // the example policy below denies access to all resources in the RestApi
-  const policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
-
-  // Add generic allow for any valid user, with the following DENY statements taking precedence when included
-  policy.allowAllMethods();
-
-
-  if (!admin) {
-    policy.denyMethod(AuthPolicy.HttpVerb.DELETE, '/locations');
-    policy.denyMethod(AuthPolicy.HttpVerb.DELETE, '/locations/*');
-    policy.denyMethod(AuthPolicy.HttpVerb.POST, '/locations');
-    policy.denyMethod(AuthPolicy.HttpVerb.POST, '/locations/*');
-  }
-
-  // finally, build the policy and exit the function
-  let iamPolicy = policy.build();
-  logger.info('Generated IAM Policy', iamPolicy);
-  logger.info('Effective IAM statement', iamPolicy.policyDocument.Statement);
-  callback(null, iamPolicy);
 };
