@@ -7,7 +7,7 @@ var cf = rfr('/util/cloudFormation');
 let identityPools = new AWS.CognitoIdentity();
 let userPools = new AWS.CognitoIdentityServiceProvider();
 
-let identityPoolName = config.getName('identityPool').replace(/-/g,'_');
+let identityPoolName = config.getName('identityPool').replace(/-/g, '_');
 let userPoolName = config.getName('userPool');
 let userPoolClientName = userPoolName + '-client';
 let newUserTempPassword = 'Temp123!';
@@ -20,7 +20,7 @@ function createUserPool() {
     ]
   };
   return new Promise((resolve, reject) => {
-    userPools.createUserPool(params, function(err, data) {
+    userPools.createUserPool(params, function (err, data) {
       if (err) {
         if (err.code === 'ResourceConflictException') {
           resolve('User pool already exists');
@@ -30,8 +30,8 @@ function createUserPool() {
           return;
         }
       }
-    logger.info('Created Cognito User Pool', params.PoolName);
-    resolve(data);
+      logger.info('Created Cognito User Pool', params.PoolName);
+      resolve(data);
     });
   }).then(createUserPoolClientsV2);
 }
@@ -41,9 +41,8 @@ function safeCreateUserPool() {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    userPools.listUserPools(listUserPoolsParams, function(err, data) {
-      if (err)
-      {
+    userPools.listUserPools(listUserPoolsParams, function (err, data) {
+      if (err) {
         reject(err);
       }
       for (let i = 0; i < data.UserPools.length; i++) {
@@ -64,7 +63,7 @@ function safeCreateUserPool() {
 
 function createUserPoolClient(params) {
   return new Promise((resolve, reject) => {
-    userPools.createUserPoolClient(params, function(err, data) {
+    userPools.createUserPoolClient(params, function (err, data) {
       if (err) {
         if (err.code === 'ResourceConflictException') {
           resolve('User pool client ' + params.ClientName + ' already exists');
@@ -148,9 +147,8 @@ function getUserPoolId() {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    userPools.listUserPools(listUserPoolsParams, function(err, data) {
-      if (err)
-      {
+    userPools.listUserPools(listUserPoolsParams, function (err, data) {
+      if (err) {
         reject(err);
         return;
       }
@@ -170,9 +168,8 @@ function getUserPoolClientId(userPoolClientName, userPoolId) {
     UserPoolId: userPoolId
   };
   return new Promise((resolve, reject) => {
-    userPools.listUserPoolClients(listUserPoolClientsParams, function(err, data) {
-      if (err)
-      {
+    userPools.listUserPoolClients(listUserPoolClientsParams, function (err, data) {
+      if (err) {
         reject(err);
         return;
       }
@@ -194,7 +191,7 @@ function createIdentityPoolV2() {
         UserPoolId: userPoolId,
         MaxResults: 60
       };
-      userPools.listUserPoolClients(listUserPoolClientParams, function(err, data) {
+      userPools.listUserPoolClients(listUserPoolClientParams, function (err, data) {
         if (err) {
           reject(err);
           return;
@@ -233,7 +230,7 @@ function createIdentityPoolImpl(userPoolId, userPoolClientIds) {
     CognitoIdentityProviders: cognitoIdentityProviders
   };
   return new Promise((resolve, reject) => {
-    identityPools.createIdentityPool(params, function(err) {
+    identityPools.createIdentityPool(params, function (err) {
       if (err) {
         if (err.code === 'ResourceConflictException') {
           resolve('Identity pool already exists');
@@ -254,9 +251,8 @@ function safeCreateIdentityPool() {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    identityPools.listIdentityPools(listIdentityPoolsParams, function(err, data) {
-      if (err)
-      {
+    identityPools.listIdentityPools(listIdentityPoolsParams, function (err, data) {
+      if (err) {
         reject(err);
         return;
       }
@@ -281,9 +277,8 @@ function getIdentityPoolId() {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    identityPools.listIdentityPools(listIdentityPoolsParams, function(err, data) {
-      if (err)
-      {
+    identityPools.listIdentityPools(listIdentityPoolsParams, function (err, data) {
+      if (err) {
         reject(err);
         return;
       }
@@ -334,7 +329,7 @@ function deleteIdentityPool() {
       if (err) {
         throw (new Error(err));
       }
-      return(data);
+      return (data);
     });
   });
 }
@@ -348,11 +343,10 @@ function deleteUserPool() {
       if (err) {
         throw (new Error(err));
       }
-      return(data);
+      return (data);
     });
   });
 }
-
 
 function adminCreateGroup(group) {
   return getUserPoolId().then((userPoolId) => {
@@ -363,8 +357,6 @@ function adminCreateGroup(group) {
       Description: group.description,
       Precedence: group.precedence
     };
-
-    userPools.adminAddUserToGroup()
     userPools.createGroup(params, function (err, data) {
       if (err) {
         throw (new Error(err));
@@ -372,6 +364,7 @@ function adminCreateGroup(group) {
       return (data)
     });
   });
+
 }
 
 

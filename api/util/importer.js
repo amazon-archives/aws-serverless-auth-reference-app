@@ -228,7 +228,6 @@ class SampleData {
     });
   }
 
-
   static createPromiseToCreateGroup(group) {
     let promise = new Promise((resolve, reject) => {
       cognito.adminCreateGroup(group)
