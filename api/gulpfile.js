@@ -138,7 +138,7 @@ gulp.task('generate_sample_groups', function (done) {
   execPromise(importer.SampleData.generateSampleUserGroups(), done);
 });
 
-gulp.task('assign_users_to_groups', function (done) {
+gulp.task('assign_users_to_cognito_user_groups', function (done) {
   logger.info('Assigning users to groups...');
   execPromise(importer.SampleData.assignUsersToGroups(), done);
 })
@@ -169,6 +169,7 @@ gulp.task('deploy_lambda', gulp.series('create_lambda_zip', 'upload_lambda_zip',
 
 gulp.task('generate_sdk', gulp.series('export_api', 'create_sdk', 'delete_export_api'));
 
+
 gulp.task('deploy', gulp.series(
   'create_cloudformation_stack',
   'create_dynamodb_tables',
@@ -186,16 +187,3 @@ gulp.task('undeploy', gulp.series(
   'delete_cloudwatch_logs'
 ));
 
-
-gulp.task('bootstrap', gulp.series(
-  'deploy',
-  'generate_sample_groups',
-  'sleep',
-  'generate_sample_users',
-  'sleep',
-  'assign_users_to_groups',
-  'sleep',
-  'generate_sample_data'
-));
-
-gulp.task('default', gulp.series('bootstrap'));

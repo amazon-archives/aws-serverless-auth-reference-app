@@ -2,32 +2,32 @@
 
 **SpaceFinder** is a reference mobile app that allows users to book conference rooms, work desks, and other shared resources. The app showcases **serverless authentication and authorization** using the AWS platform.
 
-The mobile front-end is built using the [Ionic2 framework](http://ionicframework.com/docs/v2/) and client libraries to call AWS services and mobile backend APIs. The backend APIs themselves are powered by AWS services. The backend APIs are built using a serverless architecture, which makes it easy to deploy updates, and it also means that there are no servers to operationally manage.
+The mobile front-end is built using the [Ionic2 framework] and client libraries to call AWS services and mobile backend APIs. The backend APIs themselves are powered by AWS services. The backend APIs are built using a serverless architecture, which makes it easy to deploy updates, and it also means that there are no servers to operationally manage.
 
 SpaceFinder is primarily developed and maintained by Jim Tran and Justin Pirtle, Solutions Architects at Amazon Web Services. The project code is released under the Apache 2.0 license. Please feel free to make use of the code in this project, and spread the word. We hope you enjoy it, and we certainly welcome all feedback, pull requests and other contributions!
 
 ## Video presentation
 
-A live demo of the SpaceFinder app was presented at [AWS re:Invent 2016](https://reinvent.awsevents.com/), the annual AWS cloud computing conference. The presentation provides useful context on the authentication and authorization flows that the app demonstrates. The YouTube recording of the session (53 minutes) is available here:
+A live demo of the SpaceFinder app was presented at [AWS re:Invent 2016], the annual AWS cloud computing conference. The presentation provides useful context on the authentication and authorization flows that the app demonstrates. The YouTube recording of the session (53 minutes) is available here:
 
-* [AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (MBL306)](https://www.youtube.com/watch?v=n4hsWVXCuVI&list=PLhr1KZpdzukdAg4bXtTfICuFeZFC_H2Xq&index=6)
+* [AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (MBL306)]
 <br/>Presenters: Jim Tran and Justin Pirtle
 <br/>Presented on: November 30, 2016
 
 
 ## Architecture diagram
 
-![Spacefinder Mobile App architecture](/app/docs/images/spacefinder-app-architecture.png?raw=true)
+![Spacefinder Mobile App architecture]
 
 ## AWS services used
 
 SpaceFinder is built using the following AWS services:
 
-* [AWS Cognito](https://aws.amazon.com/cognito/) - Amazon Cognito lets you easily add user sign-up and sign-in to your mobile and web apps. With Amazon Cognito, you also have the options to authenticate users through social identity providers such as Facebook, Twitter, or Amazon, with SAML identity solutions, or by using your own identity system.
-* [AWS Lambda](https://aws.amazon.com/lambda/) - AWS Lambda lets you run code without provisioning or managing servers. You pay only for the compute time you consume - there is no charge when your code is not running. With Lambda, you can run code for virtually any type of application or backend service - all with zero administration.
-* [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) - Amazon DynamoDB is a fast and flexible NoSQL database service for all applications that need consistent, single-digit millisecond latency at any scale. It is a fully managed cloud database and supports both document and key-value store models.
-* [Amazon API Gateway](https://aws.amazon.com/api-gateway/) - Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale. You can create an API that acts as a “front door” for applications to access data, business logic, or functionality from your back-end services, such as workloads running on Amazon Elastic Compute Cloud (Amazon EC2), code running on AWS Lambda, or any Web application. Amazon API Gateway handles all the tasks involved in accepting and processing up to hundreds of thousands of concurrent API calls, including traffic management, authorization and access control, monitoring, and API version management.
-* [AWS CloudFormation](https://aws.amazon.com/cloudformation/) - AWS CloudFormation gives developers and systems administrators an easy way to create and manage a collection of related AWS resources, provisioning and updating them in an orderly and predictable fashion.
+* [AWS Cognito] - Amazon Cognito lets you easily add user sign-up and sign-in to your mobile and web apps. With Amazon Cognito, you also have the options to authenticate users through social identity providers such as Facebook, Twitter, or Amazon, with SAML identity solutions, or by using your own identity system. Furthermore, [AWS Cognito] supports [User Groups] that let to create collections of users to manage their permissions or to represent different types of users.   
+* [AWS Lambda] - AWS Lambda lets you run code without provisioning or managing servers. You pay only for the compute time you consume - there is no charge when your code is not running. With Lambda, you can run code for virtually any type of application or backend service - all with zero administration.
+* [Amazon DynamoDB] - Amazon DynamoDB is a fast and flexible NoSQL database service for all applications that need consistent, single-digit millisecond latency at any scale. It is a fully managed cloud database and supports both document and key-value store models.
+* [Amazon API Gateway] - Amazon API Gateway is a fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale. You can create an API that acts as a “front door” for applications to access data, business logic, or functionality from your back-end services, such as workloads running on Amazon Elastic Compute Cloud (Amazon EC2), code running on AWS Lambda, or any Web application. Amazon API Gateway handles all the tasks involved in accepting and processing up to hundreds of thousands of concurrent API calls, including traffic management, authorization and access control, monitoring, and API version management.
+* [AWS CloudFormation] - AWS CloudFormation gives developers and systems administrators an easy way to create and manage a collection of related AWS resources, provisioning and updating them in an orderly and predictable fashion.
 
 ----
 
@@ -35,7 +35,7 @@ SpaceFinder is built using the following AWS services:
 
 Spacefinder uses a Serverless API built using Amazon API Gateway, Lambda, DynamoDB, and CloudFormation. The API has the following REST methods, and some methods can only be called by users with "Admin" privileges.
 
-![Spacefinder API](/api/docs/images/spacefinder-api.png?raw=true)
+![Spacefinder API]
 
 If you only want to quickly run the mobile app to try out the app and see how it leverages different authorization patterns, you do not need to deploy the backend API to your account.
 
@@ -43,7 +43,7 @@ For full visibility into how everything works, you're able to setup the backend 
 
 ### Installing the prerequisites
 
-The framework relies on [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/).
+The framework relies on [Node.js] and [npm].
 
     # install the latest Gulp CLI tools globally (you will need a newer version of Gulp CLI which supports Gulp v4)
     npm install gulpjs/gulp-cli -g
@@ -69,15 +69,17 @@ The framework relies on [Node.js](https://nodejs.org/en/download/) and [npm](htt
     
     # Generate some sample data
     gulp generate_sample_users
+    generate_sample_groups
+    assign_users_to_cognito_user_groups
     gulp generate_sample_data
 
 ----
 
 ## Mobile app
 
-The mobile app is a hybrid mobile app, and is built on the [Ionic2 framework](http://ionicframework.com/docs/v2/), which relies on [Angular 2](https://angular.io/) and [TypeScript 2.0](https://www.typescriptlang.org/index.html). The hybrid mobile app can run on Android devices and iOS devices, as well as a modern web browser.
+The mobile app is a hybrid mobile app, and is built on the [Ionic2 framework], which relies on [Angular 2] and [TypeScript 2.0]. The hybrid mobile app can run on Android devices and iOS devices, as well as a modern web browser.
 
-![Spacefinder Mobile app](/app/docs/images/screenshot-small.png?raw=true)
+![Spacefinder Mobile app]
 
 ## User flows
 
@@ -108,7 +110,7 @@ The app currently demonstrates the following user flows:
 
 ### Installing the prerequisites
 
-The application framework relies on [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/). It also uses [Apache Cordova](https://cordova.apache.org/) plugins to support certain native functionality on mobile devices.
+The application framework relies on [Node.js] and [npm]. It also uses [Apache Cordova] plugins to support certain native functionality on mobile devices.
 
     # install latest version of the Ionic2 CLI, Cordova, and Bower tools
     npm install -g ionic cordova bower
@@ -148,8 +150,8 @@ Alternatively, to generate just the Android APK file, which can then be loaded o
     ionic build android
 
 Remote debug live content on an Android device from your Windows, Mac, or Linux computer,
-using [Chrome's remote debugger tool](https://developers.google.com/web/tools/chrome-devtools/remote-debugging/), and visiting `chrome://inspect` in your Chrome browser.
-There are also third-party tools such as [Vysor](https://www.vysor.io/) which can allow you to view your mobile device screen on your computer.
+using [Chrome's remote debugger tool], and visiting `chrome://inspect` in your Chrome browser.
+There are also third-party tools such as [Vysor] which can allow you to view your mobile device screen on your computer.
 
 #### Run in an Apple iOS emulator
 
@@ -187,3 +189,23 @@ When you're through testing and using the application, you may run the following
 
     cd aws-serverless-auth-reference-app/api
     gulp undeploy
+
+[AWS Cognito]:(https://aws.amazon.com/cognito/)
+[AWS Lambda]:(https://aws.amazon.com/lambda/) 
+[Amazon DynamoDB]:(https://aws.amazon.com/dynamodb/) 
+[Amazon API Gateway]:(https://aws.amazon.com/api-gateway/)
+[AWS CloudFormation]:(https://aws.amazon.com/cloudformation/)
+[Vysor]:(https://www.vysor.io/)
+[Chrome's remote debugger tool]:(https://developers.google.com/web/tools/chrome-devtools/remote-debugging/)
+[Node.js]:(https://nodejs.org/en/download/)
+[npm]:(https://www.npmjs.com/)
+[Apache Cordova]:(https://cordova.apache.org/)
+[Spacefinder Mobile app]:(/app/docs/images/screenshot-small.png?raw=true)
+[Spacefinder API]:(/api/docs/images/spacefinder-api.png?raw=true)
+[Spacefinder Mobile App architecture]:(/app/docs/images/spacefinder-app-architecture.png?raw=true)
+[Ionic2 framework]:(http://ionicframework.com/docs/v2/)
+[Angular 2]:(https://angular.io/)
+[TypeScript 2.0]:(https://www.typescriptlang.org/index.html)
+[AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (MBL306)]:(https://www.youtube.com/watch?v=n4hsWVXCuVI&list=PLhr1KZpdzukdAg4bXtTfICuFeZFC_H2Xq&index=6)
+[AWS re:Invent 2016]:(https://reinvent.awsevents.com/)
+[User Groups]:(http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-user-groups.html)
