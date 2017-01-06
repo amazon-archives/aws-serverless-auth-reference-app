@@ -7,11 +7,7 @@ var env = rfr('/environment');
 var request = require('request');
 var jwkToPem = require('jwk-to-pem');
 var PEMS = null;
-
 console.log('Loading function');
-
-// TODO(Add identity token signature verification then remove this comment)
-
 
 /**
  * AuthPolicy receives a set of allowed and denied methods and generates a valid
