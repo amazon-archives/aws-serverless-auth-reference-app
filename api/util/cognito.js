@@ -134,7 +134,7 @@ function createUserPoolClientsV2(data) {
 
     createUserPoolClient(appConfigParameters).then(() => {
       // Create admin client after app client successfully created
-      resolve('Created user pool LEX client successfully');
+      resolve('Created user pool client successfully');
     }).catch((err) => {
       reject(err);
     });
