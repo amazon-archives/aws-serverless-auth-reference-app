@@ -69,9 +69,13 @@ The framework relies on [Node.js] and [npm].
     
     # Generate some sample data
     gulp generate_sample_users
-    generate_sample_groups
-    assign_users_to_cognito_user_groups
     gulp generate_sample_data
+
+    # Generate Cognito User Groups
+    gulp generate_sample_groups
+    
+    # Assign user to groups
+    gulp assign_users_to_cognito_user_groups
 
 ----
 
