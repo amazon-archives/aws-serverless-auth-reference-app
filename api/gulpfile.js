@@ -181,7 +181,6 @@ gulp.task('deploy', gulp.series(
 ));
 
 gulp.task('bootstrap', gulp.series(
-  'deploy',
   'generate_sample_users',
   'generate_sample_groups',
   'sleep',
