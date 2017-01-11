@@ -176,7 +176,16 @@ gulp.task('deploy', gulp.series(
   'create_cognito_pools',
   'deploy_lambda',
   'deploy_api',
-  'generate_client_config'
+  'generate_client_config',
+  'generate_sample_data'
+));
+
+gulp.task('bootstrap', gulp.series(
+  'deploy',
+  'generate_sample_users',
+  'generate_sample_groups',
+  'sleep',
+  'assign_users_to_cognito_user_groups'
 ));
 
 gulp.task('undeploy', gulp.series(
@@ -187,3 +196,4 @@ gulp.task('undeploy', gulp.series(
   'delete_cloudwatch_logs'
 ));
 
+gulp.task('default', gulp.series('bootstrap'));

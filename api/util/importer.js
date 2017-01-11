@@ -1,10 +1,15 @@
 'use strict';
 var rfr = require('rfr');
+var logger = rfr('util/logger');
 var locations = rfr('lambda/locations');
 var resources = rfr('lambda/resources');
 var bookings = rfr('lambda/bookings');
 var cognito = rfr('util/cognito');
 
+/*
+ More information about the UserGroups and the precedence
+ http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-user-groups.html#assigning-precedence-values-to-groups
+ */
 
 var SampleGroups = [
   {
@@ -16,7 +21,7 @@ var SampleGroups = [
   {
     name: 'clientGroup',
     description: 'Cognito user group for spacefinder users',
-    precedence: 0,
+    precedence: 1,
     iam: 'something'
   },
 ];
@@ -29,6 +34,7 @@ var SampleUsers = [
     givenName: 'Admin',
     familyName: 'User',
     password: 'Test123!'
+
   },
   {
     username: 'user1',
@@ -103,6 +109,7 @@ class SampleData {
 
   generateSampleLocation(name, description, imageUrl) {
     return new Promise((resolve, reject) => {
+
       locations.Create({
           body: JSON.stringify({
             name: name,
@@ -264,13 +271,12 @@ class SampleData {
     return promise;
   }
 
+
   static assignUsersToGroups() {
     let promises = [];
     for (let user of SampleUsers) {
       let group = null;
-      //Just a trivial assignment to demonstrate adding users
-      //to a group. For the example admin1 user goes to admin group
-      //and user1 user goes to client group
+
       if (user.username === "admin1") {
         group = SampleGroups[0];
       } else {
@@ -279,12 +285,16 @@ class SampleData {
       let promise = SampleData.createUserAssignmentToGroupPromise(user, group);
       promises.push(promise);
     }
+    logger.info(promises.length);
     return Promise.all(promises);
+
+
   }
 
 
 } // end class
 
-module.exports = {
+module
+  .exports = {
   SampleData
 };

@@ -348,8 +348,19 @@ function deleteUserPool() {
   });
 }
 
+/**
+ * The function creates a Cognito UserGroup based on the input argument.
+ * If the group already exists, then it ignores the request.
+ * @param group The group we want to create
+ * @returns {Promise.<TResult>|*}
+ */
 function adminCreateGroup(group) {
   return getUserPoolId().then((userPoolId) => {
+
+    logger.info('Incoming request to crate group %s', group.name);
+    let listParams = {
+      UserPoolId: userPoolId
+    };
 
     let params = {
       UserPoolId: userPoolId,
@@ -357,36 +368,32 @@ function adminCreateGroup(group) {
       Description: group.description,
       Precedence: group.precedence
     };
-    userPools.createGroup(params, function (err, data) {
+    userPools.listGroups(listParams, function (err, listData) {
       if (err) {
         throw (new Error(err));
       }
-      return (data)
+      for (let userGroupIndex in listData.Groups) {
+
+        if (listData.Groups[userGroupIndex].GroupName === group.name) {
+          logger.info('Group %s already exists, ignoring', group.name);
+          return;
+        }
+      }
+      userPools.createGroup(params, function (err, data) {
+
+
+        if (err) {
+          throw (new Error(err));
+        }
+        return (data);
+      })
     });
   });
-
 }
-
-
-function adminAssignUserToGroup(user, group) {
-  return getUserPoolId().then((userPoolId) => {
-    let params = {
-      UserPoolId: userPoolId,
-      Username: user.username,
-      GroupName: group.name
-    };
-
-    userPools.adminAddUserToGroup(params, function (err, data) {
-      if (err) {
-        throw (new Error(err));
-      }
-      return (data)
-    })
-  });
-}
-
 
 function adminCreateUser(userData) {
+
+
   return getUserPoolId().then((userPoolId) => {
     let createUserParams = {
       UserPoolId: userPoolId,
@@ -408,14 +415,50 @@ function adminCreateUser(userData) {
         }
       ]
     };
-    userPools.adminCreateUser(createUserParams, function (err) {
+
+    let listUserParams = {
+      UserPoolId: userPoolId
+    }
+
+    userPools.listUsers(listUserParams, function (err, listUsersData) {
       if (err) {
         throw (new Error(err));
       }
-      return initialChangePassword(userData);
+
+      for (let poolUserIndex in listUsersData.Users) {
+        if (listUsersData.Users[poolUserIndex].Username === userData.username) {
+          logger.info('User %s already exists, ignoring', userData.username);
+          return;
+        }
+      }
+      userPools.adminCreateUser(createUserParams, function (err) {
+        if (err) {
+          throw (new Error(err));
+        }
+        return initialChangePassword(userData);
+      });
+
     });
+
   });
 }
+
+function adminAssignUserToGroup(user, group) {
+  return getUserPoolId().then((userPoolId) => {
+    let params = {
+      UserPoolId: userPoolId,
+      Username: user.username,
+      GroupName: group.name
+    };
+    userPools.adminAddUserToGroup(params, function (err, data) {
+      if (err) {
+        throw (new Error(err));
+      }
+      return (data);
+    })
+  });
+}
+
 
 function initialChangePassword(userData) {
   return new Promise((resolve, reject) => {

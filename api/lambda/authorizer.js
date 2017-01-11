@@ -320,27 +320,52 @@ AuthPolicy.prototype = (function AuthPolicyClass() {
 
 
 function processAuthRequest(event, tokenIssuer, callback) {
+
+  const apiOptions = {};
+  const tmp = event.methodArn.split(':');
+  const apiGatewayArnTmp = tmp[5].split('/');
+  const awsAccountId = tmp[4];
+
+  apiOptions.region = tmp[3];
+  apiOptions.restApiId = apiGatewayArnTmp[0];
+  apiOptions.stage = apiGatewayArnTmp[1];
+
+
+
+
+
+
   var token = event.authorizationToken;
 
   //Fail if the token is not jwt
   var decodedJwt = jwt.decode(token, {complete: true});
   if (!decodedJwt) {
-    console.log('Not a valid JWT token');
-    callback('Unauthorized');
+    let policy = new AuthPolicy('', awsAccountId, apiOptions);
+    logger.info("Not valid JWT token, returning deny all policy");
+    policy.denyAllMethods();
+    let iamPolicy = policy.build();
+    callback(null, iamPolicy);
     return;
   }
 
   //Fail if token is not from your User Pool
   if (decodedJwt.payload['iss'] != tokenIssuer) {
-    console.log("invalid Issuer");
-    callback("Unauthorized");
+    logger.info("Provided Token not from UserPool, returning deny all policy");
+    let policy = new AuthPolicy('', awsAccountId, apiOptions);
+    policy.denyAllMethods();
+    let iamPolicy = policy.build();
+    callback(null, iamPolicy);
     return;
   }
 
-  //Reject the jwt if it's not an 'Access Token'
+  //Reject the jwt if it's not an 'Identity Token'
   if (decodedJwt.payload['token_use'] != 'id') {
     console.log("Not an Identity token");
-    callback("Unauthorized");
+    logger.info("Provided Token is not and identity token, returning deny all policy");
+    let policy = new AuthPolicy('', awsAccountId, apiOptions);
+    policy.denyAllMethods();
+    let iamPolicy = policy.build();
+    callback(null, iamPolicy);
     return;
   }
 
@@ -349,7 +374,11 @@ function processAuthRequest(event, tokenIssuer, callback) {
   var pem = PEMS[kid];
   if (!pem) {
     console.log('Invalid Identity token');
-    callback("Unauthorized");
+    logger.info("Invalid Identity token, returning deny all policy");
+    let policy = new AuthPolicy('', awsAccountId, apiOptions);
+    policy.denyAllMethods();
+    let iamPolicy = policy.build();
+    callback(null, iamPolicy);
     return;
   }
 
@@ -357,31 +386,27 @@ function processAuthRequest(event, tokenIssuer, callback) {
 
   jwt.verify(token, pem, {issuer: tokenIssuer}, function (err, payload) {
     if (err) {
-      callback("Unauthorized");
+      logger.info("Error while trying to verify the Token, returning deny-all policy");
+      let policy = new AuthPolicy('', awsAccountId, apiOptions);
+      policy.denyAllMethods();
+      let iamPolicy = policy.build();
+      callback(null, iamPolicy);
     } else {
       //Valid token. Generate the API Gateway policy for the user
       //Always generate the policy on value of 'sub' claim and not for
       // 'username' because username is reassignable
       //sub is UUID for a user which is never reassigned to another user.
 
-      const apiOptions = {};
-      const tmp = event.methodArn.split(':');
-      const apiGatewayArnTmp = tmp[5].split('/');
-      const principalId = payload.sub;
-      const awsAccountId = tmp[4];
-
-      apiOptions.region = tmp[3];
-      apiOptions.restApiId = apiGatewayArnTmp[0];
-      apiOptions.stage = apiGatewayArnTmp[1];
-
       let admin = null;
-      let policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
+      const pId = payload.sub;
+      logger.info(pId);
+      let policy = new AuthPolicy(pId, awsAccountId, apiOptions);
       policy.allowAllMethods();
-
 
       //Check the Cognito group entry for Admin.
       //Assuming here that the Admin group has always higher
       //precedence
+      const principalId = payload.sub;
 
       if (payload['cognito:groups'] &&
         payload['cognito:groups'][0] === 'adminGroup') {
