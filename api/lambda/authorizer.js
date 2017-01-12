@@ -319,20 +319,7 @@ AuthPolicy.prototype = (function AuthPolicyClass() {
 }());
 
 
-function processAuthRequest(event, tokenIssuer, callback) {
-
-  const apiOptions = {};
-  const tmp = event.methodArn.split(':');
-  const apiGatewayArnTmp = tmp[5].split('/');
-  const awsAccountId = tmp[4];
-
-  apiOptions.region = tmp[3];
-  apiOptions.restApiId = apiGatewayArnTmp[0];
-  apiOptions.stage = apiGatewayArnTmp[1];
-
-
-
-
+function processAuthRequest(event, tokenIssuer, awsAccountId, apiOptions, callback) {
 
 
   var token = event.authorizationToken;
@@ -373,7 +360,6 @@ function processAuthRequest(event, tokenIssuer, callback) {
   var kid = decodedJwt.header.kid;
   var pem = PEMS[kid];
   if (!pem) {
-    console.log('Invalid Identity token');
     logger.info("Invalid Identity token, returning deny all policy");
     let policy = new AuthPolicy('', awsAccountId, apiOptions);
     policy.denyAllMethods();
@@ -399,7 +385,6 @@ function processAuthRequest(event, tokenIssuer, callback) {
 
       let admin = null;
       const pId = payload.sub;
-      logger.info(pId);
       let policy = new AuthPolicy(pId, awsAccountId, apiOptions);
       policy.allowAllMethods();
 
@@ -440,6 +425,17 @@ function toPem(keyDictionary) {
 
 exports.Custom = (event, context, callback) => {
 
+  const apiOptions = {};
+  const tmp = event.methodArn.split(':');
+  const apiGatewayArnTmp = tmp[5].split('/');
+  const awsAccountId = tmp[4];
+
+  apiOptions.region = tmp[3];
+  apiOptions.restApiId = apiGatewayArnTmp[0];
+  apiOptions.stage = apiGatewayArnTmp[1];
+
+
+
   let userPoolURI = 'https://cognito-idp.' + config.AWS_REGION
     + '.amazonaws.com/' + env.config.USER_POOL_ID;
 
@@ -456,15 +452,22 @@ exports.Custom = (event, context, callback) => {
             var kid = keys[keyIndex].kid;
             PEMS[kid] = toPem(keys[keyIndex]);
           }
-          processAuthRequest(event, userPoolURI, callback);
+          processAuthRequest(event, userPoolURI, awsAccountId, apiOptions, callback);
 
         } else {
-          callback('Unauthorized');
+          logger.info("Failed to retrieve the keys from " +
+            "the well known user-pool URI, ");
+          logger.info('Error-Code: ', response.statusCode);
+          logger.info(error);
+          let policy = new AuthPolicy('', awsAccountId, apiOptions);
+          policy.denyAllMethods();
+          let iamPolicy = policy.build();
+          callback(null, iamPolicy);
         }
       }
     );
   } else {
-    processAuthRequest(event, userPoolURI, callback);
+    processAuthRequest(event, userPoolURI, awsAccountId, apiOptions, callback);
   }
 
 };
