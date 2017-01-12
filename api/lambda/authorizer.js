@@ -3,9 +3,9 @@ var rfr = require('rfr');
 var logger = rfr('/logger');
 var config = rfr('/config');
 var jwt = require('jsonwebtoken');
-var env = rfr('/environment');
 var request = require('request');
 var jwkToPem = require('jwk-to-pem');
+var env = rfr('/environment');
 var PEMS = null;
 console.log('Loading function');
 
@@ -391,8 +391,6 @@ function processAuthRequest(event, tokenIssuer, awsAccountId, apiOptions, callba
       //Check the Cognito group entry for Admin.
       //Assuming here that the Admin group has always higher
       //precedence
-      const principalId = payload.sub;
-
       if (payload['cognito:groups'] &&
         payload['cognito:groups'][0] === 'adminGroup') {
         admin = true;
@@ -425,6 +423,7 @@ function toPem(keyDictionary) {
 
 exports.Custom = (event, context, callback) => {
 
+
   const apiOptions = {};
   const tmp = event.methodArn.split(':');
   const apiGatewayArnTmp = tmp[5].split('/');
@@ -440,7 +439,7 @@ exports.Custom = (event, context, callback) => {
     + '.amazonaws.com/' + env.config.USER_POOL_ID;
 
   let jwtKeySetURI = userPoolURI + '/.well-known/jwks.json';
-
+  logger.info("Requesting keys from "+jwtKeySetURI);
 
   if (!PEMS) {
     request({url: jwtKeySetURI, json: true},

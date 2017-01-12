@@ -174,10 +174,10 @@ gulp.task('deploy', gulp.series(
   'create_cloudformation_stack',
   'create_dynamodb_tables',
   'create_cognito_pools',
+  'generate_client_config',
   'deploy_lambda',
   'deploy_api',
-  'generate_client_config',
-  'generate_sample_data'
+  'generate_sample_data'   
 ));
 
 gulp.task('bootstrap', gulp.series(
