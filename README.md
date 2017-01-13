@@ -188,21 +188,21 @@ When you're through testing and using the application, you may run the following
     gulp undeploy
 
 [AWS Cognito]:https://aws.amazon.com/cognito/
-[AWS Lambda]:(https://aws.amazon.com/lambda/) 
-[Amazon DynamoDB]:(https://aws.amazon.com/dynamodb/) 
-[Amazon API Gateway]:(https://aws.amazon.com/api-gateway/)
-[AWS CloudFormation]:(https://aws.amazon.com/cloudformation/)
-[Vysor]:(https://www.vysor.io/)
-[Chrome's remote debugger tool]:(https://developers.google.com/web/tools/chrome-devtools/remote-debugging/)
-[Node.js]:(https://nodejs.org/en/download/)
-[npm]:(https://www.npmjs.com/)
-[Apache Cordova]:(https://cordova.apache.org/)
-[Spacefinder Mobile app]:(/app/docs/images/screenshot-small.png?raw=true)
-[Spacefinder API]:(/api/docs/images/spacefinder-api.png?raw=true)
-[Spacefinder Mobile App architecture]:(/app/docs/images/spacefinder-app-architecture.png?raw=true)
-[Ionic2 framework]:(http://ionicframework.com/docs/v2/)
-[Angular 2]:(https://angular.io/)
-[TypeScript 2.0]:(https://www.typescriptlang.org/index.html)
-[AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (MBL306)]:(https://www.youtube.com/watch?v=n4hsWVXCuVI&list=PLhr1KZpdzukdAg4bXtTfICuFeZFC_H2Xq&index=6)
-[AWS re:Invent 2016]:(https://reinvent.awsevents.com/)
-[User Groups]:(http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-user-groups.html)
+[AWS Lambda]:https://aws.amazon.com/lambda/ 
+[Amazon DynamoDB]:https://aws.amazon.com/dynamodb/
+[Amazon API Gateway]:https://aws.amazon.com/api-gateway/
+[AWS CloudFormation]:https://aws.amazon.com/cloudformation/
+[Vysor]:https://www.vysor.io/
+[Chrome's remote debugger tool]:https://developers.google.com/web/tools/chrome-devtools/remote-debugging/
+[Node.js]:https://nodejs.org/en/download/
+[npm]:https://www.npmjs.com/
+[Apache Cordova]:https://cordova.apache.org/
+[Spacefinder Mobile app]:/app/docs/images/screenshot-small.png?raw=true
+[Spacefinder API]:/api/docs/images/spacefinder-api.png?raw=true
+[Spacefinder Mobile App architecture]:/app/docs/images/spacefinder-app-architecture.png?raw=true
+[Ionic2 framework]:http://ionicframework.com/docs/v2/
+[Angular 2]:https://angular.io/
+[TypeScript 2.0]:https://www.typescriptlang.org/index.html
+[AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (MBL306)]:https://www.youtube.com/watch?v=n4hsWVXCuVI&list=PLhr1KZpdzukdAg4bXtTfICuFeZFC_H2Xq&index=6
+[AWS re:Invent 2016]: https://reinvent.awsevents.com/
+[User Groups]:http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-user-groups.html
