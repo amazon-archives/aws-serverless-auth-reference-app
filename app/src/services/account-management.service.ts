@@ -81,7 +81,7 @@ export class CognitoUtil {
 
   public static getUserGroup(): string {
     // Retrieve the user group from the local storage
-    return LocalStorage.get("userGroup")
+    return LocalStorage.get("userGroup");
   }
 
   public static getUserState(): UserState {
@@ -341,9 +341,18 @@ export class UserLoginService {
            */
           let idTokenPayload = UserLoginService._userTokens.idToken.split('.')[1];
           let payload = JSON.parse(sjcl.codec.utf8String.fromBits(sjcl.codec.base64url.toBits(idTokenPayload)));
-          let userGroup = payload["cognito:groups"][0];
-          LocalStorage.set('userGroup', userGroup);
-          console.log('%cCognito User Pools User Groups :'+'%c%s belongs to group %s', Logger.LeadInStyle, "black",
+          let userGroup = payload["cognito:groups"];
+          if (userGroup && userGroup.length > 0) {
+            LocalStorage.set('userGroup', userGroup);
+          } else {
+            /*
+              The user group is set only for the pre-defined users. By default
+              we assign them to client group.
+             */
+            userGroup = 'clientGroup';
+            LocalStorage.set('userGroup', userGroup);
+          }
+          console.log('%cCognito User Pools User Groups :' + '%c%s belongs to group %s', Logger.LeadInStyle, "black",
             userLogin.username, userGroup);
 
           // Set user state to authenticated
