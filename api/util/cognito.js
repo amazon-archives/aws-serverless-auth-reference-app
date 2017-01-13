@@ -7,10 +7,9 @@ var cf = rfr('/util/cloudFormation');
 let identityPools = new AWS.CognitoIdentity();
 let userPools = new AWS.CognitoIdentityServiceProvider();
 
-let identityPoolName = config.getName('identityPool').replace(/-/g,'_');
+let identityPoolName = config.getName('identityPool').replace(/-/g, '_');
 let userPoolName = config.getName('userPool');
-let userPoolAdminClientName = userPoolName + '-admin-client';
-let userPoolAppClientName = userPoolName + '-app-client';
+let userPoolClientName = userPoolName + '-client';
 let newUserTempPassword = 'Temp123!';
 
 function createUserPool() {
@@ -18,17 +17,10 @@ function createUserPool() {
     PoolName: userPoolName,
     AutoVerifiedAttributes: [
       'email'
-    ],
-    Schema: [
-      {
-        Name: 'admin',
-        AttributeDataType: 'Boolean',
-        Mutable: true
-      }
     ]
   };
   return new Promise((resolve, reject) => {
-    userPools.createUserPool(params, function(err, data) {
+    userPools.createUserPool(params, function (err, data) {
       if (err) {
         if (err.code === 'ResourceConflictException') {
           resolve('User pool already exists');
@@ -38,10 +30,10 @@ function createUserPool() {
           return;
         }
       }
-    logger.info('Created Cognito User Pool', params.PoolName);
-    resolve(data);
+      logger.info('Created Cognito User Pool', params.PoolName);
+      resolve(data);
     });
-  }).then(createUserPoolClients);
+  }).then(createUserPoolClientsV2);
 }
 
 function safeCreateUserPool() {
@@ -49,9 +41,8 @@ function safeCreateUserPool() {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    userPools.listUserPools(listUserPoolsParams, function(err, data) {
-      if (err)
-      {
+    userPools.listUserPools(listUserPoolsParams, function (err, data) {
+      if (err) {
         reject(err);
       }
       for (let i = 0; i < data.UserPools.length; i++) {
@@ -72,7 +63,7 @@ function safeCreateUserPool() {
 
 function createUserPoolClient(params) {
   return new Promise((resolve, reject) => {
-    userPools.createUserPoolClient(params, function(err, data) {
+    userPools.createUserPoolClient(params, function (err, data) {
       if (err) {
         if (err.code === 'ResourceConflictException') {
           resolve('User pool client ' + params.ClientName + ' already exists');
@@ -88,30 +79,12 @@ function createUserPoolClient(params) {
   });
 }
 
-function createUserPoolClients(data) {
+function createUserPoolClientsV2(data) {
   return new Promise((resolve, reject) => {
     let userPoolId = data.UserPool.Id;
-    // Generate app client config and create client
-    let appClientParams = {
-      ClientName: userPoolAppClientName,
-      UserPoolId: userPoolId,
-      GenerateSecret: false,
-      ReadAttributes: [
-        'email',
-        'email_verified',
-        'given_name',
-        'family_name',
-        'custom:admin'
-      ],
-      WriteAttributes: [
-        'email',
-        'given_name',
-        'family_name'
-      ]
-    };
 
-    let adminClientParams = {
-      ClientName: userPoolAdminClientName,
+    let appConfigParameters = {
+      ClientName: userPoolClientName,
       UserPoolId: userPoolId,
       ExplicitAuthFlows: [
         'ADMIN_NO_SRP_AUTH'
@@ -136,8 +109,7 @@ function createUserPoolClients(data) {
         'profile',
         'zoneinfo',
         'updated_at',
-        'website',
-        'custom:admin'
+        'website'
       ],
       WriteAttributes: [
         'address',
@@ -156,32 +128,27 @@ function createUserPoolClients(data) {
         'profile',
         'zoneinfo',
         'updated_at',
-        'website',
-        'custom:admin'
+        'website'
       ]
     };
 
-    createUserPoolClient(appClientParams).then(() => {
+    createUserPoolClient(appConfigParameters).then(() => {
       // Create admin client after app client successfully created
-      createUserPoolClient(adminClientParams).then(() => {
-        resolve('Created admin and app client successfully');
-      }).catch((err) => {
-         reject(err);
-      });
+      resolve('Created user pool client successfully');
     }).catch((err) => {
-        reject(err);
+      reject(err);
     });
   });
 }
+
 
 function getUserPoolId() {
   let listUserPoolsParams = {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    userPools.listUserPools(listUserPoolsParams, function(err, data) {
-      if (err)
-      {
+    userPools.listUserPools(listUserPoolsParams, function (err, data) {
+      if (err) {
         reject(err);
         return;
       }
@@ -201,9 +168,8 @@ function getUserPoolClientId(userPoolClientName, userPoolId) {
     UserPoolId: userPoolId
   };
   return new Promise((resolve, reject) => {
-    userPools.listUserPoolClients(listUserPoolClientsParams, function(err, data) {
-      if (err)
-      {
+    userPools.listUserPoolClients(listUserPoolClientsParams, function (err, data) {
+      if (err) {
         reject(err);
         return;
       }
@@ -217,14 +183,15 @@ function getUserPoolClientId(userPoolClientName, userPoolId) {
   });
 }
 
-function createIdentityPool() {
+
+function createIdentityPoolV2() {
   return new Promise((resolve, reject) => {
     getUserPoolId().then((userPoolId) => {
       let listUserPoolClientParams = {
         UserPoolId: userPoolId,
         MaxResults: 60
       };
-      userPools.listUserPoolClients(listUserPoolClientParams, function(err, data) {
+      userPools.listUserPoolClients(listUserPoolClientParams, function (err, data) {
         if (err) {
           reject(err);
           return;
@@ -232,7 +199,7 @@ function createIdentityPool() {
         let userPoolClientIds = [];
         for (let i = 0; i < data.UserPoolClients.length; i++) {
           // Loop through user pool clients to find desired user pool client and return Id
-          if (data.UserPoolClients[i].ClientName === userPoolAppClientName || data.UserPoolClients[i].ClientName === userPoolAdminClientName) {
+          if (data.UserPoolClients[i].ClientName === userPoolClientName) {
             userPoolClientIds.push(data.UserPoolClients[i].ClientId);
           }
         }
@@ -246,6 +213,7 @@ function createIdentityPool() {
     });
   });
 }
+
 
 function createIdentityPoolImpl(userPoolId, userPoolClientIds) {
   let cognitoIdentityProviders = [];
@@ -262,7 +230,7 @@ function createIdentityPoolImpl(userPoolId, userPoolClientIds) {
     CognitoIdentityProviders: cognitoIdentityProviders
   };
   return new Promise((resolve, reject) => {
-    identityPools.createIdentityPool(params, function(err) {
+    identityPools.createIdentityPool(params, function (err) {
       if (err) {
         if (err.code === 'ResourceConflictException') {
           resolve('Identity pool already exists');
@@ -283,9 +251,8 @@ function safeCreateIdentityPool() {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    identityPools.listIdentityPools(listIdentityPoolsParams, function(err, data) {
-      if (err)
-      {
+    identityPools.listIdentityPools(listIdentityPoolsParams, function (err, data) {
+      if (err) {
         reject(err);
         return;
       }
@@ -300,7 +267,7 @@ function safeCreateIdentityPool() {
       }
 
       // No name match found. Create new user pool
-      resolve(createIdentityPool());
+      resolve(createIdentityPoolV2());
     });
   });
 }
@@ -310,9 +277,8 @@ function getIdentityPoolId() {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    identityPools.listIdentityPools(listIdentityPoolsParams, function(err, data) {
-      if (err)
-      {
+    identityPools.listIdentityPools(listIdentityPoolsParams, function (err, data) {
+      if (err) {
         reject(err);
         return;
       }
@@ -363,7 +329,7 @@ function deleteIdentityPool() {
       if (err) {
         throw (new Error(err));
       }
-      return(data);
+      return (data);
     });
   });
 }
@@ -377,12 +343,57 @@ function deleteUserPool() {
       if (err) {
         throw (new Error(err));
       }
-      return(data);
+      return (data);
+    });
+  });
+}
+
+/**
+ * The function creates a Cognito UserGroup based on the input argument.
+ * If the group already exists, then it ignores the request.
+ * @param group The group we want to create
+ * @returns {Promise.<TResult>|*}
+ */
+function adminCreateGroup(group) {
+  return getUserPoolId().then((userPoolId) => {
+
+    logger.info('Incoming request to crate group %s', group.name);
+    let listParams = {
+      UserPoolId: userPoolId
+    };
+
+    let params = {
+      UserPoolId: userPoolId,
+      GroupName: group.name,
+      Description: group.description,
+      Precedence: group.precedence
+    };
+    userPools.listGroups(listParams, function (err, listData) {
+      if (err) {
+        throw (new Error(err));
+      }
+      for (let userGroupIndex in listData.Groups) {
+
+        if (listData.Groups[userGroupIndex].GroupName === group.name) {
+          logger.info('Group %s already exists, ignoring', group.name);
+          return;
+        }
+      }
+      userPools.createGroup(params, function (err, data) {
+
+
+        if (err) {
+          throw (new Error(err));
+        }
+        return (data);
+      })
     });
   });
 }
 
 function adminCreateUser(userData) {
+
+
   return getUserPoolId().then((userPoolId) => {
     let createUserParams = {
       UserPoolId: userPoolId,
@@ -401,26 +412,58 @@ function adminCreateUser(userData) {
         {
           Name: 'family_name',
           Value: userData.familyName
-        },
-        {
-          Name: 'custom:admin',
-          Value: userData.admin
         }
       ]
     };
-    userPools.adminCreateUser(createUserParams, function (err) {
+
+    let listUserParams = {
+      UserPoolId: userPoolId
+    }
+
+    userPools.listUsers(listUserParams, function (err, listUsersData) {
       if (err) {
         throw (new Error(err));
       }
-      return initialChangePassword(userData);
+
+      for (let poolUserIndex in listUsersData.Users) {
+        if (listUsersData.Users[poolUserIndex].Username === userData.username) {
+          logger.info('User %s already exists, ignoring', userData.username);
+          return;
+        }
+      }
+      userPools.adminCreateUser(createUserParams, function (err) {
+        if (err) {
+          throw (new Error(err));
+        }
+        return initialChangePassword(userData);
+      });
+
     });
+
   });
 }
+
+function adminAssignUserToGroup(user, group) {
+  return getUserPoolId().then((userPoolId) => {
+    let params = {
+      UserPoolId: userPoolId,
+      Username: user.username,
+      GroupName: group.name
+    };
+    userPools.adminAddUserToGroup(params, function (err, data) {
+      if (err) {
+        throw (new Error(err));
+      }
+      return (data);
+    })
+  });
+}
+
 
 function initialChangePassword(userData) {
   return new Promise((resolve, reject) => {
     getUserPoolId().then((userPoolId) => {
-      getUserPoolClientId(userPoolAdminClientName, userPoolId).then((userPoolClientId) => {
+      getUserPoolClientId(userPoolClientName, userPoolId).then((userPoolClientId) => {
         let adminInitiateAuthParams = {
           AuthFlow: 'ADMIN_NO_SRP_AUTH',
           ClientId: userPoolClientId,
@@ -461,7 +504,7 @@ function initialChangePassword(userData) {
 function getIdentityPoolUserId(userData) {
   return new Promise((resolve, reject) => {
     getUserPoolId().then((userPoolId) => {
-      getUserPoolClientId(userPoolAdminClientName, userPoolId).then((userPoolClientId) => {
+      getUserPoolClientId(userPoolClientName, userPoolId).then((userPoolClientId) => {
         let adminInitiateAuthParams = {
           AuthFlow: 'ADMIN_NO_SRP_AUTH',
           ClientId: userPoolClientId,
@@ -517,5 +560,7 @@ module.exports = {
   getIdentityPoolUserId,
   getUserPoolId,
   getUserPoolClientId,
-  userPoolAppClientName
+  adminCreateGroup,
+  adminAssignUserToGroup,
+  userPoolClientName
 };

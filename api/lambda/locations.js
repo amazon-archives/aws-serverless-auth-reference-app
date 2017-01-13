@@ -6,6 +6,7 @@ let LocationsTable = new data.LocationsTable();
 
 
 function Create(event) {
+
   return LocationsTable.put(JSON.parse(event.body));
 }
 

@@ -11,6 +11,7 @@ app/platforms/
 app/plugins/
 app/src/assets/vendor/bower_components/
 app/www/assets
+app/www/build/
 api/dist/
 api/lambda/node_modules/
 api/later/
