@@ -187,7 +187,7 @@ When you're through testing and using the application, you may run the following
     cd aws-serverless-auth-reference-app/api
     gulp undeploy
 
-[AWS Cognito]:(https://aws.amazon.com/cognito/)
+[AWS Cognito]:https://aws.amazon.com/cognito/
 [AWS Lambda]:(https://aws.amazon.com/lambda/) 
 [Amazon DynamoDB]:(https://aws.amazon.com/dynamodb/) 
 [Amazon API Gateway]:(https://aws.amazon.com/api-gateway/)
