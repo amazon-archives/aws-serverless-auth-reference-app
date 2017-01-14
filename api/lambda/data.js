@@ -1,10 +1,6 @@
 'use strict';
 var AWS = require('aws-sdk');
 var uuid = require('uuid');
-AWS.config.update({
-  region: 'us-east-1',
-  // logger: process.stdout
-});
 var dynamoDB = new AWS.DynamoDB();
 var documentClient = new AWS.DynamoDB.DocumentClient();
 var rfr = require('rfr');
