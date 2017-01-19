@@ -33,7 +33,7 @@
     "sjcl": "1.0.6"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "0.0.45",
+    "@ionic/app-scripts": "1.0.0",
     "tslint-eslint-rules": "2.1.0",
     "typescript": "2.0.3"
   },
