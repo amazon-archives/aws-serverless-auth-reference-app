@@ -159,8 +159,8 @@ class LocationsTable extends Table {
       KeySchema: [{ AttributeName: 'locationId', KeyType: 'HASH' }],
       AttributeDefinitions: [{ AttributeName: 'locationId', AttributeType: 'S' }],
       ProvisionedThroughput: {
-        ReadCapacityUnits: 5,
-        WriteCapacityUnits: 5
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1
       }
     },
     // These are custom options that the Table class understands
@@ -201,14 +201,14 @@ class ResourcesTable extends Table {
           KeySchema: [ { AttributeName: 'locationId', KeyType: 'HASH' }],
           Projection: { ProjectionType: 'ALL' },
           ProvisionedThroughput: {
-            ReadCapacityUnits: 5,
-            WriteCapacityUnits: 5
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1
           }
         }
       ],
       ProvisionedThroughput: {
-        ReadCapacityUnits: 5,
-        WriteCapacityUnits: 5
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1
       }
     },
     // These are custom options that the Table class understands
@@ -272,8 +272,8 @@ class BookingsTable extends Table {
           KeySchema: [ { AttributeName: 'userId', KeyType: 'HASH' }],
           Projection: { ProjectionType: 'ALL' },
           ProvisionedThroughput: {
-            ReadCapacityUnits: 5,
-            WriteCapacityUnits: 5
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1
           }
         },
         {
@@ -284,8 +284,8 @@ class BookingsTable extends Table {
           ],
           Projection: { ProjectionType: 'ALL' },
           ProvisionedThroughput: {
-            ReadCapacityUnits: 5,
-            WriteCapacityUnits: 5
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1
           }
         },
         {
@@ -296,15 +296,15 @@ class BookingsTable extends Table {
           ],
           Projection: { ProjectionType: 'ALL' },
           ProvisionedThroughput: {
-            ReadCapacityUnits: 5,
-            WriteCapacityUnits: 5
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1
           }
         }
 
       ],
       ProvisionedThroughput: {
-        ReadCapacityUnits: 5,
-        WriteCapacityUnits: 5
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1
       }
     },
     // These are custom options that the Table class understands
@@ -381,8 +381,8 @@ class ProfilesTable extends Table {
       KeySchema: [{ AttributeName: 'identityId', KeyType: 'HASH' }],
       AttributeDefinitions: [{ AttributeName: 'identityId', AttributeType: 'S' }],
       ProvisionedThroughput: {
-        ReadCapacityUnits: 5,
-        WriteCapacityUnits: 5
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1
       }
     },
     // These are custom options that the Table class understands
