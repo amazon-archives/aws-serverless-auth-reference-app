@@ -115,9 +115,6 @@ The application framework relies on [Node.js] and [npm]. It also uses [Apache Co
     # install the Node modules 
     cd aws-serverless-auth-reference-app/app
     npm install
-    
-    # install the Bower crypto components (for AWS request signing)
-    bower install
 
     # install Cordova platform components if you would like to build the app for mobile
     cordova platform remove android
