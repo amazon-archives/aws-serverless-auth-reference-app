@@ -21,9 +21,7 @@ export class GlobalStateService {
   }
 
   getUserId(): string {
-    let userId = CognitoUtil.getUserId();
-    // Replacing ":" in userID so it is URL safe for HTTP requests to /users/userID
-    return userId == null ? '' : userId.replace(':', '_');
+    return CognitoUtil.getUserId();
   }
 
   getUnencodedUserId(): string {

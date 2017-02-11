@@ -16,13 +16,13 @@ var SampleGroups = [
     name: 'adminGroup',
     description: 'Cognito user group for administrators',
     precedence: 0,
-    iam: 'something'
+    roleArn: 'cognitoAuthAdminRoleArn'
   },
   {
     name: 'clientGroup',
     description: 'Cognito user group for spacefinder users',
     precedence: 1,
-    iam: 'something'
+    roleArn: 'cognitoAuthStandardRoleArn'
   },
 ];
 

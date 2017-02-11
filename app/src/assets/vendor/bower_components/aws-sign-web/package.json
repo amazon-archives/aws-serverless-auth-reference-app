@@ -1,0 +1,34 @@
+{
+  "name": "aws-sign-web",
+  "version": "1.1.1",
+  "description": "Plain JavaScript AWS Signature v4 for use within Web Browsers",
+  "keywords": [
+    "aws",
+    "sign",
+    "web",
+    "plain",
+    "es5"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danieljoos/aws-sign-web.git"
+  },
+  "author": "Daniel Joos <daniel@joosweb.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danieljoos/aws-sign-web/issues"
+  },
+  "homepage": "https://github.com/danieljoos/aws-sign-web#readme",
+  "main": "aws-sign-web.js",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.1",
+    "gulp-load-plugins": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.3"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.6"
+  }
+}

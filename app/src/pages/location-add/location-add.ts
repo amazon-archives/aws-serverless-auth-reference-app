@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { GlobalStateService } from '../../services/global-state.service';
-import { CustomAuthorizerClient } from "../../services/spacefinder-api.service";
+import { CustomAuthorizerClient, IamAuthorizerClient } from "../../services/spacefinder-api.service";
 import { Logger } from '../../services/logger.service';
 
 
@@ -57,7 +57,7 @@ export class LocationAddPage {
     }
   }
 
-  constructor(public navCtrl: NavController, private globals: GlobalStateService, private client: CustomAuthorizerClient) {
+  constructor(public navCtrl: NavController, private globals: GlobalStateService, private client: IamAuthorizerClient) {
   }
 
   ionViewDidEnter() {
