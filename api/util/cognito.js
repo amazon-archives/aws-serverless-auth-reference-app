@@ -241,7 +241,7 @@ function createIdentityPoolImpl(userPoolId, userPoolClientIds) {
         }
       }
       logger.info('Created Cognito Identity Pool', params.IdentityPoolName);
-      resolve(setIdentityPoolRoles());
+      resolve(setIdentityPoolRoles(userPoolId, userPoolClientIds));
     });
   });
 }
@@ -294,17 +294,24 @@ function getIdentityPoolId() {
   });
 }
 
-function setIdentityPoolRoles() {
+function setIdentityPoolRoles(userPoolId, userPoolClientIds) {
   return cf.getStackOutputs().then((cfOutputs) => {
-    let cognitoAuthRoleArn = cfOutputs.CognitoIdentityPoolAuthRoleArn;
+    let cognitoAuthAdminRoleArn = cfOutputs.CognitoIdentityPoolAuthAdminRoleArn;
+    let cognitoAuthStandardRoleArn = cfOutputs.CognitoIdentityPoolAuthStandardRoleArn;
     let cognitoUnAuthRoleArn = cfOutputs.CognitoIdentityPoolUnAuthRoleArn;
     return getIdentityPoolId().then((identityPoolId) => {
+      let userPoolRoleMappings = {};
+      userPoolRoleMappings['cognito-idp.' + config.AWS_REGION + '.amazonaws.com/' + userPoolId + ':' + userPoolClientIds[0]] = {
+          Type: 'Token',
+          AmbiguousRoleResolution: 'AuthenticatedRole'
+      };
       let params = {
         IdentityPoolId: identityPoolId,
         Roles: {
-          authenticated: cognitoAuthRoleArn,
+          authenticated: cognitoAuthStandardRoleArn,
           unauthenticated: cognitoUnAuthRoleArn
-        }
+        },
+        RoleMappings: userPoolRoleMappings
       };
       return new Promise((resolve, reject) => {
         identityPools.setIdentityPoolRoles(params, function (err) {
@@ -356,37 +363,42 @@ function deleteUserPool() {
  */
 function adminCreateGroup(group) {
   return getUserPoolId().then((userPoolId) => {
+    return cf.getStackOutputs().then((cfOutputs) => {
+      let roleArns = {};
+      roleArns['cognitoAuthAdminRoleArn'] = cfOutputs.CognitoIdentityPoolAuthAdminRoleArn;
+      roleArns['cognitoAuthStandardRoleArn'] = cfOutputs.CognitoIdentityPoolAuthStandardRoleArn;
+      roleArns['cognitoUnAuthRoleArn'] = cfOutputs.CognitoIdentityPoolUnAuthRoleArn;
 
-    logger.info('Incoming request to crate group %s', group.name);
-    let listParams = {
-      UserPoolId: userPoolId
-    };
+      logger.info('Incoming request to crate group %s', group.name);
+      let listParams = {
+        UserPoolId: userPoolId
+      };
 
-    let params = {
-      UserPoolId: userPoolId,
-      GroupName: group.name,
-      Description: group.description,
-      Precedence: group.precedence
-    };
-    userPools.listGroups(listParams, function (err, listData) {
-      if (err) {
-        throw (new Error(err));
-      }
-      for (let userGroupIndex in listData.Groups) {
-
-        if (listData.Groups[userGroupIndex].GroupName === group.name) {
-          logger.info('Group %s already exists, ignoring', group.name);
-          return;
-        }
-      }
-      userPools.createGroup(params, function (err, data) {
-
-
+      let params = {
+        UserPoolId: userPoolId,
+        GroupName: group.name,
+        Description: group.description,
+        Precedence: group.precedence,
+        RoleArn: roleArns[group.roleArn]
+      };
+      userPools.listGroups(listParams, function (err, listData) {
         if (err) {
           throw (new Error(err));
         }
-        return (data);
-      })
+        for (let userGroupIndex in listData.Groups) {
+
+          if (listData.Groups[userGroupIndex].GroupName === group.name) {
+            logger.info('Group %s already exists, ignoring', group.name);
+            return;
+          }
+        }
+        userPools.createGroup(params, function (err, data) {
+          if (err) {
+            throw (new Error(err));
+          }
+          return (data);
+        })
+      });
     });
   });
 }

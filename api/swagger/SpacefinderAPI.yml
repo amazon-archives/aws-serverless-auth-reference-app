@@ -51,7 +51,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
       security:
-      - spacefinder-custom-authorizer: []
+      - sigv4: []
 
   /locations/{locationId}:
     delete:

@@ -181,9 +181,6 @@
             {hexOutput: false, textInput: false}
         );
         ws.signature = hmac(signKey, ws.stringToSign, {textInput: false});
-        console.log('ws.signature:', ws.signature);
-        console.log('ws.stringToSign', ws.stringToSign);
-        console.log('signKey', signKey);
     }
 
     // Build the signature HTTP header using the data in the working set.
