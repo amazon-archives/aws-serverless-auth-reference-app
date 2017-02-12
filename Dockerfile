@@ -9,8 +9,6 @@
 
 # # once you're running inside the Docker container
 # aws configure  # make sure to choose us-east-1 as the region
-#   - aws_access_key_id = AKIAI3YTODSF37ITIYQA
-#   - aws_secret_access_key = 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
 # cd ./api
 # gulp deploy
 # gulp bootstrap
