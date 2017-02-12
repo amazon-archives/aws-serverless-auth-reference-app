@@ -177,14 +177,14 @@ gulp.task('deploy', gulp.series(
   'generate_client_config',
   'deploy_lambda',
   'deploy_api',
-  'generate_sample_data'   
-));
-
-gulp.task('bootstrap', gulp.series(
   'generate_sample_users',
   'generate_sample_groups',
   'sleep',
   'assign_users_to_cognito_user_groups'
+));
+
+gulp.task('bootstrap', gulp.series(
+  'generate_sample_data'
 ));
 
 gulp.task('undeploy', gulp.series(
