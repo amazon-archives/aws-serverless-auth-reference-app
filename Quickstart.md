@@ -20,9 +20,9 @@ This lab demonstrates how to demo the SpaceFinder reference app, and help you un
 
 Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built SpaceFinder Docker container. Once your AWS credentials and configured and the AWS resources are deployed, you'll start the Ionic 2 server which will serve up the hybrid mobile app.
 
-1. **Launch the EC2 instance** in your AWS account, using a public AMI which contains a Docker image with a pre-configured environment:
+1. **Launch the EC2 instance** in your AWS account, using a public community AMI which contains a Docker image with a pre-configured environment:
 
-	- **Public AMI**: `ami-bada16ac`
+	- **Public Community AMI**: `ami-bada16ac`
 	- **Instance type**: m4.large
 	- **Subnet/AZ:** Launch in any **public** VPC subnet (in any AZ)
 	- **Public IP**: Enable "Auto-assign Public IP"
