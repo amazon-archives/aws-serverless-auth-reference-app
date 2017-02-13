@@ -66,16 +66,21 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the Docker co
 
 Interact with the mobile app, and gain insights by viewing the behind-the-scenes info in the browser's JavaScript console. Explore how the AWS resources are configured.
 
-1. Sign-up as new user in the hybrid mobile app, using your e-mail address
-1. Provide confirmation code from e-mail to validate e-mail and confirm registration
-1.	Sign-in as your new user
-	- Notice all tokens returned from Cognito User Pools and AWS credentials returned from Cognito Federated Identities
-	- Copy/paste identity token into `http://jwt.io` and decode it to see contents
+1. **Sign-up as new user in the hybrid mobile app, using your e-mail address**
+1. **Provide confirmation code from e-mail to validate e-mail and confirm registration**
+1.**Sign-in as your new user**
+	- Review the output in the browser's JavaScript console.
+      - <span style='color:green'>How many JWT tokens are returned from Cognito User Pools?</span>
+      - <span style='color:green'>Which AWS credential components are returned from Cognito Federated Identities?</span>
+	- Copy/paste the identity token into the JWT debugger at `http://jwt.io`, and decode it to see the base64-decoded content of the JWT.
 		- How long is the identity token valid for before it expires?
-	- Copy/paste access token into `http://jwt.io` and decode it to see contents.
+    - Which attributes are encoded inside of the token?
+	- Copy/paste the access token into the JWT debugger at `http://jwt.io`, and decode it to see the base64-decoded content of the JWT.
 		- How long is the access token valid for before it expires?
-1.	Browse to "Resources" tab in the mobile app
-1.	Attempt to load locations “without Auth”
+    - Which attributes are encoded inside of the token?
+    - Which attributes are the same as the ones in the identity token? Which ones are different?
+1. **Browse to "Resources" tab in the mobile app**
+1. **Attempt to load locations “without Auth"**
 	- Notice the exact HTTP request in the developer console and the headers sent.
 	- Notice an error is returned with a `401` status code.
 1.	Attempt to load locations “with Auth”
