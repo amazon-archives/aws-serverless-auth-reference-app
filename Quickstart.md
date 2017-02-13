@@ -87,10 +87,10 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 	- Review the output in the browser's JavaScript console.
       - *Which JWT tokens are returned from Cognito User Pools?*
       - *Which AWS credential components are returned from Cognito Federated Identities?*
-1. Copy/paste the identity token into the JWT debugger at <http://jwt.io>, and decode it to see the base64-decoded content.
+1. **Copy/paste the identity token into the JWT debugger at <http://jwt.io>, and decode it to see the base64-decoded content.**
 	- *How long is the identity token valid for before it expires?*
     - *Which attributes are encoded in the token?*
-1. Copy/paste the access token into the JWT debugger at <http://jwt.io>, and decode it to see the base64-decoded content.
+1. **Copy/paste the access token into the JWT debugger at <http://jwt.io>, and decode it to see the base64-decoded content.**
 	- *How long is the access token valid for before it expires?*
   - *Which attributes are encoded in the token?*
   - *Which attributes also exist in the identity token? Which ones are different?*
