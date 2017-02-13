@@ -184,8 +184,9 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
     - *An API Gateway Custom Authorizer is associated with this API operation. The Custom Authorizer logic evaluates the user's identity token and corresponding Cognito User Pools group membership. Since your user is in the administrators group, the Custom Authorizer returns an IAM policy that effectively allows the user to perform this API operation.*
 1. **Click on the arrow located in the upper left of the app (next to the `Resources` title), to return to the previous screen.**
 1. **Click on "Add a location"**
-1.	**Fill out the form and click on the “Add location” button**
+1.	**Fill out the form and click on the “Add location” button. You may use the default image URL for a default location image.**
 	- *This time, your API request is successful, since your account is part of the administrators group, which is associated with an IAM role that has permissions to perform this API operation.*
+1. **Click on "Load locations with Auth". You new location with an image should appear in the locations list.**
 
 ---
 
