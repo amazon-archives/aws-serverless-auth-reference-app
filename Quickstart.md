@@ -269,11 +269,11 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 
 ### O. Exploring the client-side code to interact with Cognito
 
-1. **Client-side interactions with Cognito are performed using the Cognito JavaScript SDKs. Explore the app's Cognito-related code, which has been encapsulated in this class:
+1. **Client-side interactions with Cognito are performed using the Cognito JavaScript SDKs. Explore the app's Cognito-related code, which has been encapsulated in this class:**
 <https://github.com/awslabs/aws-serverless-auth-reference-app/blob/master/app/src/services/account-management.service.ts>
-    - Which calls are using Cognito User Pools vs Cognito Federated Identities?
-    - What types of API calls are needed to get AWS credentials?
-    - When we sign out a user, how do we ensure that Cognito signs-up the user?
+    - *Which calls are using Cognito User Pools vs Cognito Federated Identities?*
+    - *What types of API calls are needed to get AWS credentials?*
+    - *When we sign out a user, how do we ensure that Cognito signs-up the user?*
 
 ---
 
