@@ -2,7 +2,7 @@
 
 This Developer Guide provides instructions on setting up the project pre-requisites manually in your developer environment.
 
-Please make sure to go through the [Quickstart guide](Quickstart.md) first to familiarize yourself with the application and codebase. The [Quickstart Guide](Quickstart.md) walks through setting up a demo environment (5 minutes) with a tutorial of key app flows (15-minutes). This lab is self-contained and cleans up after itself by un-deploying all auto-generated AWS resources.
+Please make sure to go through the [Quickstart guide](Quickstart.md) first to familiarize yourself with the application and codebase. The [Quickstart Guide](Quickstart.md) walks through setting up a demo environment (5 minutes) with a tutorial of key app flows (30 minutes). This lab is self-contained and cleans up after itself by un-deploying all auto-generated AWS resources.
 
 
 ## Backend API
