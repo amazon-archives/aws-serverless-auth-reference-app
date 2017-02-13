@@ -20,6 +20,9 @@ This lab demonstrates how to demo the SpaceFinder reference app, and help you un
 
 Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built SpaceFinder Docker container. Once your AWS credentials and configured and the AWS resources are deployed, you'll start the Ionic 2 server which will serve up the hybrid mobile app.
 
+1. **Create a highly-privileged IAM user, if necessary.** The lab needs permissions to provision/de-provision Cognito User Pools, DynamoDB tables, S3 buckets, Lambda functions, API Gateway configurations, CloudFormation stacks, and IAM roles. You will need the AWS credentials (AWS Access Key and AWS Secret Access Key ID) associated with this highly-privileged user later on in step #5.
+	> All resources are created in your personal AWS account. This lab is self-contained and cleans up after itself by un-deploying all generated AWS resources.
+  
 1. **Launch the EC2 instance** in your AWS account, using a public community AMI which contains a Docker image with a pre-configured SpaceFinder environment:
 
 	- **Public Community AMI**: `ami-bada16ac`
@@ -41,9 +44,7 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built
 
 	> Troubleshooting: If you encounter a error saying “Bind for 0.0.0.0:80 failed: port is already allocated”, try: `sudo service docker restart`
 
-1. **Create a highly-privileged IAM user, if necessary.** The lab needs permissions to provision/de-provision Cognito User Pools, DynamoDB tables, S3 buckets, Lambda functions, API Gateway configurations, CloudFormation stacks, and IAM roles.
-	> All resources are created in your personal AWS account. This lab is self-contained and cleans up after itself by un-deploying all generated AWS resources.
-1. **Configure the AWS credentials** to be used while inside the Docker container.
+1. **Configure the AWS credentials** to be used while inside the Docker container. Use the AWS credentials (AWS Access Key and AWS Secret Access Key ID) associated with the highly-privileged IAM user that was referenced in step #1.
 
 		aws configure
 
