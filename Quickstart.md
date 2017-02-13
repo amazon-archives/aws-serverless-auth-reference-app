@@ -10,7 +10,7 @@ This lab demonstrates how to demo the SpaceFinder reference app, and help you un
 
 # Here's the high-level plan...
 
-1. **SETUP** (5 minutes): Provision an EC2 instance, and run the Docker container. Configure your AWS credentials, and deploy the AWS resources. Start Ionic 2 server.
+1. **SETUP** (5 minutes): Provision an EC2 instance, and run the pre-built SpaceFinder Docker container. Configure your AWS credentials, deploy the AWS resources, and start the Ionic 2 server.
 1. **INTERACT AND LEARN** (30 minutes): Interact with the hybrid mobile app, and gain insights with the behind-the-scenes info displayed in the browser's JavaScript console. Explore how the AWS resources are configured.
 1. **CLEANUP** (1 minute): Stop the Ionic 2 server, and un-deploy the AWS resources.
 
@@ -18,7 +18,7 @@ This lab demonstrates how to demo the SpaceFinder reference app, and help you un
 
 # SETUP (5 minutes)
 
-Setup is quick and easy. You'll provision an EC2 instance, and run the Docker container. Once your AWS credentials and configured and the AWS resources are deployed, you'll start the Ionic 2 server.
+Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built SpaceFinder Docker container. Once your AWS credentials and configured and the AWS resources are deployed, you'll start the Ionic 2 server which will serve up the hybrid mobile app.
 
 1. **Launch the EC2 instance** in your AWS account, using a public AMI which contains a Docker image with a pre-configured environment:
 
