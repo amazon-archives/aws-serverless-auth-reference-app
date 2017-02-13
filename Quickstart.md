@@ -207,6 +207,61 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 	- *Which validations are performed against the HTTP request's authorization header passed to Lambda as part of the event object?*
 	- *Since a custom authorizer should always return an effective IAM policy for a token sent to it, the project returns a “deny-all” policy for any invalid or malformed tokens.*
 	
+---
+
+### L. Exploring the Cognito User Pools console
+
+1.	**Browse to the Cognito User Pools console**
+1.	**Select the "spacefinder-api-..." user pool**
+1.	**Select "Users and Groups" from the left-hand panel**
+1.	**Review your users in the right-hand panel**
+1.	**Click on the "Groups" tab in the right-hand panel**
+    - The precedence value indicates which group’s role should be chosen for a user if a user is a part of multiple groups
+1.	**Click on the "adminGroup" to review the group details for standard users**
+    - *Which IAM role is assigned to this group?*
+    - *Can the IAM role and predence settings be edited?*
+1.	**Click on the "Groups" breadcrumb in the right-hand panel to go back**
+1.	**Click on the "clientGroup" to review its settings**
+    - *Is this a different IAM role assigned to this group than the "adminGroup?"*
+1.	**Click on Attributes in the left-hand panel**
+    - *Are there any required attributes for new users in this user group?*
+    - *Are there any custom attributes for users in this user group?*
+1.	**Explore the Verifications section**
+    - *This section governs requirements for new sign-ups and ongoing user sign-ins.*
+    - *Notice the requirement of e-mail verification, hence the earlier confirmation code message.*
+1.	**Evaluate the "apps" section**
+    - *We only have one app for this project in this case since users only interact via the Ionic 2 mobile/web app.*
+    - *"No Admin SRP" is required for the backend "gulp deploy" process (which you ran during setup) to be able to programatically login as our sample users to configure them and set their permanent passwords.*
+    - *For production use, SRP is a best practice and "no admin SRP" auth should only be used for system logins with the user pool such as for user import/migration or for test automation purposes. In such cases, having a separate app for each backend system with this property set is advisable so client apps are required to use SRP in all cases.*
+    - *A client secret is not needed for a JavaScript application, but can optionally be required for apps in other languages.*
+    - *Additionally, different apps can have access to different attributes of the user pool where the identity token returned from Cognito User Pools for that app will only include attributes the given app has "read access" to.*
+
+---
+
+### M. Exploring the Cognito Federated Identities console
+
+1.	**Browse to "Cognito Federated Identities" console**
+1.	**Select the "Spacefinder" identity pool**
+1.	**Click "Edit Identity Pool" in the top right**
+1.	**Scroll down and expand the authentication providers section**
+    - *Only the particular Cognito User Pool with its respective client ID is granted access to be able to assume an identity in this Cognito Federated identity pool*
+    - *Since this app implements Cognito's fine-grained access control, beyond the default unauthenticated and authenticated role defined for the identity pool, it also is set to allow selection of the effective IAM role from a "token"*
+    - *The token in this case is the "Cognito:preferred_role" attribute as shown in the decoded identity token returned from the user pool after sign-in.**
+
+### N. Exploring the effective IAM policies
+
+1.	**Browse to "CloudFormation" and select "spacefinder-api-..." stack**
+1.	**Under "Outputs", scan for the "CognitoIdentityPoolAuthStandardRole"**
+1.	**Copy the exact IAM role name for the standard role next to the output name**
+1.	**Browse to the "IAM" console**
+1.	**Click "Roles"**
+1.	**Paste the copied value into the filter box**
+    - *If the next screen showing the role details doesn’t automatically load, highlight the desired IAM role by clicking on it.*
+1.	**Scroll down and click “Edit Policy” for the in-line policy on the role**
+1.	**You should now see the effective IAM permissions for this policy**
+    - *IAM policy variables specific to Cognito are leveraged to ensure a user can only create or delete resource bookings for him or herself, and not using other user’s IDs in the URI path.*
+    - *Additionally, uploading of profile pictures to S3 is allowed, but only to the user’s particular path of their unique user ID within the S3 bucket.*
+    - *If you were to look up the effective in-line IAM policy for the administrators role, you would see that these restrictions do not exist for administrators.*
 
 
 # CLEANUP (1 minute)
