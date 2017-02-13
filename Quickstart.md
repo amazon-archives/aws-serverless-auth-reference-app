@@ -29,8 +29,9 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built
   - **Auto-assign Public IP**: Enable
   - **Security Groups:** Open up ports 22 (SSH) and 80 (HTTP) to `0.0.0.0/0`
   - **SSH keypair:** Associate it with an SSH keypair of your choice
+  - **Name:** You may wish to tag your instance with a name (e.g. "AWS-Auth-Lab") to make it to easier to identify later, and to remind yourself to delete the instance once you're done with the lab.
   - For all other EC2 launch settings, you can use the defaults.
-1. **SSH into the EC2 instance**. ([Instructions](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html))
+1. **SSH into the EC2 instance**. The AMI is based on Amazon Linux, and the username to SSH into the instance is `ec2-user`. ([Instructions](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html))
 
 		ssh -i /path/to/keypair.pem ec2-user@PUBLIC_DNS_OF_YOUR_EC2_SERVER
 
