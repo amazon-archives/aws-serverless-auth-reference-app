@@ -63,8 +63,8 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built
 
 1. **Open the JavaScript console**. As you interact with the hybrid mobile app, useful info will appear in the JavaScript console.
 
-	* For example, for Firefox on Mac, the JavaScript console can be toggled via the menu: `Tools > Web Developer > Web Console`. For Chrome on Mac, the menu is: `View > Developer > JavaScript Console`.
-	* You may find it helpful to have the JavaScript console display docked on the right side of the browser main window. This will allow you to see both mobile app as well as the JavaScript console output at the same time.
+	* For example, for Firefox on Mac, the JavaScript console can be toggled via the menu: `Tools > Web Developer > Web Console`. For Chrome on Mac: `View > Developer > JavaScript Console`.
+	* It's helpful to have the JavaScript console docked on the right side of the browser main window. This will allow you to see the mobile app and JavaScript console output at the same time.
 
 1. **Resize the browser main window**, to simulate the width of a mobile phone. Please be sure that you can see output displayed in the JavaScript console, as you click around the app.
 
@@ -82,14 +82,13 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 	- Review the output in the browser's JavaScript console.
       - *Which JWT tokens are returned from Cognito User Pools?*
       - *Which AWS credential components are returned from Cognito Federated Identities?*
-	- Copy/paste the identity token into the JWT debugger at `http://jwt.io`, and decode it to see the base64-decoded content.
-		- *How long is the identity token valid for before it expires?*
-        - *Which attributes are encoded in the token?*
-	- Copy/paste the access token into the JWT debugger at `http://jwt.io`, and decode it to see the base64-decoded content.
-		- *How long is the access token valid for before it expires?*
-        - *Which attributes are encoded in the token?*
-        - *Which attributes also exist in the identity token? Which ones are different?*
-1. **Copy the identity token displayed in the JavaScript console. This will be needed later.**
+1. Copy/paste the identity token into the JWT debugger at <http://jwt.io>, and decode it to see the base64-decoded content.
+	- *How long is the identity token valid for before it expires?*
+    - *Which attributes are encoded in the token?*
+1. Copy/paste the access token into the JWT debugger at <http://jwt.io>, and decode it to see the base64-decoded content.
+	- *How long is the access token valid for before it expires?*
+  - *Which attributes are encoded in the token?*
+  - *Which attributes also exist in the identity token? Which ones are different?*
 
 ---
 
@@ -153,7 +152,7 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 
 1.	**In a new browser tab/window, sign in to the AWS Management Console. Navigate to the API Gateway console.**
 1.	**Click to view details for the "Spacefinder-API"**
-2.	**In the lefthand menu, click "Authorizers" to view the Authorizers associated with 'Spacerfinder-API'.**
+2.	**In the lefthand menu, click "Authorizers" to view the Authorizers associated with 'Spacerfinder-API'**
 3.  **View the details of the "spacefinder-userPool-authorizer"**
 4.  **Copy your user's identity token from the JavaScript console in the other browser tab/window. (You may need to scroll back to the beginning of your JavaScript console to find the identity token.)**
 5.  **Return back to the "spacefinder-userPool-authorizer" detail screen. In the righthand pane, scroll down to the "Test your authorizer" section. Paste the identity token into the "Identity token" textfield, and click "Test".**
@@ -166,7 +165,7 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 ### H. Testing Custom Authorizers using the API Gateway console
     
 1.  **While still on the "Authorizers" screen, click on 'spacefinder-custom-authorizer' to view details.**
-1.  **In the righthand pane, scroll down to the "Test your authorizer" section. Paste in the identity token into the "Identity token" textfield, and click "Test"**
+1.  **In the righthand pane, scroll down to the "Test your authorizer" section. Paste the identity token into the "Identity token" textfield, and click "Test"**
     - *You should see an IAM Policy with permissions to Allow restricted access to the API operations. The IAM Policy also has explicit Deny statements to block the creation or deletion of locations/resources.*
 
 ---
@@ -219,13 +218,13 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 1.	**Select "Users and Groups" from the left-hand panel**
 1.	**Review your users in the right-hand panel**
 1.	**Click on the "Groups" tab in the right-hand panel**
-    - The precedence value indicates which group’s role should be chosen for a user if a user is a part of multiple groups
+    - The precedence value indicates which group’s role should be chosen for a user if a user is a member of multiple groups
 1.	**Click on the "adminGroup" to review the group details for standard users**
     - *Which IAM role is assigned to this group?*
-    - *Can the IAM role and predence settings be edited?*
+    - *Can the IAM role and precedence settings be edited?*
 1.	**Click on the "Groups" breadcrumb in the right-hand panel to go back**
 1.	**Click on the "clientGroup" to review its settings**
-    - *Is this a different IAM role assigned to this group than the "adminGroup?"*
+    - *Is a different IAM role assigned to this group than the "adminGroup?"*
 1.	**Click on Attributes in the left-hand panel**
     - *Are there any required attributes for new users in this user group?*
     - *Are there any custom attributes for users in this user group?*
@@ -248,7 +247,7 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 1.	**Click "Edit Identity Pool" in the top right**
 1.	**Scroll down and expand the authentication providers section**
     - *Only the particular Cognito User Pool with its respective client ID is granted access to be able to assume an identity in this Cognito Federated identity pool*
-    - *Since this app implements Cognito's fine-grained access control, beyond the default unauthenticated and authenticated role defined for the identity pool, it also is set to allow selection of the effective IAM role from a "token"*
+    - *Since this app implements Cognito's fine-grained access control, beyond the default unauthenticated and authenticated roles associated for the identity pool, it is set to allow selection of the effective IAM role from a "token"*
     - *The token in this case is the "Cognito:preferred_role" attribute as shown in the decoded identity token returned from the user pool after sign-in.**
 
 ---
