@@ -290,6 +290,8 @@ Cleanup is fast and easy. This lab is self-contained and cleans up after itself 
 
 1. **Exit Ionic 2 console and stop the Ionic server.**
 	- `Control-C` or `q` (for quit) will exit the Ionic 2 console.
+  
+> Troubleshooting: If your SSH session was terminated by the time you get to this point, don't worry about this Ionic 2 server step. However, you will need to repeat steps #3 through step #5 in the SETUP instructions, before you continue with the following steps. You will need to SSH back into your EC2 instance, start up the Docker container, and configure your AWS credentials, before continuing with the rest of the CLEANUP steps.
 
 1. **Un-deploy all AWS resources**:
 
