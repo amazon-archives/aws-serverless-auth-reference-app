@@ -80,7 +80,8 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 
 ### A. Register and Sign-in
 
-1. **Register as a new user in the hybrid mobile app, using your e-mail address.** (Note: Your email address is only used for the purpose of this lab, and is stored in the Cognito User Pool in your AWS account; it is not tracked or stored or used for any purposes beyond your use in this lab. The Cognito User Pool and other auto-generated AWS resources are un-deployed at the end of this lab.)
+1. **Register as a new user in the hybrid mobile app, using your e-mail address.**
+  - *Note: Your email address is not tracked or stored or used for any purposes beyond your use in this lab, and is stored in the Cognito User Pool in your AWS account. The Cognito User Pool and other auto-generated AWS resources are un-deployed at the end of this lab.*
 1. **Provide confirmation code from e-mail to validate e-mail and confirm registration**
 1. **Sign-in as your new user**
 	- Review the output in the browser's JavaScript console.
@@ -280,7 +281,7 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
 <https://github.com/awslabs/aws-serverless-auth-reference-app/blob/master/app/src/services/account-management.service.ts>**
     - *Which calls are using Cognito User Pools vs Cognito Federated Identities?*
     - *What types of API calls are needed to get AWS credentials?*
-    - *When we sign out a user, how do we ensure that Cognito signs-up the user?*
+    - *When we sign out a user, how do we ensure that Cognito fully signs-out the user?*
 
 ---
 
