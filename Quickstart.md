@@ -42,6 +42,7 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the Docker co
 
 		cd /home/aws-serverless-auth-reference-app/api
 		gulp deploy
+    gulp bootstrap
 
 1. **Start the Ionic 2 server.** This starts up the Ionic 2 server listening on port 8100, which is port-mapped (via Docker) to port 80 of the host EC2 instance.
 
