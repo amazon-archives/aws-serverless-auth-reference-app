@@ -6,12 +6,15 @@ This lab demonstrates how to demo the SpaceFinder reference app, and help you un
 
 > Please be sure to complete the "CLEANUP" section after you're done with the lab!
 
+---
+
 # Here's the high-level plan...
 
 1. **SETUP** (5 minutes): Provision an EC2 instance, and run the Docker container. Configure your AWS credentials, and deploy the AWS resources. Start Ionic 2 server.
 1. **INTERACT AND LEARN** (30 minutes): Interact with the hybrid mobile app, and gain insights with the behind-the-scenes info displayed in the browser's JavaScript console. Explore how the AWS resources are configured.
 1. **CLEANUP** (1 minute): Stop the Ionic 2 server, and un-deploy the AWS resources.
 
+---
 
 # SETUP (5 minutes)
 
@@ -248,6 +251,8 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
     - *Since this app implements Cognito's fine-grained access control, beyond the default unauthenticated and authenticated role defined for the identity pool, it also is set to allow selection of the effective IAM role from a "token"*
     - *The token in this case is the "Cognito:preferred_role" attribute as shown in the decoded identity token returned from the user pool after sign-in.**
 
+---
+
 ### N. Exploring the effective IAM policies
 
 1.	**Browse to "CloudFormation" and select "spacefinder-api-..." stack**
@@ -263,6 +268,7 @@ Interact with the mobile app, and gain insights by viewing the behind-the-scenes
     - *Additionally, uploading of profile pictures to S3 is allowed, but only to the user’s particular path of their unique user ID within the S3 bucket.*
     - *If you were to look up the effective in-line IAM policy for the administrators role, you would see that these restrictions do not exist for administrators.*
 
+---
 
 # CLEANUP (1 minute)
 
