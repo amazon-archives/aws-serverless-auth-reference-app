@@ -24,6 +24,9 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the Docker co
 	- **Security Groups:** Open up ports 22 (SSH) and 80 (HTTP) to `0.0.0.0/0`
 	- **SSH keypair:** Associate it with an SSH keypair of your choice
 1. **SSH into the EC2 instance**.
+
+		ssh -i /path/to/keypair.pem ec2-user@PUBLIC_DNS_OF_YOUR_EC2_SERVER
+
 1. **Once logged in, run the Docker container** in interactive mode. This  command will start the Docker container, and bind the container’s port 8100 to the host EC2 instance’s port 80:
 
 		docker run --rm -it -p 80:8100 awsdevops/aws-serverless-auth-reference-app
