@@ -14,6 +14,7 @@ A live demo of the SpaceFinder app was presented at [AWS re:Invent 2016], the an
 <br/>Presenters: Jim Tran and Justin Pirtle
 <br/>Presented on: November 30, 2016
 
+Note: Since the re:Invent presentation, we've updated the app to make use of [Cognito Groups and support for fine-grained role-based access control](https://aws.amazon.com/blogs/aws/new-amazon-cognito-groups-and-fine-grained-role-based-access-control-2/). These features were launched in December 2016, and are considered best practices. Also, the Quickstart Guide, Developer Guide, and Dockerfile have been added to this project.
 
 ## Quickstart and Developer Guide
 
