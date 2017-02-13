@@ -26,9 +26,9 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built
 	- **Instance type**: m4.large
   - **Network**: Select any VPC that has a **public subnet**. (If you haven't modified your "default VPC", that will work fine for this lab.)
   - **Subnet**: Launch in any **public subnet** (in any AZ). 
-	- **Auto-assign Public IP**: Enable
-	- **Security Groups:** Open up ports 22 (SSH) and 80 (HTTP) to `0.0.0.0/0`
-	- **SSH keypair:** Associate it with an SSH keypair of your choice
+  - **Auto-assign Public IP**: Enable
+  - **Security Groups:** Open up ports 22 (SSH) and 80 (HTTP) to `0.0.0.0/0`
+  - **SSH keypair:** Associate it with an SSH keypair of your choice
   - For all other EC2 launch settings, you can use the defaults.
 1. **SSH into the EC2 instance**. ([Instructions](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html))
 
