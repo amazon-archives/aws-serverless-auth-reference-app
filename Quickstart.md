@@ -30,13 +30,13 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the Docker co
 
 	> Troubleshooting: If you encounter a error saying “Bind for 0.0.0.0:80 failed: port is already allocated”, try: `sudo service docker restart`
 
-1. **Create a highly-privileged IAM user if necessary.** The lab needs permissions to provision/un-provision Cognito User Pools, DynamoDB tables, S3 buckets, Lambda functions, API Gateway configurations, CloudFormation stacks, and IAM roles.
-	> All resources are created in your AWS account. This lab is self-contained and respectfully cleans up after itself by un-deploying all generated AWS resources.
+1. **Create a highly-privileged IAM user, if necessary.** The lab needs permissions to provision/de-provision Cognito User Pools, DynamoDB tables, S3 buckets, Lambda functions, API Gateway configurations, CloudFormation stacks, and IAM roles.
+	> All resources are created in your personal AWS account. This lab is self-contained and respectfully cleans up after itself by un-deploying all generated AWS resources.
 1. **Configure the AWS credentials** to be used while inside the Docker container.
 
 		aws configure
 
-	> Just accept the defaults when it asks for region and output format. The app configuration file at `~/api/config.js` configures the resources to be provisioned in `us-east-1` by default. Also, AWS credentials are NOT persisted between Docker container runs, so if you exit the Docker container, remember to run `aws configure` again.
+	> Just accept the defaults when it asks for region and output format. The app configuration file at `~/api/config.js` configures the resources to be provisioned in `us-east-1` by default. Also, AWS credentials are NOT persisted between Docker container runs, so if you exit and later re-run the Docker container, remember to run `aws configure` again.
 
 1. **Deploy the AWS resources into your account**
 
@@ -49,7 +49,7 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the Docker co
 		ionic serve
 1. **View the hybrid mobile app in your browser**, by visiting:
 
-		http://DNS_OF_YOUR_EC2_SERVER/
+		http://PUBLIC_DNS_OF_YOUR_EC2_SERVER/
 
 1. **Open the JavaScript console**. As you interact with the hybrid mobile app, useful behind-the-scenes info will appear in the JavaScript console.
 
