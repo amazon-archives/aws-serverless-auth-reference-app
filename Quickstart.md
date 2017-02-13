@@ -20,15 +20,17 @@ This lab demonstrates how to demo the SpaceFinder reference app, and help you un
 
 Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built SpaceFinder Docker container. Once your AWS credentials and configured and the AWS resources are deployed, you'll start the Ionic 2 server which will serve up the hybrid mobile app.
 
-1. **Launch the EC2 instance** in your AWS account, using a public community AMI which contains a Docker image with a pre-configured environment:
+1. **Launch the EC2 instance** in your AWS account, using a public community AMI which contains a Docker image with a pre-configured SpaceFinder environment:
 
 	- **Public Community AMI**: `ami-bada16ac`
 	- **Instance type**: m4.large
-	- **Subnet/AZ:** Launch in any **public** VPC subnet (in any AZ)
-	- **Public IP**: Enable "Auto-assign Public IP"
+  - **Network**: Select any VPC that has a **public subnet**. (If you haven't modified your "default VPC", that will work fine for this lab.)
+  - **Subnet**: Launch in any **public subnet** (in any AZ). 
+	- **Auto-assign Public IP**: Enable
 	- **Security Groups:** Open up ports 22 (SSH) and 80 (HTTP) to `0.0.0.0/0`
 	- **SSH keypair:** Associate it with an SSH keypair of your choice
-1. **SSH into the EC2 instance**.
+  - For all other EC2 launch settings, you can use the defaults.
+1. **SSH into the EC2 instance**. ([Instructions](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AccessingInstancesLinux.html))
 
 		ssh -i /path/to/keypair.pem ec2-user@PUBLIC_DNS_OF_YOUR_EC2_SERVER
 
