@@ -11,7 +11,7 @@ will create any defined table
 
 In order to have prefix, config.js will contain the prefix for resources.
 
-lambda/index.js
+lambda/resources.js
 
 These are the handlers of the lambda functions which expose a CRUD interface
 on the resources.
