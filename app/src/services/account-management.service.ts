@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Config} from '../config/config'
 import {Logger} from './logger.service';
-import * as sjcl from 'sjcl';
+import * as sjcl from '../assets/vendor/sjcl';
 
 declare const AWS: any;
 declare const AWSCognito: any;
