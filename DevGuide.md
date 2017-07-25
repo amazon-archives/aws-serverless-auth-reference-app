@@ -53,8 +53,8 @@ The mobile app is a hybrid mobile app, and is built on the [Ionic2 framework], w
 
 The application framework relies on [Node.js] and [npm]. It also uses [Apache Cordova] plugins to support certain native functionality on mobile devices.
 
-    # install latest version of the Ionic2 CLI, Cordova, and Bower tools
-    npm install -g ionic cordova bower
+    # install Ionic2 CLI, Cordova, and Bower tools
+    npm install -g ionic@2.2.1 cordova@6.5.0 bower
     
     # install the Node modules 
     cd aws-serverless-auth-reference-app/app
