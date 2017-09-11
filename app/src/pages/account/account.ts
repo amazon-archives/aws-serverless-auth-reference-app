@@ -5,7 +5,7 @@ import { AccountSignupPage } from '../account-signup/account-signup';
 import { AccountChangePasswordPage } from '../account-change-password/account-change-password';
 import { LocationAddPage } from '../location-add/location-add';
 import { GlobalStateService } from '../../services/global-state.service';
-import { ImagePicker } from 'ionic-native';
+import { ImagePicker } from '@ionic-native/image-picker';
 import { UserLoginService } from '../../services/account-management.service';
 import { Config } from '../../config/config'
 import { Logger } from '../../services/logger.service';
@@ -41,8 +41,8 @@ export class AccountPage {
       let canvas = document.createElement('CANVAS');
       let cvs = (<any>canvas);
       let ctx = cvs.getContext('2d');
-      cvs.height = this.height;
-      cvs.width = this.width;
+      cvs.height = this.offsetHeight;
+      cvs.width = this.offsetWidth;
       ctx.drawImage(this, 0, 0);
       let dataURL = cvs.toDataURL(outputFormat);
       callback(dataURL);
@@ -136,7 +136,8 @@ export class AccountPage {
         quality: 100
       }
       // code adapted from: http://blog.ionic.io/ionic-native-accessing-ios-photos-and-android-gallery-part-2/
-      ImagePicker.getPictures(options)
+
+      new ImagePicker().getPictures(options)
       .then(
         file_uris => {
           try {
