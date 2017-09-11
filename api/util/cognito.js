@@ -152,11 +152,16 @@ function getUserPoolId() {
         reject(err);
         return;
       }
+      let found = false;
       for (let i = 0; i < data.UserPools.length; i++) {
         // Loop through user pools to find desired user pool and return Id
         if (data.UserPools[i].Name === userPoolName) {
           resolve(data.UserPools[i].Id);
+          found = true;
         }
+      }
+      if (!found) {
+        reject(new Error(`Could not find userPool ${userPoolName}`));
       }
     });
   });
@@ -173,11 +178,16 @@ function getUserPoolClientId(userPoolClientName, userPoolId) {
         reject(err);
         return;
       }
+      let found = false;
       for (let i = 0; i < data.UserPoolClients.length; i++) {
         // Loop through user pools to find desired user pool and return Id
         if (data.UserPoolClients[i].ClientName === userPoolClientName) {
           resolve(data.UserPoolClients[i].ClientId);
+          found = true;
         }
+      }
+      if (!found) {
+        reject(new Error(`Could not find userPool ${userPoolClientName}`));
       }
     });
   });
