@@ -16,7 +16,7 @@ export class CustomAuthorizerClient {
       options.headers.set(
         'Authorization',
         UserLoginService.getIdToken());
-      console.log('%cCustom Authorizer Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers['_headersMap'], '\nBody:', options.body);
+      console.log('%cCustom Authorizer Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
     });
     this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT);
   }
@@ -59,7 +59,7 @@ export class IamAuthorizerClient {
       options.headers.set('Content-Type', signed['Content-Type']);
       options.headers.set('x-amz-date', signed['x-amz-date']);
       options.headers.set('x-amz-security-token', signed['x-amz-security-token']);
-      console.log('%cIAM Authorization Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers['_headersMap'], '\nBody:', options.body);
+      console.log('%cIAM Authorization Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
     });
     this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT);
   }
@@ -78,7 +78,7 @@ export class UserPoolsAuthorizerClient {
       options.headers.set(
         'Authorization',
         UserLoginService.getIdToken());
-      console.log('%cUser Pools Authorizer Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers['_headersMap'], '\nBody:', options.body);
+      console.log('%cUser Pools Authorizer Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
     });
     this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT);
   }
@@ -94,7 +94,7 @@ export class NoAuthorizationClient {
   constructor(http: Http) {
     let httpService: HttpService = new HttpService(http);
     httpService.addInterceptor((options: RequestOptions) => {
-      console.log('%cRequest without authorization:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers['_headersMap'], '\nBody:', options.body);
+      console.log('%cRequest without authorization:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
     });
     this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT);
   }
