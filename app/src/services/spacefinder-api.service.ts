@@ -1,4 +1,4 @@
-import { Http, RequestOptions } from '@angular/http';
+import { Http, RequestOptions, RequestMethod } from '@angular/http';
 import { Injectable } from "@angular/core";
 import { DefaultApi } from "./spacefinder-sdk/api/DefaultApi";
 import { UserLoginService } from "./account-management.service";
@@ -16,9 +16,9 @@ export class CustomAuthorizerClient {
       options.headers.set(
         'Authorization',
         UserLoginService.getIdToken());
-      console.log('%cCustom Authorizer Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
+      console.log('%cCustom Authorizer Request:\n', Logger.LeadInStyle, requestMethodToString(options.method), options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
     });
-    this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT);
+    this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT, null);
   }
 
   public getClient(): DefaultApi {
@@ -44,7 +44,7 @@ export class IamAuthorizerClient {
       };
       var signer = new awsSignWeb.AwsSigner(awsSignConfig);
       var request = {
-        method: options.method,
+        method: requestMethodToString(options.method),
         url: options.url,
         headers: {
           'Accept': 'application/json',
@@ -59,9 +59,9 @@ export class IamAuthorizerClient {
       options.headers.set('Content-Type', signed['Content-Type']);
       options.headers.set('x-amz-date', signed['x-amz-date']);
       options.headers.set('x-amz-security-token', signed['x-amz-security-token']);
-      console.log('%cIAM Authorization Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
+      console.log('%cIAM Authorization Request:\n', Logger.LeadInStyle, requestMethodToString(options.method), options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
     });
-    this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT);
+    this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT, null);
   }
 
   public getClient(): DefaultApi {
@@ -78,9 +78,9 @@ export class UserPoolsAuthorizerClient {
       options.headers.set(
         'Authorization',
         UserLoginService.getIdToken());
-      console.log('%cUser Pools Authorizer Request:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
+      console.log('%cUser Pools Authorizer Request:\n', Logger.LeadInStyle, requestMethodToString(options.method), options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
     });
-    this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT);
+    this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT, null);
   }
 
   public getClient(): DefaultApi {
@@ -94,12 +94,36 @@ export class NoAuthorizationClient {
   constructor(http: Http) {
     let httpService: HttpService = new HttpService(http);
     httpService.addInterceptor((options: RequestOptions) => {
-      console.log('%cRequest without authorization:\n', Logger.LeadInStyle, options.method, options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
+      console.log('%cRequest without authorization:\n', Logger.LeadInStyle, requestMethodToString(options.method), options.url, '\nHeaders:', options.headers.toJSON(), '\nBody:', options.body);
     });
-    this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT);
+    this.client = new DefaultApi(<any> httpService, Config.API_ENDPOINT, null);
   }
 
   public getClient(): DefaultApi {
     return this.client;
+  }
+}
+
+function requestMethodToString(requestmethod: RequestMethod | string) {
+  if (typeof requestmethod === 'string') {
+    return requestmethod;
+  }
+  switch (requestmethod) {
+    case RequestMethod.Delete: 
+      return 'DELETE';
+    case RequestMethod.Get:
+      return 'GET';
+    case RequestMethod.Head:
+      return 'HEAD';
+    case RequestMethod.Options:
+      return 'OPTIONS';
+    case RequestMethod.Patch:
+      return 'PATCH';
+    case RequestMethod.Post:
+      return 'POST';
+    case RequestMethod.Put:
+      return 'PUT';
+    default:
+      return '';
   }
 }

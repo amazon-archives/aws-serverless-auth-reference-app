@@ -126,7 +126,7 @@ export class BookingsPage {
     // each time a new date is encountered.
     let currentDateString = null;
     let bookingsSoFar = [];
-    bookings.push({startTimeEpochTime: 0});
+    // bookings.push({locationId: null, resourceId: null, userId: null, startTimeEpochTime: 0});
 
     for (let i=0; i<bookings.length; i++) {
       let booking = bookings[i];
