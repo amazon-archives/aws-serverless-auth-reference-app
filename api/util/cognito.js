@@ -42,7 +42,7 @@ function safeCreateUserPool() {
     MaxResults: 60
   };
   return new Promise((resolve, reject) => {
-    userPools.listUserPools(listUserPoolsParams, function (err, data) {
+    userPools.listUserPools(listUserPoolsParams, (err, data) => {
       if (err) {
         reject(err);
       }
@@ -64,7 +64,7 @@ function safeCreateUserPool() {
 
 function createUserPoolClient(params) {
   return new Promise((resolve, reject) => {
-    userPools.createUserPoolClient(params, function (err, data) {
+    userPools.createUserPoolClient(params, (err, data) => {
       if (err) {
         if (err.code === 'ResourceConflictException') {
           resolve('User pool client ' + params.ClientName + ' already exists');
@@ -643,7 +643,7 @@ function deleteUserPoolDomain(userPoolId) {
           reject(err);
           return;
         }
-        resolve('Deleted Cognito User Pool Domain', params.Domain);
+        resolve('Deleted Cognito User Pool Domain');
       });
     });
   });
@@ -654,21 +654,23 @@ function deleteUserPool() {
     let params = {
       UserPoolId: userPoolId
     };
-    userPools.deleteUserPool(params, function (err, data) {
-      if (err) {
-        throw (new Error(err));
-      }
-      return (data);
+    return deleteUserPoolDomain(userPoolId).then(() => {
+      userPools.deleteUserPool(params, function (err, data) {
+        if (err) {
+          throw (new Error(err));
+        }
+        return (data);
+      });
     });
   });
 }
 
 function createCognitoPools() {
-  return safeCreateUserPool().then(safeCreateIdentityPool());
+  return safeCreateUserPool().then(safeCreateIdentityPool);
 }
 
 function deleteCognitoPools() {
-  return deleteIdentityPool().then(deleteUserPool());
+  return deleteIdentityPool().then(deleteUserPool);
 }
 
 module.exports = {
