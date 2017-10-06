@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/justonian/spacefinder-api.git"
   },
-  "author": "Jim Tran and Justin Pirtle",
+  "author": "Jim Tran, Justin Pirtle, and Vladimir Budilov",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/justonian/spacefinder-api/issues"
@@ -19,7 +19,7 @@
   "homepage": "https://github.com/justonian/spacefinder-api#readme",
   "dependencies": {
     "archiver": "^1.1.0",
-    "aws-sdk": "^2.7.19",
+    "aws-sdk": "^2.128.0",
     "bunyan": "^1.8.3",
     "bunyan-prettystream": "^0.1.3",
     "dtrace-provider": "^0.8.0",
