@@ -4,7 +4,7 @@ var defaults = {
   AWS_PROFILE: 'default',
   AWS_REGION: 'us-east-1',
   ENVIRONMENT_STAGE: 'development',
-  PROJECT_PREFIX: 'spacefinder-api-',
+  PROJECT_PREFIX: 'spacefinder-',
   PACKAGE_VERSION: '1.0.0'
 };
 

@@ -21,23 +21,29 @@ function generateClientConfig() {
       generatedConfig.API_ENDPOINT = apiInvokeUrl;
       return cognito.getUserPoolId().then((userPoolId) => {
         generatedConfig.USER_POOL_ID = userPoolId;
-        return cognito.getUserPoolClientId(cognito.userPoolClientName, generatedConfig.USER_POOL_ID).then((userPoolClientId) => {
-          generatedConfig.CLIENT_ID = userPoolClientId;
-          return cognito.getIdentityPoolId().then((identityPoolId) => {
-            generatedConfig.IDENTITY_POOL_ID = identityPoolId;
-            logger.info('Generated Config:\n', generatedConfig);
-
-            // Generate Lambda config environment file for User Pools token verification
-            let lambdaEnvironmentConfig = "'use strict';\n// Auto-generated file, do not modify directly\n\nvar config = " +
-              JSON.stringify(generatedConfig, null, 2) + ';\n\nmodule.exports = { config };';
-            fs.writeFileSync(lambdaEnvironmentConfigFile, lambdaEnvironmentConfig);
-            logger.info('Successfully generated Lambda environment config');
-
-            // Generate mobile/client app configuration file to point to deployed API
-            let configOverridesFile = '// Auto-generated file, do not modify directly\n\nconst configOverridesGenerated = ' +
-              JSON.stringify(generatedConfig, null, 2) + ';\n\nexport { configOverridesGenerated }';
-            fs.writeFileSync(appGeneratedConfigFile, configOverridesFile);
-            logger.info('Successfully generated application config');
+        return cognito.getUserPoolDomainName().then((userPoolDomainName) => {
+          generatedConfig.USER_POOL_DOMAIN_NAME = userPoolDomainName;
+          return cognito.getUserPoolDomainPrefix().then((userPoolDomainPrefix) => {
+            generatedConfig.USER_POOL_DOMAIN_PREFIX = userPoolDomainPrefix;
+            return cognito.getUserPoolClientId(cognito.userPoolAppClientName, generatedConfig.USER_POOL_ID).then((userPoolClientId) => {
+              generatedConfig.CLIENT_ID = userPoolClientId;
+              return cognito.getIdentityPoolId().then((identityPoolId) => {
+                generatedConfig.IDENTITY_POOL_ID = identityPoolId;
+                logger.info('Generated Config:\n', generatedConfig);
+    
+                // Generate Lambda config environment file for User Pools token verification
+                let lambdaEnvironmentConfig = "'use strict';\n// Auto-generated file, do not modify directly\n\nvar config = " +
+                  JSON.stringify(generatedConfig, null, 2) + ';\n\nmodule.exports = { config };';
+                fs.writeFileSync(lambdaEnvironmentConfigFile, lambdaEnvironmentConfig);
+                logger.info('Successfully generated Lambda environment config');
+    
+                // Generate mobile/client app configuration file to point to deployed API
+                let configOverridesFile = '// Auto-generated file, do not modify directly\n\nconst configOverridesGenerated = ' +
+                  JSON.stringify(generatedConfig, null, 2) + ';\n\nexport { configOverridesGenerated }';
+                fs.writeFileSync(appGeneratedConfigFile, configOverridesFile);
+                logger.info('Successfully generated application config');
+              })
+            })
           })
         })
       })
