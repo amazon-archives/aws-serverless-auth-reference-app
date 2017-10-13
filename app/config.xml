@@ -38,5 +38,7 @@
     <plugin name="cordova-plugin-whitelist" spec="^1.3.1" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <engine name="ios" spec="~4.5.0" />
-    <engine name="android" spec="~5.2.2" />
+    <plugin name="cordova-plugin-browsertab" spec="^0.2.0" />
+    <engine name="android" spec="~6.2.2" />
+    <allow-navigation href="http://192.168.1.125:8100" />
 </widget>

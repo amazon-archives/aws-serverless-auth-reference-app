@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AlertController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
-import {CognitoUtil, UserLoginService, LocalStorage} from './account-management.service';
+import { CognitoUtil, UserLoginService, LocalStorage } from './account-management.service';
 import { Logger } from './logger.service';
 
 

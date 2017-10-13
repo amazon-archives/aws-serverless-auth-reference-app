@@ -35,13 +35,20 @@ interface IUserAttribute {
 export class CognitoUtil {
 
   private static _USER_POOL_ID = Config['USER_POOL_ID'];
+  private static _USER_POOL_DOMAIN_NAME = Config['USER_POOL_DOMAIN_NAME'];
   private static _CLIENT_ID: string = Config['CLIENT_ID'];
   private static _IDENTITY_POOL_ID: string = Config['IDENTITY_POOL_ID'];
   private static _REGION: string = Config['REGION'];
+  private static _REDIRECT_URI = 'https://aws.amazon.com';
+  private static _RESPONSE_TYPE = 'token';
 
 
   public static getRegion(): string {
     return CognitoUtil._REGION;
+  }
+
+  public static getHostedUiLoginUrl(): string {
+    return 'https://' + CognitoUtil._USER_POOL_DOMAIN_NAME + '/login?redirect_uri=' + CognitoUtil._REDIRECT_URI + '&response_type=' + CognitoUtil._RESPONSE_TYPE + '&client_id=' + CognitoUtil._CLIENT_ID;
   }
 
   public static getClientId(): string {

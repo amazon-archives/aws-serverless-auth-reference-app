@@ -148,12 +148,14 @@ function createUserPoolClients(data) {
         'profile'
       ],
       CallbackURLs: [
-        'https://aws.amazon.com'
+        'https://aws.amazon.com',
+        'http://localhost/callback',
+        'spacefinder://callback'
       ],
-      DefaultRedirectURI: 'https://aws.amazon.com',
+      DefaultRedirectURI: 'http://localhost/callback',
       GenerateSecret: false,
       LogoutURLs: [
-        'https://aws.amazon.com'
+        'http://localhost/logout'
       ],
       ReadAttributes: [
         'email',
