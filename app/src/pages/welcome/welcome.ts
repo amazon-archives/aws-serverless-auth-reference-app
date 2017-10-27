@@ -1,4 +1,5 @@
 import { Component }          from '@angular/core';
+import { Http }               from '@angular/http';
 import { NavController }      from 'ionic-angular';
 import { AccountSigninPage }  from '../account-signin/account-signin';
 import { GlobalStateService } from '../../services/global-state.service';
@@ -9,6 +10,7 @@ import { CognitoUtil, UserLoginService, IUserLogin } from '../../services/accoun
 import { Logger } from '../../services/logger.service';
 import { AccountSignupPage } from '../account-signup/account-signup';
 import { BrowserTab } from '@ionic-native/browser-tab';
+import { Deeplinks } from '@ionic-native/deeplinks';
 import { Platform } from 'ionic-angular';
 
 @Component({
@@ -17,14 +19,33 @@ import { Platform } from 'ionic-angular';
 })
 export class WelcomePage {
   accountSigninPage = AccountSigninPage;
-  accountSignupPage = AccountSignupPage;
   tabsPage = TabsPage;
   initialized = false;
   cognitoUtil = null;
 
-  constructor(public navCtrl: NavController, public globals: GlobalStateService, private browserTab: BrowserTab, private platform: Platform) {
+  constructor(public navCtrl: NavController, public globals: GlobalStateService, private browserTab: BrowserTab, private deeplinks: Deeplinks, private http: Http, private platform: Platform) {
     // hack workaround: instantiation so that the code can be loaded in time for the IonViewDidEnter() method
     this.cognitoUtil = new CognitoUtil();
+
+    this.platform.ready().then((readySource) => {
+      console.log('Platform ready from', readySource);
+      // Platform now ready, execute any required native code
+
+      this.deeplinks.route({
+        '/callback': AccountSigninPage
+      }).subscribe((match) => {
+        //console.log('Successfully matched Deeplink route', match);
+        CognitoUtil.getIdTokenFromAuthCode(match.$args.code, http).then((data) => {
+          console.log('ID Token', data.id_token);
+          console.log('Access Token', data.access_token);
+          console.log('Refresh Token', data.refresh_token);
+        }).catch((err) => {
+          console.error('error', err);
+        });
+      }, (nomatch) => {
+        console.error('Got a deeplink that did not match known routes', nomatch);
+      });
+    });
   }
 
 
@@ -67,6 +88,7 @@ export class WelcomePage {
       }
     }
     */
+
     this.initialized = true;
   }
 
@@ -89,12 +111,8 @@ export class WelcomePage {
       });
 
     } else {
-      // You're testing in a browser. Redirect to the hosted UI.
-
-      
+      // You're testing in a browser. Redirect to the hosted UI. 
     }
-
-
   }
 
 }

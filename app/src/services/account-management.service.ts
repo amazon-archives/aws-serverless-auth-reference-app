@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Http, Headers} from '@angular/http';
 import {Config} from '../config/config'
 import {Logger} from './logger.service';
 import * as sjcl from '../assets/vendor/sjcl';
@@ -39,16 +40,38 @@ export class CognitoUtil {
   private static _CLIENT_ID: string = Config['CLIENT_ID'];
   private static _IDENTITY_POOL_ID: string = Config['IDENTITY_POOL_ID'];
   private static _REGION: string = Config['REGION'];
-  private static _REDIRECT_URI = 'https://aws.amazon.com';
-  private static _RESPONSE_TYPE = 'token';
-
+  private static _MOBILE_REDIRECT_URI = 'spacefinder://callback';
+  private static _WEB_REDIRECT_URI = 'https://aws.amazon.com';
+  private static _RESPONSE_TYPE = 'code';
 
   public static getRegion(): string {
     return CognitoUtil._REGION;
   }
 
   public static getHostedUiLoginUrl(): string {
-    return 'https://' + CognitoUtil._USER_POOL_DOMAIN_NAME + '/login?redirect_uri=' + CognitoUtil._REDIRECT_URI + '&response_type=' + CognitoUtil._RESPONSE_TYPE + '&client_id=' + CognitoUtil._CLIENT_ID;
+    return 'https://' + CognitoUtil._USER_POOL_DOMAIN_NAME + '/login?redirect_uri=' + CognitoUtil._MOBILE_REDIRECT_URI + '&response_type=' + CognitoUtil._RESPONSE_TYPE + '&client_id=' + CognitoUtil._CLIENT_ID;
+  }
+
+  private static getHostedUiTokenUrl(): string {
+    return 'https://' + CognitoUtil._USER_POOL_DOMAIN_NAME + '/oauth2/token'
+  }
+
+  public static getIdTokenFromAuthCode(authCode, http: Http): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/x-www-form-urlencoded');
+      let body = 
+        'grant_type=authorization_code&' +
+        'client_id=' + CognitoUtil._CLIENT_ID + '&' +
+        'redirect_uri=' + CognitoUtil._MOBILE_REDIRECT_URI + '&' +
+        'code=' + authCode;
+      http.post(CognitoUtil.getHostedUiTokenUrl(), body, {headers: headers})
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+          //TODO: Catch any post error
+        });
+    });
   }
 
   public static getClientId(): string {
@@ -318,8 +341,6 @@ export class UserLoginService {
     };
 
     let authenticationDetails = new AWSCognito.CognitoIdentityServiceProvider.AuthenticationDetails(authenticationData);
-
-    // Set user name
     CognitoUtil.setUsername(userLogin.username);
     console.log('Authenticating user ' + userLogin.username);
 
@@ -328,59 +349,7 @@ export class UserLoginService {
       cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: function (result) {
           console.debug(result);
-          // Save user tokens to local state
-          UserLoginService._userTokens.accessToken = result.getAccessToken().getJwtToken();
-          UserLoginService._userTokens.idToken = result.getIdToken().getJwtToken();
-          UserLoginService._userTokens.refreshToken = result.getRefreshToken().getToken();
-
-
-          LocalStorage.set('userTokens.idToken', UserLoginService._userTokens.idToken);
-          console.log('%cCognito User Pools Identity Token: ', Logger.LeadInStyle, UserLoginService.getIdToken());
-          LocalStorage.set('userTokens.accessToken', UserLoginService._userTokens.accessToken);
-          console.log('%cCognito User Pools Access Token: ', Logger.LeadInStyle, UserLoginService.getAccessToken());
-          LocalStorage.set('userTokens.refreshToken', UserLoginService._userTokens.refreshToken);
-          console.log('%cCognito User Pools Refresh Token: ', Logger.LeadInStyle, UserLoginService.getRefreshToken());
-
-          /*
-           Extract the user group from the identity token.
-           First, get the identity token payload and then perform a Base64 decoding
-           so you can later extract the user group.
-           */
-          let idTokenPayload = UserLoginService._userTokens.idToken.split('.')[1];
-          let payload = JSON.parse(sjcl.codec.utf8String.fromBits(sjcl.codec.base64url.toBits(idTokenPayload)));
-          let userGroup = payload["cognito:groups"];
-          if (userGroup && userGroup.length > 0) {
-            LocalStorage.set('userGroup', userGroup);
-          } else {
-            /*
-              The user group is set only for the pre-defined users. By default
-              we assign them to client group.
-             */
-            userGroup = 'clientGroup';
-            LocalStorage.set('userGroup', userGroup);
-          }
-          console.log('%cCognito User Pools User Groups :' + '%c%s belongs to group %s', Logger.LeadInStyle, "black",
-            userLogin.username, userGroup);
-
-          // Set user state to authenticated
-          CognitoUtil.setUserState(UserState.SignedIn);
-
-          // Read user attributes and write to console
-          UserProfileService.getUserAttributes().then(() => {
-            UserLoginService.getAwsCredentials().then(() => {
-              LocalStorage.set('userId', CognitoUtil.getCognitoIdentityId());
-              console.log('%cCognito Identity ID: ', Logger.LeadInStyle, CognitoUtil.getCognitoIdentityId());
-              LocalStorage.set('userTokens.awsAccessKeyId', AWS.config.credentials.accessKeyId);
-              console.log('%cAWS Access Key ID: ', Logger.LeadInStyle, AWS.config.credentials.accessKeyId);
-              LocalStorage.set('userTokens.awsSecretAccessKey', AWS.config.credentials.secretAccessKey);
-              console.log('%cAWS Secret Access Key: ', Logger.LeadInStyle, AWS.config.credentials.secretAccessKey);
-              LocalStorage.set('userTokens.awsSessionToken', AWS.config.credentials.sessionToken);
-              console.log('%cAWS Session Token: ', Logger.LeadInStyle, AWS.config.credentials.sessionToken);
-            });
-            resolve();
-          }).catch((err) => {
-            reject(err);
-          });
+          UserLoginService.completeSignIn(result.getAccessToken().getJwtToken(),result.getIdToken().getJwtToken(),result.getRefreshToken().getToken());
         },
         onFailure: function (err) {
           // Check for user not confirmed exception
@@ -395,6 +364,61 @@ export class UserLoginService {
       });
     });
     return promise;
+  }
+
+  public static completeSignIn(accessToken, idToken, refreshToken) {
+
+    // Save user tokens to local state
+    UserLoginService._userTokens.accessToken = accessToken;
+    UserLoginService._userTokens.idToken = idToken;
+    UserLoginService._userTokens.refreshToken = refreshToken;
+
+    LocalStorage.set('userTokens.idToken', UserLoginService._userTokens.idToken);
+    console.log('%cCognito User Pools Identity Token: ', Logger.LeadInStyle, UserLoginService.getIdToken());
+    LocalStorage.set('userTokens.accessToken', UserLoginService._userTokens.accessToken);
+    console.log('%cCognito User Pools Access Token: ', Logger.LeadInStyle, UserLoginService.getAccessToken());
+    LocalStorage.set('userTokens.refreshToken', UserLoginService._userTokens.refreshToken);
+    console.log('%cCognito User Pools Refresh Token: ', Logger.LeadInStyle, UserLoginService.getRefreshToken());
+
+    /*
+     Extract the user group from the identity token.
+     First, get the identity token payload and then perform a Base64 decoding
+     so you can later extract the user group.
+     */
+    let idTokenPayload = UserLoginService._userTokens.idToken.split('.')[1];
+    let payload = JSON.parse(sjcl.codec.utf8String.fromBits(sjcl.codec.base64url.toBits(idTokenPayload)));
+    CognitoUtil.setUsername(payload["cognito:username"]);
+    let userName = payload["cognito:username"];
+    let userGroup = payload["cognito:groups"];
+    if (userGroup && userGroup.length > 0) {
+      LocalStorage.set('userGroup', userGroup);
+    } else {
+      /*
+        The user group is set only for the pre-defined users. By default
+        we assign them to client group.
+       */
+      userGroup = 'clientGroup';
+      LocalStorage.set('userGroup', userGroup);
+    }
+    console.log('%cCognito User Pools User Groups :' + '%c%s belongs to group %s', Logger.LeadInStyle, "black",
+      userName, userGroup);
+
+    // Set user state to authenticated
+    CognitoUtil.setUserState(UserState.SignedIn);
+
+    // Read user attributes and write to console
+    UserProfileService.getUserAttributes().then(() => {
+      UserLoginService.getAwsCredentials().then(() => {
+        LocalStorage.set('userId', CognitoUtil.getCognitoIdentityId());
+        console.log('%cCognito Identity ID: ', Logger.LeadInStyle, CognitoUtil.getCognitoIdentityId());
+        LocalStorage.set('userTokens.awsAccessKeyId', AWS.config.credentials.accessKeyId);
+        console.log('%cAWS Access Key ID: ', Logger.LeadInStyle, AWS.config.credentials.accessKeyId);
+        LocalStorage.set('userTokens.awsSecretAccessKey', AWS.config.credentials.secretAccessKey);
+        console.log('%cAWS Secret Access Key: ', Logger.LeadInStyle, AWS.config.credentials.secretAccessKey);
+        LocalStorage.set('userTokens.awsSessionToken', AWS.config.credentials.sessionToken);
+        console.log('%cAWS Session Token: ', Logger.LeadInStyle, AWS.config.credentials.sessionToken);
+      });
+    });
   }
 
   public static signOut() {
@@ -493,7 +517,6 @@ export class UserLoginService {
           reject(err);
           return;
         }
-
 
         logins['cognito-idp.' + CognitoUtil.getRegion() + '.amazonaws.com/' + CognitoUtil.getUserPoolId()] = result.getIdToken().getJwtToken();
 

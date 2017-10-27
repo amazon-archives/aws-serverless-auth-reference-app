@@ -138,8 +138,7 @@ function createUserPoolClients(data) {
       ClientName: userPoolAppClientName,
       UserPoolId: userPoolId,
       AllowedOAuthFlows: [
-        'code',
-        'implicit'
+        'code'
       ],
       AllowedOAuthFlowsUserPoolClient: true,
       AllowedOAuthScopes: [
@@ -152,7 +151,7 @@ function createUserPoolClients(data) {
         'https://localhost/callback',
         'spacefinder://callback'
       ],
-      DefaultRedirectURI: 'https://localhost/callback',
+      DefaultRedirectURI: 'spacefinder://callback',
       GenerateSecret: false,
       LogoutURLs: [
         'https://localhost/logout'

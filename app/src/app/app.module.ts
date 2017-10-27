@@ -3,6 +3,7 @@ import { IonicApp, IonicModule }       from 'ionic-angular';
 import { MyApp }                       from './app.component';
 import { HttpModule }                  from "@angular/http";
 import { BrowserTab }                  from '@ionic-native/browser-tab';
+import { Deeplinks }                   from '@ionic-native/deeplinks';
 
 import { AboutPage }                   from '../pages/about/about';
 import { AccountConfirmationCodePage } from '../pages/account-confirmation-code/account-confirmation-code';
@@ -74,6 +75,7 @@ import {
   ],
   providers: [
     BrowserTab,
+    Deeplinks,
     { provide: HttpService, useClass: HttpService },
     { provide: CustomAuthorizerClient, useClass: CustomAuthorizerClient },
     { provide: IamAuthorizerClient, useClass: IamAuthorizerClient },
