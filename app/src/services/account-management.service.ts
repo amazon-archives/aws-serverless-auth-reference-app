@@ -160,12 +160,6 @@ export class CognitoUtil {
       IdentityPoolId: CognitoUtil._IDENTITY_POOL_ID
     });
 
-    // Set Cognito Identity Pool details
-    AWS.config.region = CognitoUtil._REGION;
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: CognitoUtil._IDENTITY_POOL_ID
-    });
-
     // Initialize AWS config object with dummy keys - required if unauthenticated access is not enabled for identity pool
     AWSCognito.config.update({accessKeyId: 'dummyvalue', secretAccessKey: 'dummyvalue'});
     return new AWSCognito.CognitoIdentityServiceProvider.CognitoUserPool(poolData);
@@ -536,46 +530,43 @@ export class UserLoginService {
   }
 
   public static getAwsCredentials(): Promise<void> {
-    // TODO: Integrate this method as needed into the overall module
-    let logins = {};
-
     let promise: Promise<void> = new Promise<void>((resolve, reject) => {
-      // Check if user session exists
-      CognitoUtil.getCognitoUser().getSession((err: Error, result: any) => {
-        if (err) {
-          reject(err);
-          return;
-        }
+      // TODO: Integrate this method as needed into the overall module
+      // Add the User's Id token to the Cognito credentials login map
+      let logins = {};  
+      logins['cognito-idp.' + CognitoUtil.getRegion() + '.amazonaws.com/' + CognitoUtil.getUserPoolId()] = LocalStorage.get('userTokens.idToken');;
 
-        logins['cognito-idp.' + CognitoUtil.getRegion() + '.amazonaws.com/' + CognitoUtil.getUserPoolId()] = result.getIdToken().getJwtToken();
-
-        // Add the User's Id token to the Cognito credentials login map
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-          IdentityPoolId: CognitoUtil.getIdentityPoolId(),
-          Logins: logins
-        });
-
-        // Call refresh method to authenticate user and get new temp AWS credentials
-        if (AWS.config.credentials.needsRefresh()) {
-          AWS.config.credentials.clearCachedId();
-          AWS.config.credentials.get((err) => {
-            if (err) {
-              reject(err);
-              return;
-            }
-            resolve();
-          });
-        } else {
-          AWS.config.credentials.get((err) => {
-            if (err) {
-              console.error(err);
-              reject(err);
-              return;
-            }
-            resolve();
-          });
-        }
+      // Set Cognito Identity Pool details
+      AWS.config.region = CognitoUtil.getRegion();
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: CognitoUtil.getIdentityPoolId()
       });
+
+      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+        IdentityPoolId: CognitoUtil.getIdentityPoolId(),
+        Logins: logins
+      });
+
+      // Call refresh method to authenticate user and get new temp AWS credentials
+      if (AWS.config.credentials.needsRefresh()) {
+        AWS.config.credentials.clearCachedId();
+        AWS.config.credentials.get((err) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve();
+        });
+      } else {
+        AWS.config.credentials.get((err) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+            return;
+          }
+          resolve();
+        });
+      }
     });
     return promise;
   }
