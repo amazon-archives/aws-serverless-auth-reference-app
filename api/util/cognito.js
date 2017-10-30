@@ -148,10 +148,12 @@ function createUserPoolClients(data) {
       ],
       CallbackURLs: [
         'https://aws.amazon.com',
-        'https://localhost/callback',
-        'spacefinder://callback'
+        'https://localhost',
+        'spacefinder://callback',
+        'https://spacefinder.aws-demos.com/mobile',
+        'https://spacefinder.aws-demos.com/web'
       ],
-      DefaultRedirectURI: 'spacefinder://callback',
+      DefaultRedirectURI: 'https://localhost',
       GenerateSecret: false,
       LogoutURLs: [
         'https://localhost/logout'

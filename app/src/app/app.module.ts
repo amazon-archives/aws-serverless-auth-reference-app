@@ -1,7 +1,7 @@
 import { NgModule }                    from '@angular/core';
 import { IonicApp, IonicModule }       from 'ionic-angular';
 import { MyApp }                       from './app.component';
-import { HttpModule }                  from "@angular/http";
+import { HttpModule, URLSearchParams } from "@angular/http";
 import { BrowserTab }                  from '@ionic-native/browser-tab';
 import { Deeplinks }                   from '@ionic-native/deeplinks';
 
