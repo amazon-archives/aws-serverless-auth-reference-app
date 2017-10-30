@@ -420,31 +420,29 @@ export class UserLoginService {
         userGroup = 'clientGroup';
         LocalStorage.set('userGroup', userGroup[0]);
       }
-      console.log('%cCognito User Pools User Groups :' + '%c%s belongs to group %s', Logger.LeadInStyle, "black",
-        userName, userGroup);
+      console.log('%cCognito User Pools User Groups: ' + '%c%s belongs to group %s', Logger.LeadInStyle, "black",
+        userName, userGroup[0]);
 
       // Set user state to authenticated
       CognitoUtil.setUserState(UserState.SignedIn);
 
       // Read user attributes and write to console
-      UserProfileService.getUserAttributesV2().then(() => {
-          console.log('got user attributes');
-        UserLoginService.getAwsCredentials().then(() => {
-          console.log('got aws creds');
-          LocalStorage.set('userId', CognitoUtil.getCognitoIdentityId());
-          console.log('%cCognito Identity ID: ', Logger.LeadInStyle, CognitoUtil.getCognitoIdentityId());
-          LocalStorage.set('userTokens.awsAccessKeyId', AWS.config.credentials.accessKeyId);
-          console.log('%cAWS Access Key ID: ', Logger.LeadInStyle, AWS.config.credentials.accessKeyId);
-          LocalStorage.set('userTokens.awsSecretAccessKey', AWS.config.credentials.secretAccessKey);
-          console.log('%cAWS Secret Access Key: ', Logger.LeadInStyle, AWS.config.credentials.secretAccessKey);
-          LocalStorage.set('userTokens.awsSessionToken', AWS.config.credentials.sessionToken);
-          console.log('%cAWS Session Token: ', Logger.LeadInStyle, AWS.config.credentials.sessionToken);
+      console.log('%cCognito User Pools User Attributes: ', Logger.LeadInStyle, idTokenDecoded);
+      // Write user profile attributes to local storage
+      LocalStorage.setObject('userProfile', idTokenDecoded);
 
-          // Resolve promise if all is successful
-          resolve();
-        }).catch((err) => {
-          reject(err);
-        });
+      UserLoginService.getAwsCredentials().then(() => {
+        LocalStorage.set('userId', CognitoUtil.getCognitoIdentityId());
+        console.log('%cCognito Identity ID: ', Logger.LeadInStyle, CognitoUtil.getCognitoIdentityId());
+        LocalStorage.set('userTokens.awsAccessKeyId', AWS.config.credentials.accessKeyId);
+        console.log('%cAWS Access Key ID: ', Logger.LeadInStyle, AWS.config.credentials.accessKeyId);
+        LocalStorage.set('userTokens.awsSecretAccessKey', AWS.config.credentials.secretAccessKey);
+        console.log('%cAWS Secret Access Key: ', Logger.LeadInStyle, AWS.config.credentials.secretAccessKey);
+        LocalStorage.set('userTokens.awsSessionToken', AWS.config.credentials.sessionToken);
+        console.log('%cAWS Session Token: ', Logger.LeadInStyle, AWS.config.credentials.sessionToken);
+
+        // Resolve promise if all is successful
+        resolve();
       }).catch((err) => {
         reject(err);
       });
@@ -584,24 +582,20 @@ export class UserLoginService {
 }
 
 export class UserProfileService {
-  public static getUserAttributesV2() {
+  public static getUserAttributes() {
     let promise: Promise<Object> = new Promise<Object>((resolve, reject) => {
-      console.log('got to getCognitoUser');
       let cognitoUser = CognitoUtil.getCognitoUser();
       cognitoUser.getSession((err: Error, session: any) => {
         if (err) {
           reject(err);
           return;
         }
-        console.log('got Cognito session');
         cognitoUser.getUserAttributes((err: Error, result: any) => {
           if (err) {
             reject(err);
             return;
           }
-          console.log('got user attributes');
           let userAttributes = {};
-
           for (var i = 0; i < result.length; i++) {
             userAttributes[result[i].getName()] = result[i].getValue();
           }
@@ -615,35 +609,6 @@ export class UserProfileService {
     return promise;
   }
 }
-
-// export class UserProfileServiceV1 {
-//   public static getUserAttributes() {
-//     let promise: Promise<Object> = new Promise<Object>((resolve, reject) => {
-//       let cognitoUser = CognitoUtil.getCognitoUser();
-//       cognitoUser.getSession((err: Error, session: any) => {
-//         if (err) {
-//           reject(err);
-//           return;
-//         }
-//         cognitoUser.getUserAttributes((err: Error, result: any) => {
-//           if (err) {
-//             reject(err);
-//             return;
-//           }
-//           let userAttributes = {};
-//           for (var i = 0; i < result.length; i++) {
-//             userAttributes[result[i].getName()] = result[i].getValue();
-//           }
-//           console.log('%cCognito User Pools User Attributes: ', Logger.LeadInStyle, userAttributes);
-//           // Write user profile attributes to local storage
-//           LocalStorage.setObject('userProfile', userAttributes);
-//           resolve(userAttributes);
-//         });
-//       })
-//     });
-//     return promise;
-//   }
-// }
 
 @Injectable()
 export class LocalStorage {

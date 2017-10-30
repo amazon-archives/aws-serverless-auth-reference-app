@@ -130,7 +130,7 @@ export class AccountSigninPage {
   showLoginSuccessAlert(username: String, callbackHandler: () => void): void {
     let subtitle = `You are now signed in.`;
     if (this.globals.isAdminRole()) {
-      subtitle = `You are now signed as an Administrator.`
+      subtitle = `You are now signed in as an Administrator.`
     }
     let alert = this.alertCtrl.create({
       title: 'Success!',
