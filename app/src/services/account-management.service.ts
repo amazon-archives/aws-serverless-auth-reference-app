@@ -40,9 +40,9 @@ export class CognitoUtil {
   private static _CLIENT_ID: string = Config['CLIENT_ID'];
   private static _IDENTITY_POOL_ID: string = Config['IDENTITY_POOL_ID'];
   private static _REGION: string = Config['REGION'];
-  // TODO (Justin): Revert to official callback: private static _MOBILE_REDIRECT_URI = 'spacefinder://callback'; -- also update api/util/cognito.js
-  private static _MOBILE_REDIRECT_URI = 'https://spacefinder.aws-demos.com/mobile'
-  // TODO (Justin): Revert to official callback: private static _WEB_REDIRECT_URI = 'https://localhost:8100/';
+  private static _MOBILE_REDIRECT_URI = 'spacefinder://callback'
+  // private static _MOBILE_REDIRECT_URI = 'https://spacefinder.aws-demos.com/mobile'
+  // TODO (Justin): Revert to official callback: private static _WEB_REDIRECT_URI = 'https://localhost:8100/'; - ; -- also update api/util/cognito.js
   private static _WEB_REDIRECT_URI = 'https://spacefinder.aws-demos.com/web'
   private static _RESPONSE_TYPE = 'code';
 
