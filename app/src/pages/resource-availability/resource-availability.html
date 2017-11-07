@@ -40,7 +40,7 @@
         <h2 *ngIf="initialized && getBooking(timeslot)" style='color:#999999'>&nbsp;&nbsp;&nbsp;{{getBooking(timeslot).userFirstName}} {{getBooking(timeslot).userLastName}}</h2>
         <h2 *ngIf="!initialized">&nbsp;&nbsp;&nbsp;</h2>
         <button *ngIf="initialized && !getBooking(timeslot)" ion-button color="light" item-right  (click)="displayBookingDialog(resource.resourceId, timeslot)">BOOK</button>
-        <button *ngIf="initialized && (getBooking(timeslot) && (globals.displayAdminFeatures() || (getBooking(timeslot).userId == globals.userId)))" (click)="displayCancelDialog(timeslot)" ion-button color="danger" item-right>Cancel</button>
+        <button *ngIf="initialized && (getBooking(timeslot) && (globals.displayAdminFeatures() || (getBooking(timeslot).userId == globals.getUserId())))" (click)="displayCancelDialog(timeslot)" ion-button color="danger" item-right>Cancel</button>
         <button style='display:none' *ngIf="!initialized" ion-button item-right></button>
       </ion-item>
     </ion-list>
