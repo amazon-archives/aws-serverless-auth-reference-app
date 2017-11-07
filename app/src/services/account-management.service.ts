@@ -376,7 +376,6 @@ export class UserLoginService {
         }
       });
     });
-    console.log('got to here');
     return promise;
   }
 

@@ -11,7 +11,6 @@ import { AccountChangePasswordPage }   from '../pages/account-change-password/ac
 import { AccountForgotPasswordPage }   from '../pages/account-forgot-password/account-forgot-password';
 import { AccountPage }                 from '../pages/account/account';
 import { AccountSigninPage }           from '../pages/account-signin/account-signin';
-import { AccountSigninUsingSAMLPage }  from '../pages/account-signin-using-saml/account-signin-using-saml';
 import { AccountSignupPage }           from '../pages/account-signup/account-signup';
 import { BookingsPage }                from '../pages/bookings/bookings';
 import { LocationListPage }            from '../pages/location-list/location-list';
@@ -37,7 +36,6 @@ import {
     AccountForgotPasswordPage,
     AccountPage,
     AccountSigninPage,
-    AccountSigninUsingSAMLPage,
     AccountSignupPage,
     BookingsPage,
     LocationAddPage,
@@ -61,7 +59,6 @@ import {
     AccountForgotPasswordPage,
     AccountPage,
     AccountSigninPage,
-    AccountSigninUsingSAMLPage,
     AccountSignupPage,
     BookingsPage,
     LocationAddPage,

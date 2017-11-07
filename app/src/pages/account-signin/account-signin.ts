@@ -6,7 +6,6 @@ import { GlobalStateService } from '../../services/global-state.service';
 import { AccountForgotPasswordPage } from '../account-forgot-password/account-forgot-password';
 import { AccountSignupPage } from '../account-signup/account-signup';
 // import { WelcomePage } from '../welcome/welcome';
-import { AccountSigninUsingSAMLPage } from '../account-signin-using-saml/account-signin-using-saml';
 import {
   UserLoginService, IUserLogin, UserState,
   UserRegistrationService, CognitoUtil
@@ -23,7 +22,6 @@ export class AccountSigninPage {
   allowButtonPresses = true; // to prevent multiple clicks
   accountSignupPage = AccountSignupPage;
   accountForgotPasswordPage = AccountForgotPasswordPage;
-  accountSigninUsingSAMLPage = AccountSigninUsingSAMLPage;
   tabsPage = TabsPage;
   alertCtrl : AlertController = this.globals.getAlertController();
 

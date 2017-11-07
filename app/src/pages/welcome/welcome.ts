@@ -3,13 +3,13 @@ import { Http, URLSearchParams } from '@angular/http';
 import { NavController }      from 'ionic-angular';
 import { AlertController }    from 'ionic-angular';
 import { AccountSigninPage }  from '../account-signin/account-signin';
+import { AccountSignupPage } from '../account-signup/account-signup';
 import { GlobalStateService } from '../../services/global-state.service';
 import { TabsPage }           from '../tabs/tabs';
 import { Config }             from '../../config/config';
 // import { UserState }       from '../../services/account-management.service';
 import { CognitoUtil, UserLoginService, IUserLogin } from '../../services/account-management.service';
 import { Logger } from '../../services/logger.service';
-import { AccountSignupPage } from '../account-signup/account-signup';
 import { BrowserTab } from '@ionic-native/browser-tab';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { Platform } from 'ionic-angular';
@@ -20,6 +20,7 @@ import { Platform } from 'ionic-angular';
 })
 export class WelcomePage {
   accountSigninPage = AccountSigninPage;
+  accountSignupPage = AccountSignupPage;
   tabsPage = TabsPage;
   alertCtrl : AlertController = this.globals.getAlertController();
   initialized = false;
