@@ -146,8 +146,14 @@ export class BookingsPage {
         // ...and start with a fresh array
         currentDateString = dateString;
         bookingsSoFar = [booking];
-
       }
+    }
+    if (bookingsSoFar.length > 0) {
+      let b = {
+        "date": currentDateString,
+        "bookings": bookingsSoFar.slice(0) // clone the array
+      };
+      result.push(b);
     }
     return result;
   }
