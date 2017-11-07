@@ -134,6 +134,9 @@ function createUserPoolClients(data) {
       ]
     };
 
+    // Localhost callback below is only included for demo and development purposes
+    // For production use, only HTTPS (or custom URI scheme for mobile) callbacks should be used
+    // Best practice is to have separate app clients for admin operations (adding to groups, no SRP, etc.) vs. regular client interactions, as well as development vs. production.
     let appClientParams = {
       ClientName: userPoolAppClientName,
       UserPoolId: userPoolId,
@@ -355,7 +358,7 @@ function setIdentityPoolRoles(userPoolId, userPoolClientIds) {
       for (let i = 0; i < userPoolClientIds.length; i++) {
         userPoolRoleMappings['cognito-idp.' + config.AWS_REGION + '.amazonaws.com/' + userPoolId + ':' + userPoolClientIds[i]] = {
           Type: 'Token',
-          AmbiguousRoleResolution: 'Deny'
+          AmbiguousRoleResolution: 'AuthenticatedRole'
         };
       }
       let params = {
