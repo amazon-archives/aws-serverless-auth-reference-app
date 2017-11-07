@@ -40,7 +40,7 @@ export class WelcomePage {
         this.deeplinks.route({
           '/callback': AccountSigninPage
         }).subscribe((match) => {
-          //console.log('Successfully matched Deeplink route', match);
+          console.log('Successfully invoked mobile callback deeplink route', match);
           this.completeSignIn(match.$args.code, platform, http);
         }, (nomatch) => {
           console.error('Got a deeplink that did not match known routes', nomatch);
@@ -52,7 +52,11 @@ export class WelcomePage {
           let params = new URLSearchParams(window.location.search);
           let authCode = params.get('?code');
           console.log('authCode',authCode);
-          this.completeSignIn(authCode, platform, http);
+          this.completeSignIn(authCode, platform, http).then(() => {
+            // Reset query parameters from URL in browser
+            let clean_uri = location.protocol + "//" + location.host + location.pathname;
+            window.history.replaceState({}, document.title, clean_uri);
+          });
         }
       }
     });
