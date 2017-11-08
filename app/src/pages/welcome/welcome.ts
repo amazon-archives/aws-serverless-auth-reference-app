@@ -7,7 +7,6 @@ import { AccountSignupPage } from '../account-signup/account-signup';
 import { GlobalStateService } from '../../services/global-state.service';
 import { TabsPage }           from '../tabs/tabs';
 import { Config }             from '../../config/config';
-// import { UserState }       from '../../services/account-management.service';
 import { CognitoUtil, UserLoginService, IUserLogin } from '../../services/account-management.service';
 import { Logger } from '../../services/logger.service';
 import { BrowserTab } from '@ionic-native/browser-tab';
