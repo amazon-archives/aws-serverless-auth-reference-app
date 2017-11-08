@@ -1,20 +1,21 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons right>
-      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
-        <ion-icon name="contact"></ion-icon>Register 
+    <ion-title>SpaceFinder</ion-title>
+
+    <ion-buttons width="100%" align="left">
+      <button ion-button icon-left class="myButton" [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
+        <ion-icon name="contact"></ion-icon>Sign-Up
       </button>
-      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Custom UI
+      <button ion-button icon-left class="myButton" [navPush]="accountSigninPage" *ngIf="globals.userId === ''">
+        <ion-icon name="log-in"></ion-icon>Sign-In (Custom UI)
       </button>
-      <button ion-button icon-left (click)="launchHostedUi()" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Hosted UI
+      <button ion-button icon-left class="myButton" (click)="launchHostedUi()" *ngIf="globals.userId === ''">
+        <ion-icon name="log-in"></ion-icon>Sign-In (Hosted UI)
       </button>
-      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId !== ''">
+      <button ion-button icon-left class="myButton" (click)="globals.logout()" *ngIf="globals.userId !== ''">
         <ion-icon name="log-out"></ion-icon>Sign Out
       </button>
     </ion-buttons>
-    <ion-title>SpaceFinder</ion-title> 
   </ion-navbar>
 </ion-header>
 <ion-content class='main'>
