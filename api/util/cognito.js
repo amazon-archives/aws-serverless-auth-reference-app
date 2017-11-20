@@ -151,16 +151,12 @@ function createUserPoolClients(data) {
       ],
       CallbackURLs: [
         'https://aws.amazon.com',
-        'https://localhost',
+        'http://localhost:8100',
         'spacefinder://callback',
-        'https://spacefinder.aws-demos.com/mobile',
-        'https://spacefinder.aws-demos.com/web'
       ],
-      DefaultRedirectURI: 'https://localhost',
+      DefaultRedirectURI: 'http://localhost:8100',
       GenerateSecret: false,
-      LogoutURLs: [
-        'https://localhost/logout'
-      ],
+      LogoutURLs: [],
       ReadAttributes: [
         'email',
         'email_verified',
