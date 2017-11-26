@@ -34,15 +34,15 @@ export class AccountPage {
     this.globals.setViewAdminFeaturesOverride(this.viewAdminFeatures);
   }
   // code from: http://stackoverflow.com/questions/29644474/how-to-be-able-to-convert-image-to-base64-and-avoid-same-origin-policy
-  convertImgToBase64URL(url, callback, outputFormat) {
+  convertImgToBase64URL(url, options, callback, outputFormat) {
     let img = new Image();
     img.crossOrigin = 'Anonymous';
     img.onload = function () {
       let canvas = document.createElement('CANVAS');
       let cvs = (<any>canvas);
       let ctx = cvs.getContext('2d');
-      cvs.height = this.offsetHeight;
-      cvs.width = this.offsetWidth;
+      cvs.height = options.height;
+      cvs.width = options.width;
       ctx.drawImage(this, 0, 0);
       let dataURL = cvs.toDataURL(outputFormat);
       callback(dataURL);
@@ -144,7 +144,7 @@ export class AccountPage {
             if (file_uris !== null && file_uris !== '' && (file_uris.length > 0)) {
               console.log(`Image selected: [${file_uris}]`);
               console.log(`Converting to Base64 image`);
-              this.convertImgToBase64URL(file_uris[0], base64Img=>{
+              this.convertImgToBase64URL(file_uris[0], options,base64Img=>{
                 // console.log(base64Img);
                 console.log('Converting to Blob');
                 let blob = this.dataURItoBlob(base64Img);
