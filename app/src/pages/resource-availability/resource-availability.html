@@ -1,21 +1,5 @@
 <ion-header>
-  <ion-navbar>
-    <ion-buttons right>
-      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
-        <ion-icon name="contact"></ion-icon>Register 
-      </button>
-      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Custom UI
-      </button>
-      <button ion-button icon-left (click)="launchHostedUi()" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Hosted UI
-      </button>
-      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId !== ''">
-        <ion-icon name="log-out"></ion-icon>Sign Out
-      </button>
-    </ion-buttons>
-    <ion-title>Resource Availability</ion-title>
-  </ion-navbar>
+  <navbar title="Resource Availability"></navbar>
 </ion-header>
 
 <ion-content>
@@ -26,10 +10,10 @@
   </div>
 
   <div *ngIf="globals.userId != ''">
-      
+
     <ion-list>
       <ion-list-header style="color:white; background-color: #89bdd3 !important">
-        <b>{{location.name}} > {{resource.name}}</b> 
+        <b>{{location.name}} > {{resource.name}}</b>
       </ion-list-header>
       <ion-item>
         <ion-label>Showing availability for: </ion-label>

@@ -1,21 +1,5 @@
 <ion-header>
-  <ion-navbar>
-    <ion-buttons right>
-      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
-        <ion-icon name="contact"></ion-icon>Register 
-      </button>
-      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Custom UI
-      </button>
-      <button ion-button icon-left (click)="launchHostedUi()" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Hosted UI
-      </button>
-      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId !== ''">
-        <ion-icon name="log-out"></ion-icon>Sign Out
-      </button>
-    </ion-buttons>
-    <ion-title>Locations</ion-title>
-  </ion-navbar>
+  <navbar title="Locations"></navbar>
 </ion-header>
 
 <ion-content>
@@ -45,7 +29,7 @@
         <button *ngIf="globals.displayAdminFeatures()" (click)="displayDeleteLocationConfirmation(location.locationId, location.name)" ion-button color="danger" item-right>Delete</button>
       </ion-item>
     </ion-list>
-    
+
     <div align='center' *ngIf="globals.displayAdminFeatures() && initialized">
       <button ion-button [navPush]="locationAddPage" type="submit" color="primary">Add a location</button>
     </div>

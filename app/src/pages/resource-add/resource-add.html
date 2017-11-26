@@ -1,12 +1,6 @@
 <ion-header>
-  <ion-navbar>
-    <!--<button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>-->
-    <ion-title>Add a Resource</ion-title>
-  </ion-navbar>
+  <navbar title="Add a Resource"></navbar>
 </ion-header>
-
 
 <ion-content padding>
 
@@ -37,7 +31,7 @@
       </ion-item>
       <p [hidden]="description.valid || !submitted" color="danger" padding-left>
         Description is required
-      </p>      
+      </p>
 
     </form>
   </ion-list>

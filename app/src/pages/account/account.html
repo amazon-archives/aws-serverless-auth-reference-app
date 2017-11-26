@@ -1,21 +1,5 @@
 <ion-header>
-  <ion-navbar>
-    <!--<button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>-->
-    <ion-buttons right>
-      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
-        <ion-icon name="contact"></ion-icon>Register
-      </button>
-      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId == ''">
-        <ion-icon name="log-in"></ion-icon>Sign In
-      </button>
-      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId">
-        <ion-icon name="log-out"></ion-icon>Sign Out
-      </button>
-    </ion-buttons>
-    <ion-title>My Account</ion-title>
-  </ion-navbar>
+  <navbar title="My Account"></navbar>
 </ion-header>
 
 <ion-content padding>
@@ -42,7 +26,7 @@
     <label ion-button (click)="attachImageUploadEventListener()" color="primary" style='none;display: inline-block;' for="imageUpload" id="imageUploadLabel">Select image</label>
     <button ion-button (click)="selectImage()" style='visibility:hidden; text-transform:none;' type="submit" color="primary" id="imageUploadSubmit">UPLOAD</button>
   </div>
-  
+
   <br/><br/>
 
   <h5>Change password</h5>

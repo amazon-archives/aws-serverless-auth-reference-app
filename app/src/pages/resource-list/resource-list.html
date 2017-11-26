@@ -1,21 +1,5 @@
 <ion-header>
-  <ion-navbar>
-    <ion-buttons right>
-      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
-        <ion-icon name="contact"></ion-icon>Register 
-      </button>
-      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Custom UI
-      </button>
-      <button ion-button icon-left (click)="launchHostedUi()" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Hosted UI
-      </button>
-      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId !== ''">
-        <ion-icon name="log-out"></ion-icon>Sign Out
-      </button>
-    </ion-buttons>
-    <ion-title>Resources</ion-title>
-  </ion-navbar>
+  <navbar title="Resources"></navbar>
 </ion-header>
 
 <ion-content>
@@ -28,7 +12,7 @@
   <div *ngIf="globals.userId != ''">
     <ion-list>
       <ion-list-header style="color:white; background-color: #89bdd3 !important">
-        <b>{{location.name}}</b> 
+        <b>{{location.name}}</b>
       </ion-list-header>
       <ion-item *ngFor="let resource of resources">
         <ion-avatar item-left (click)="gotoResourceAvailabilityPage(location, resource)">

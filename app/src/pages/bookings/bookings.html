@@ -1,21 +1,5 @@
 <ion-header>
-  <ion-navbar>
-    <ion-buttons right>
-      <button ion-button icon-left [navPush]="accountSignupPage" *ngIf="globals.userId == ''">
-        <ion-icon name="contact"></ion-icon>Register 
-      </button>
-      <button ion-button icon-left [navPush]="accountSigninPage" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Custom UI
-      </button>
-      <button ion-button icon-left (click)="launchHostedUi()" *ngIf="globals.userId === ''">
-        <ion-icon name="log-in"></ion-icon>Sign In with Hosted UI
-      </button>
-      <button ion-button icon-left (click)="globals.logout()" *ngIf="globals.userId !== ''">
-        <ion-icon name="log-out"></ion-icon>Sign Out
-      </button>
-    </ion-buttons>
-    <ion-title>My Bookings</ion-title>
-  </ion-navbar>
+  <navbar title="My Bookings"></navbar>
 </ion-header>
 
 <ion-content>
@@ -39,7 +23,7 @@
         </ion-list-header>
         <ion-item *ngFor="let booking of d.bookings">
           <div item-left style='width:25%'>{{booking.timeslot}}</div>
-          <p>{{booking.locationName}}</p>  
+          <p>{{booking.locationName}}</p>
           <h2>{{booking.resourceName}}</h2>
           <p>{{booking.resourceDescription}}</p>
           <button ion-button color="light" item-right (click)="displayCancelDialog(booking.bookingId, booking.timeslot, booking.locationName, booking.resourceName)">Cancel</button>

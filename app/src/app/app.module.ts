@@ -4,6 +4,8 @@ import { MyApp }                       from './app.component';
 import { HttpModule, URLSearchParams } from "@angular/http";
 import { BrowserTab }                  from '@ionic-native/browser-tab';
 import { Deeplinks }                   from '@ionic-native/deeplinks';
+import { ComponentsModule }            from "../components/components.module";
+import { NavbarComponent }             from "../components/navbar/navbar";
 
 import { AboutPage }                   from '../pages/about/about';
 import { AccountConfirmationCodePage } from '../pages/account-confirmation-code/account-confirmation-code';
@@ -45,7 +47,8 @@ import {
     ResourceAvailabilityPage,
     MyApp,
     TabsPage,
-    WelcomePage
+    WelcomePage,
+    NavbarComponent
   ],
   imports: [
     HttpModule,
@@ -68,11 +71,12 @@ import {
     ResourceAvailabilityPage,
     MyApp,
     TabsPage,
-    WelcomePage,
+    WelcomePage
   ],
   providers: [
     BrowserTab,
     Deeplinks,
+    ComponentsModule,
     { provide: HttpService, useClass: HttpService },
     { provide: CustomAuthorizerClient, useClass: CustomAuthorizerClient },
     { provide: IamAuthorizerClient, useClass: IamAuthorizerClient },

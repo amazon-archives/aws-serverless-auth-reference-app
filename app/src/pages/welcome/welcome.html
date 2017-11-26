@@ -1,25 +1,7 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>SpaceFinder</ion-title>
-    <ion-buttons right *ngIf="globals.userId === ''">
-      <button ion-button icon-left class="myButton" [navPush]="accountSignupPage">
-        <ion-icon name="contact"></ion-icon>Sign-Up
-      </button>
-      <button ion-button icon-left class="myButton" [navPush]="accountSigninPage">
-        <ion-icon name="log-in"></ion-icon>Sign-In (Custom UI)
-      </button>
-      <button ion-button icon-left class="myButton" (click)="launchHostedUi()">
-        <ion-icon name="log-in"></ion-icon>Sign-In (Hosted UI)
-      </button>
-    </ion-buttons>
-    <ion-buttons right *ngIf="globals.userId !== ''">
-      <button ion-button icon-right class="myButton" (click)="globals.logout()">
-        <ion-icon name="log-out"></ion-icon>Sign Out
-      </button>
-    </ion-buttons>
-  </ion-navbar>
-
+  <navbar title="SpaceFinder"></navbar>
 </ion-header>
+
 <ion-content class='main'>
   <div id='main-content'>
     <img width='100%' src='assets/images/conference_room_unsplash.jpg'>
