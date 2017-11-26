@@ -12,13 +12,14 @@ import { BrowserTab } from '@ionic-native/browser-tab';
 import { Deeplinks } from '@ionic-native/deeplinks';
 import { Platform } from 'ionic-angular';
 
-
 @Component({
   selector: 'navbar',
   templateUrl: 'navbar.html'
 })
 export class NavbarComponent {
-  @Input() title: string;
+  @Input() public title: string;
+  @Input() public showSignin: boolean = true;
+  @Input() public showSignup: boolean = true;
 
   accountSigninPage = AccountSigninPage;
   accountSignupPage = AccountSignupPage;

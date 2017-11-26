@@ -1,13 +1,13 @@
   <ion-navbar>
     <ion-title>{{ title }}</ion-title>
     <ion-buttons right *ngIf="globals.userId === ''">
-      <button ion-button icon-left class="myButton" [navPush]="accountSignupPage">
+      <button ion-button *ngIf="showSignup" icon-left class="myButton" [navPush]="accountSignupPage">
         <ion-icon name="contact"></ion-icon>Sign-Up
       </button>
-      <button ion-button icon-left class="myButton" [navPush]="accountSigninPage">
+      <button ion-button *ngIf="showSignin" icon-left class="myButton" [navPush]="accountSigninPage">
         <ion-icon name="log-in"></ion-icon>Sign-In (Custom UI)
       </button>
-      <button ion-button icon-left class="myButton" (click)="launchHostedUi()">
+      <button ion-button *ngIf="showSignin" icon-left class="myButton" (click)="launchHostedUi()">
         <ion-icon name="log-in"></ion-icon>Sign-In (Hosted UI)
       </button>
     </ion-buttons>
