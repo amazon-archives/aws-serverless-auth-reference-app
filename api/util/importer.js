@@ -69,6 +69,15 @@ class SampleData {
 
   generateSampleData() {
     return Promise.all([
+      // Aria
+      this.generateSampleLocation('Aria', 'Las Vegas',
+        'https://s3.amazonaws.com/spacefinder-public-image-repository/aria.jpg')
+        .then(locationId => {
+          this.generateSampleResource('Ironwood 5', 'Aria Level 3', locationId, 'room');
+          this.generateSampleResource('Ironwood 8', 'Aria Level 3', locationId, 'room');
+          this.generateSampleResource('Juniper 4', 'Aria Level 3', locationId, 'room');
+        // this.generateSampleResource('Delfino 4004', 'Venetian Level 4', locationId, 'desk');
+      }),
       // Venetian
       this.generateSampleLocation('The Venetian', 'Las Vegas',
         'https://s3.amazonaws.com/spacefinder-public-image-repository/venetian.jpg')

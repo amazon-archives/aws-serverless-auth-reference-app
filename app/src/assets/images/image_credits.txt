@@ -35,3 +35,9 @@ The Venetian Hotel photo
 Encore Las Vegas photo
   - License: CC BY-SA 3.0
   - https://en.wikipedia.org/wiki/Encore_Las_Vegas#/media/File:Encore,_Las_Vegas_June_2013.jpg
+
+Aria Las Vegas photo
+  - Wikimedia Commons: https://commons.wikimedia.org/wiki/File%3AAria_Las_Vegas.JPG
+  - License: https://creativecommons.org/licenses/by-sa/3.0
+  - https://upload.wikimedia.org/wikipedia/commons/c/c6/Aria_Las_Vegas.JPG
+
