@@ -18,6 +18,23 @@ function createUserPool() {
     PoolName: userPoolName,
     AutoVerifiedAttributes: [
       'email'
+    ],
+    Schema: [
+      {
+        AttributeDataType: 'String',
+        Name: 'email',
+        Required: true
+      },
+      {
+        AttributeDataType: 'String',
+        Name: 'family_name',
+        Required: true
+      },
+      {
+        AttributeDataType: 'String',
+        Name: 'given_name',
+        Required: true
+      }
     ]
   };
   return new Promise((resolve, reject) => {
@@ -150,9 +167,8 @@ function createUserPoolClients(data) {
         'profile'
       ],
       CallbackURLs: [
-        'https://aws.amazon.com',
         'http://localhost:8100',
-        'spacefinder://callback',
+        'spacefinder://callback'
       ],
       DefaultRedirectURI: 'http://localhost:8100',
       GenerateSecret: false,
@@ -617,7 +633,7 @@ function createUserPoolDomain(userPoolId) {
         resolve('Created user pool successfully');
       });
     });
-  });  
+  });
 }
 
 function getUserPoolDomainPrefix() {
@@ -630,7 +646,7 @@ function getUserPoolDomainPrefix() {
 function getUserPoolDomainName() {
   return getUserPoolDomainPrefix().then((userPoolDomainPrefix) => {
     return userPoolDomainPrefix + '.auth.' + config.AWS_REGION + '.amazoncognito.com';
-  });  
+  });
 }
 
 function deleteUserPoolDomain(userPoolId) {
