@@ -21,7 +21,6 @@
 
 #=========================================================================
 
-
 FROM library/ubuntu:16.04
 MAINTAINER Jim Tran and Justin Pirtle
 WORKDIR /home/
@@ -32,12 +31,13 @@ RUN apt-get update
 
 # install the AWS CLI and Python pip dependency
 RUN apt-get install -y python-pip
+RUN pip install --upgrade pip
 RUN pip install awscli
 
 # install Node.js
 RUN apt-get install -y python-software-properties
 RUN apt-get install -y curl
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
 
 # set the Node.js npm logger level for build visibility (logging minimized by default)
@@ -59,7 +59,7 @@ RUN npm install
 WORKDIR $DIRPATH/api/lambda
 RUN npm install
 
-# install latest version of the Ionic2 CLI, Cordova, and Bower tools
+# install latest version of the Ionic CLI, Cordova, and Bower tools
 RUN npm install -g ionic cordova bower
 WORKDIR $DIRPATH/app
 RUN npm install
@@ -71,7 +71,7 @@ RUN npm install
 # install Cordova platform components if you would like to build the app for mobile
 RUN cordova platform remove android
 RUN cordova platform remove ios
-RUN cordova platform add android@5.X.X
+RUN cordova platform add android@6.X.X
 RUN cordova platform add ios@4.X.X
 
 # change prompt color
@@ -84,4 +84,4 @@ RUN bash
 EXPOSE 8100 35729
 WORKDIR $DIRPATH
 
-# ENTRYPOINT aws configure && (cd api && gulp deploy) && (cd api && gulp generate_sample_users) && (cd api && gulp generate_sample_data) && (cd app && ionic serve) && (cd api && gulp undeploy)
+# ENTRYPOINT aws configure && (cd api && gulp deploy) && (cd api && gulp bootstrap) && (cd app && ionic serve) && (cd api && gulp undeploy)
