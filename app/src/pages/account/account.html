@@ -1,5 +1,5 @@
 <ion-header>
-  <navbar title="My Account"></navbar>
+  <navbar [title]="globals.userId === '' ? '': 'My Account'"></navbar>
 </ion-header>
 
 <ion-content padding>

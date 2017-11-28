@@ -1,5 +1,5 @@
 <ion-header>
-  <navbar title="Add a Resource"></navbar>
+  <navbar [title]="globals.userId === '' ? '': 'Add a Resource'"></navbar>
 </ion-header>
 
 <ion-content padding>

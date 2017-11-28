@@ -32,7 +32,6 @@ export class NavbarComponent {
     this.cognitoUtil = new CognitoUtil();
 
     this.platform.ready().then((readySource) => {
-      console.log('Platform ready from', readySource);
       // Platform now ready, execute any required native code
 
       if (this.platform.is('cordova')) {
