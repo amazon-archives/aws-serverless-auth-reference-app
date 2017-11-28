@@ -25,7 +25,7 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built
   
 1. **Launch the EC2 instance** in your AWS account, using a public community AMI which contains a [Docker image](https://hub.docker.com/r/awsdevops/aws-serverless-auth-reference-app/) with a pre-configured SpaceFinder environment:
 
-	- **Public Community AMI**: `ami-77bc2f0d` (only available in us-east-1 (N. Virginia) region)
+	- **Public Community AMI**: `ami-d1f865ab` (only available in us-east-1 (N. Virginia) region)
 	- **Instance type**: t2.medium
   - **Network**: Select any VPC that has a **public subnet**. (If you haven't modified your "default VPC", that will work fine for this lab.)
   - **Subnet**: Launch in any **public subnet** (in any AZ). 
