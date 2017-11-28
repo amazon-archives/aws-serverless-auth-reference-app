@@ -34,21 +34,6 @@ function createUserPool() {
         AttributeDataType: 'String',
         Name: 'given_name',
         Required: true
-      },
-      {
-        AttributeDataType: 'String',
-        Name: 'external_idp_access_token',
-        Required: false
-      },
-      {
-        AttributeDataType: 'String',
-        Name: 'external_idp_refresh_token',
-        Required: false
-      },
-      {
-        AttributeDataType: 'String',
-        Name: 'external_idp_expires_in',
-        Required: false
       }
     ]
   };
