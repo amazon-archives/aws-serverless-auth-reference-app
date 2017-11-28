@@ -45,7 +45,7 @@ RUN apt-get install -y nodejs
 
 # install git and pull down source code
 RUN apt-get install -y git
-RUN git clone https://github.com/awslabs/aws-serverless-auth-reference-app
+RUN git clone --depth 1 https://github.com/awslabs/aws-serverless-auth-reference-app
 RUN DIRPATH=$(pwd)/aws-serverless-auth-reference-app
 
 # install the latest Gulp CLI tools globally (you will need a newer version of Gulp CLI which supports Gulp v4)
