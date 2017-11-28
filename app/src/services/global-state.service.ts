@@ -92,7 +92,10 @@ export class GlobalStateService {
           text: 'OK',
         }]
     });
-    alert.present();
+    alert.present().then(() => {
+    }).catch((ex) => {
+      console.log('Show logout alert exception', ex);
+    });;
   }
 
   displayAlert(title, subtitle, functionToRunWhenOkButtonIsPressed=null) {
@@ -105,7 +108,10 @@ export class GlobalStateService {
       subTitle: subtitle,
       buttons: [{ text: 'OK', handler: okFunction }]
     });
-    alert.present();
+    alert.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display alert exception', ex);
+    });
   }
   displayToast(message) {
     let toast = this.toastCtrl.create({
@@ -113,22 +119,40 @@ export class GlobalStateService {
       duration: 3000,
       position: 'bottom'
     });
-    toast.present();
+    toast.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display toast exception', ex);
+    });
   }
 
-  displayLoader(message, durationInMilliseconds=3000) {
+  displayLoader(message, durationInMilliseconds=3000): Promise<any> {
     this.loader = this.loadingCtrl.create({
       content: message,
       duration: durationInMilliseconds,
       dismissOnPageChange: true
     });
-    this.loader.present();
+    return this.loader.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display loader exception', ex);
+    });
   }
 
-  dismissLoader() {
-    if (this.loader != null) {
-      this.loader.dismiss();
-    }
-    this.loader = null;
+  dismissLoader(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (this.loader != null) {
+        this.loader.dismiss().then(() => {
+          this.loader = null;
+          resolve();
+        }).catch((ex) => {
+          this.loader = null;
+          // TODO: Debug Ionic 2 vs 3 change with dismiss loader creating issue with RemoteView not found - https://github.com/ionic-team/ionic/issues/11443
+          // console.log('Dismiss loader exception', ex);
+          // reject(ex);
+          resolve();
+        });
+      } else {
+        resolve();
+      }
+    });
   }
 }

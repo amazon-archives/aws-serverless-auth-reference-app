@@ -82,22 +82,24 @@ export class AccountSigninPage {
       return;
     }
     this.allowButtonPresses = false;
-    this.globals.displayLoader('Signing in...');
-    UserLoginService.signIn(this.userData)
-    .then(() => {
-      // Login was successful
-      this.globals.dismissLoader();
-      this.showLoginSuccessAlert(this.userData.username, () => {
-        this.globals.userId = this.globals.getUserId();
-        this.globals.setViewAdminFeaturesOverride(this.globals.isAdminRole());
-        this.navCtrl.popToRoot({animate: false});
-        // this.navCtrl.push(WelcomePage);
+    this.globals.displayLoader('Signing in...').then(() => {
+      UserLoginService.signIn(this.userData)
+      .then(() => {
+        // Login was successful
+        return this.globals.dismissLoader().then(() => {
+          return this.showLoginSuccessAlert(this.userData.username, () => {
+            this.globals.userId = this.globals.getUserId();
+            this.globals.setViewAdminFeaturesOverride(this.globals.isAdminRole());
+            this.navCtrl.popToRoot({animate: false});
+            // this.navCtrl.push(WelcomePage);
+          });
+        });
+      }).catch((err: Error): void => {
+        // Login was unsuccessful
+        this.globals.dismissLoader();
+        this.allowButtonPresses = true;
+        this.displayAlertError(err);
       });
-    }).catch((err: Error): void => {
-      // Login was unsuccessful
-      this.globals.dismissLoader();
-      this.allowButtonPresses = true;
-      this.displayAlertError(err);
     });
   }
 
@@ -141,7 +143,10 @@ export class AccountSigninPage {
           }
         }]
     });
-    alert.present();
+    alert.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display alert exception', ex);
+    });;
   }
 
   showResendSuccessAlert(callbackHandler: () => void): void {
@@ -153,7 +158,10 @@ export class AccountSigninPage {
         handler: data => { callbackHandler(); }
       }]
     });
-    alert.present();
+    alert.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display alert exception', ex);
+    });
   }
 
   showOneTimeVerificationAlert(username: String, callbackHandler: () => void): void {
@@ -202,7 +210,10 @@ export class AccountSigninPage {
         { text: 'Cancel' },
         ]
     });
-    alert.present();
+    alert.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display alert exception', ex);
+    });
   }
 
   showConfirmationFailureAlert(err: Error): void {
@@ -211,7 +222,10 @@ export class AccountSigninPage {
       subTitle: err.message,
       buttons: [{ text: 'OK' }]
     });
-    alert.present();
+    alert.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display alert exception', ex);
+    });
   }
 
 
@@ -221,7 +235,10 @@ export class AccountSigninPage {
       subTitle: `${message}`,
       buttons: [{ text: 'OK' }]
     });
-    alert.present();
+    alert.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display alert exception', ex);
+    });
   }
 
   showForgotPasswordFailureAlert(err): void {
@@ -230,7 +247,10 @@ export class AccountSigninPage {
       subTitle: `An error was encountered when attempting to initiate the password change process: [${err}]. Please try again.`,
       buttons: [{ text: 'OK' }]
     });
-    alert.present();
+    alert.present().then(() => {
+    }).catch((ex) => {
+      console.log('Display alert exception', ex);
+    });
   }
 
   constructor(public navCtrl: NavController, private globals: GlobalStateService) {
