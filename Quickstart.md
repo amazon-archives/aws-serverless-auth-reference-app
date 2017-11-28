@@ -23,10 +23,10 @@ Setup is quick and easy. You'll provision an EC2 instance, and run the pre-built
 1. **Create a highly-privileged IAM user, if necessary.** The lab needs permissions to provision/de-provision Cognito User Pools, DynamoDB tables, S3 buckets, Lambda functions, API Gateway configurations, CloudFormation stacks, and IAM roles. You will need the AWS credentials (AWS Access Key and AWS Secret Access Key ID) associated with this highly-privileged user later on in step #5.
 	> All resources are created in your personal AWS account. This lab is self-contained and cleans up after itself by un-deploying all generated AWS resources.
   
-1. **Launch the EC2 instance** in your AWS account, using a public community AMI which contains a Docker image with a pre-configured SpaceFinder environment:
+1. **Launch the EC2 instance** in your AWS account, using a public community AMI which contains a [Docker image](https://hub.docker.com/r/awsdevops/aws-serverless-auth-reference-app/) with a pre-configured SpaceFinder environment:
 
-	- **Public Community AMI**: `ami-bada16ac` (only available in us-east-1 (N. Virginia) region)
-	- **Instance type**: m4.large
+	- **Public Community AMI**: `ami-77bc2f0d` (only available in us-east-1 (N. Virginia) region)
+	- **Instance type**: t2.medium
   - **Network**: Select any VPC that has a **public subnet**. (If you haven't modified your "default VPC", that will work fine for this lab.)
   - **Subnet**: Launch in any **public subnet** (in any AZ). 
   - **Auto-assign Public IP**: Enable
