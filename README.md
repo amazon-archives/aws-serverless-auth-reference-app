@@ -2,19 +2,17 @@
 
 **SpaceFinder** is a reference mobile app that allows users to book conference rooms, work desks, and other shared resources. The app showcases **serverless authentication and authorization** using the AWS platform.
 
-The mobile front-end is built using the [Ionic2 framework] and client libraries to call AWS services and mobile backend APIs. The backend APIs themselves are powered by AWS services. The backend APIs are built using a serverless architecture, which makes it easy to deploy updates, and it also means that there are no servers to operationally manage.
+The mobile front-end is built using the [Ionic 3 framework] and client libraries to call AWS services and mobile backend APIs. The backend APIs themselves are powered by AWS services. The backend APIs are built using a serverless architecture, which makes it easy to deploy updates, and it also means that there are no servers to operationally manage.
 
 SpaceFinder is primarily developed and maintained by Jim Tran and Justin Pirtle, Solutions Architects at Amazon Web Services. The project code is released under the Apache 2.0 license. Please feel free to make use of the code in this project, and spread the word. We hope you enjoy it, and we certainly welcome all feedback, pull requests and other contributions!
 
 ## Video presentation
 
-A live demo of the SpaceFinder app was presented at [AWS re:Invent 2016], the annual AWS cloud computing conference. The presentation provides useful context on the authentication and authorization flows that the app demonstrates. The YouTube recording of the session (53 minutes) is available here:
+A live demo of the SpaceFinder app was presented at [AWS re:Invent 2017], the annual AWS cloud computing conference. The presentation provides useful context on the authentication and authorization flows that the app demonstrates. The YouTube recording of the session (53 minutes) is available here:
 
-* [AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (MBL306)]
-<br/>Presenters: Jim Tran and Justin Pirtle
-<br/>Presented on: November 30, 2016
-
-Note: Since the re:Invent presentation, we've updated the app to make use of [Cognito Groups and support for fine-grained role-based access control](https://aws.amazon.com/blogs/aws/new-amazon-cognito-groups-and-fine-grained-role-based-access-control-2/). These features were launched in December 2016, and are considered best practices. Also, the Quickstart Guide, Developer Guide, and Dockerfile have been added to this project.
+* [AWS re:Invent 2017: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (SRV403)]
+<br/>Presenters: Justin Pirtle and Vladimir Budilov
+<br/>Presented on: November 28, 2017
 
 ## Quickstart and Developer Guide
 
@@ -47,7 +45,7 @@ Spacefinder uses a Serverless API built using Amazon API Gateway, Lambda, Dynamo
 
 ## Mobile app
 
-The mobile app is a hybrid mobile app, and is built on the [Ionic2 framework], which relies on [Angular 2] and [TypeScript 2.0]. The hybrid mobile app can run on Android devices and iOS devices, as well as a modern web browser.
+The mobile app is a hybrid mobile app, and is built on the [Ionic 3 framework], which relies on [Angular 4] and [TypeScript 2]. The hybrid mobile app can run on Android devices and iOS devices, as well as a modern web browser.
 
 ![Spacefinder Mobile app]
 
@@ -109,9 +107,9 @@ The log messages will show you all tokens retrieved as part of the sign-in proce
 [Spacefinder Mobile app]:/app/docs/images/screenshot-small.png?raw=true
 [Spacefinder API]:/api/docs/images/spacefinder-api.png?raw=true
 [Spacefinder Mobile App architecture]:/app/docs/images/spacefinder-app-architecture.png?raw=true
-[Ionic2 framework]:http://ionicframework.com/docs/v2/
-[Angular 2]:https://angular.io/
-[TypeScript 2.0]:https://www.typescriptlang.org/index.html
-[AWS re:Invent 2016: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (MBL306)]:https://www.youtube.com/watch?v=n4hsWVXCuVI&list=PLhr1KZpdzukdAg4bXtTfICuFeZFC_H2Xq&index=6
-[AWS re:Invent 2016]: https://reinvent.awsevents.com/
+[Ionic 3 framework]:http://ionicframework.com/docs/
+[Angular 4]:https://angular.io/
+[TypeScript 2]:https://www.typescriptlang.org
+[AWS re:Invent 2017: Serverless Authentication and Authorization: Identity Management for Serverless Architectures (SRV403)]:https://www.youtube.com/watch?v=VZqG7HjT2AQ
+[AWS re:Invent 2017]: https://reinvent.awsevents.com/
 [User Groups]:http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-user-groups.html
