@@ -71,7 +71,7 @@ export class HttpService {
 
   requestImpl(url:string, method:RequestMethod, opt?: RequestOptionsArgs):Observable<Response>{
     let headers = new Headers();
-    let options: RequestOptions = new BaseRequestOptions();
+    let options: RequestOptionsArgs = new BaseRequestOptions();
     if (!opt) {
       options.url = url;
       options.method =  method;
@@ -81,6 +81,8 @@ export class HttpService {
       options.url = url;
       options.method = method;
       options.body = opt.body;
+      options.params = opt.params;
+      options.search = opt.search;
       options.headers = opt.headers || headers;
       options.withCredentials = false;
     }
