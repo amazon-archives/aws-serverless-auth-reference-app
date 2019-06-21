@@ -21,7 +21,7 @@ function createFunction(operationId, description) {
         FunctionName: config.getName(operationId),
         Handler: operationId.replace('-', '.'),
         Role: cfOutputs.LambdaExecutionRoleArn,
-        Runtime: 'nodejs4.3',
+        Runtime: 'nodejs8.10',
         Timeout: 10
       };
     }).then(createFunctionImpl);
